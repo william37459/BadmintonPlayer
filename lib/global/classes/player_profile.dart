@@ -1,0 +1,75 @@
+class PlayerProfile {
+  final String name;
+  final List<AttachedProfile> attachedProfiles;
+  final String club;
+  final String startLevel;
+  final List<ScoreData> scoreData;
+  final List<TeamTournament> teamTournaments;
+  final List<PlayerTournament> tournaments;
+  final Map<String, String> seasons;
+
+  PlayerProfile({
+    required this.name,
+    required this.attachedProfiles,
+    required this.club,
+    required this.startLevel,
+    required this.scoreData,
+    required this.teamTournaments,
+    required this.tournaments,
+    required this.seasons,
+  });
+}
+
+class AttachedProfile {
+  final String name;
+  final String id;
+
+  AttachedProfile({
+    required this.name,
+    required this.id,
+  });
+}
+
+class ScoreData {
+  final String type;
+  final String rank;
+  final String points;
+  final String matches;
+  final String placement;
+
+  ScoreData({
+    required this.type,
+    required this.rank,
+    required this.points,
+    required this.matches,
+    required this.placement,
+  });
+}
+
+class TeamTournament {
+  final DateTime date;
+  final String rank;
+  final String team;
+  final String opponent;
+
+  TeamTournament({
+    required this.date,
+    required this.rank,
+    required this.team,
+    required this.opponent,
+  });
+}
+
+class PlayerTournament {
+  final DateTime date;
+  final String club;
+  final String rank;
+  final String id;
+
+  PlayerTournament({
+    required this.date,
+    required this.club,
+    required this.rank,
+    required this.id,
+  });
+}

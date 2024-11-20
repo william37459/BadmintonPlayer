@@ -1,0 +1,195 @@
+import 'package:app/global/classes/color_theme.dart';
+import 'package:app/global/constants.dart';
+import 'package:app/calendar/index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class ToggleSwitchButton extends ConsumerWidget {
+  final String label1;
+  final String label2;
+  final double marginTop;
+  final bool enabled;
+  const ToggleSwitchButton({
+    super.key,
+    required this.label1,
+    required this.label2,
+    required this.enabled,
+    this.marginTop = 0,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    int choiceIndexState = ref.watch(choiceIndex);
+    CustomColorTheme colorSchemeState = ref.watch(colorThemeProvider);
+
+    return Padding(
+      padding: EdgeInsets.only(top: marginTop, left: 8, right: 8),
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorSchemeState.fontColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Stack(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ChoiceWidget(
+                    label: label1,
+                    index: -1,
+                  ),
+                  ChoiceWidget(
+                    label: label2,
+                    index: 0,
+                    enabled: enabled,
+                  ),
+                ],
+              ),
+              AnimatedAlign(
+                duration: const Duration(milliseconds: 150),
+                alignment: choiceIndexState == 0
+                    ? const Alignment(-1, 0)
+                    : const Alignment(1, 0),
+                child: FractionallySizedBox(
+                  widthFactor: 0.5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: colorSchemeState.primaryColor,
+                      borderRadius: BorderRadius.circular(4),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorSchemeState.shadowColor,
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Text(
+                        choiceIndexState == 0 ? label1 : label2,
+                        style: TextStyle(
+                          color: colorSchemeState.secondaryFontColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void changeIndex(WidgetRef ref, int choiceIndexState, bool enabled) {
+  if (enabled) {
+    ref.read(choiceIndex.notifier).state = (choiceIndexState + 1) % 2;
+    if (choiceIndexState == -1) {
+      ref.read(tournamentFilterProvider.notifier).state = {
+        "age": null,
+        "agegroupids": ["0"],
+        "birthdate": null,
+        "classids": ["0"],
+        "clubid": "",
+        "disciplines": null,
+        "gender": "",
+        "georegionids": null,
+        "page": 0,
+        "playerid": "",
+        "points": null,
+        "publicseasonplan": true,
+        "regionids": null,
+        "seasonid": "2023",
+        "selectclientfunction": null,
+        "showleague": true,
+        "strfrom": "",
+        "strto": "",
+        "strweekno": "",
+        "strweekno2": "",
+      };
+    } else {
+      ref.read(tournamentFilterProvider.notifier).state = {
+        "age": null,
+        "agegroupids": ["0"],
+        "birthdate": null,
+        "classids": ["0"],
+        "clubid": "",
+        "disciplines": null,
+        "gender": "",
+        "georegionids": null,
+        "page": 0,
+        "playerid": "",
+        "points": null,
+        "publicseasonplan": true,
+        "regionids": null,
+        "seasonid": "2023",
+        "selectclientfunction": "SeasonPlan.SelectTournament",
+        "showleague": true,
+        "strfrom": "",
+        "strto": "",
+        "strweekno": "",
+        "strweekno2": "",
+      };
+    }
+  }
+}
+
+class ChoiceWidget extends ConsumerWidget {
+  final String label;
+  final int index;
+  final bool enabled;
+
+  const ChoiceWidget({
+    super.key,
+    required this.label,
+    required this.index,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    CustomColorTheme colorSchemeState = ref.watch(colorThemeProvider);
+
+    return Expanded(
+      child: InkWell(
+        onTap: () => changeIndex(ref, index, enabled),
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              enabled
+                  ? Container()
+                  : SizedBox(
+                      height: 12,
+                      width: 12,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                        color: colorSchemeState.primaryColor,
+                      ),
+                    ),
+              enabled ? Container() : const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: colorSchemeState.fontColor.withOpacity(0.5),
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
