@@ -168,6 +168,25 @@ class Tournament {
     }
     return classAndAgeGroupCodes;
   }
+
+  List<String> getFormattedClassAndAgeGroupCodes() {
+    Map<String, List<String>> classAndAgeGroupCodes = {};
+    for (var detail in details) {
+      classAndAgeGroupCodes
+          .putIfAbsent(detail.ageGroupCode, () => [])
+          .add(detail.classCode);
+    }
+
+    List<String> formattedClassAndAgeGroupCodes = [];
+
+    classAndAgeGroupCodes.forEach((key, value) {
+      formattedClassAndAgeGroupCodes.add(
+        "$key ${value.join(', ')}",
+      );
+    });
+
+    return formattedClassAndAgeGroupCodes;
+  }
 }
 
 class TournamentLink {

@@ -268,7 +268,7 @@ class PlayerSearch extends ConsumerWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Der er ingen turneringer der matchede din søgning",
+                                    "Der er ingen spillere der matchede din søgning",
                                     style: TextStyle(
                                       color: colorThemeState.fontColor,
                                       fontSize: 18,

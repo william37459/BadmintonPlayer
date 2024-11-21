@@ -5,11 +5,15 @@ class CustomContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
+  final double? width;
+  final Color? backgroundColor;
   const CustomContainer({
     super.key,
     this.onTap,
     this.margin,
     this.padding,
+    this.width,
+    this.backgroundColor,
     required this.child,
   });
 
@@ -30,15 +34,18 @@ class CustomContainer extends StatelessWidget {
             ),
           ],
         ),
-        child: Material(
-          borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
-          child: InkWell(
+        child: SizedBox(
+          width: width,
+          child: Material(
             borderRadius: BorderRadius.circular(4),
-            onTap: onTap,
-            child: Padding(
-              padding: padding ?? const EdgeInsets.all(6.0),
-              child: child,
+            color: backgroundColor ?? Colors.white,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(4),
+              onTap: onTap,
+              child: Padding(
+                padding: padding ?? const EdgeInsets.all(6.0),
+                child: child,
+              ),
             ),
           ),
         ),

@@ -1,18 +1,16 @@
+import 'package:app/dashboard/index.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/player_profile_search/index.dart';
-import 'package:app/profile/index.dart';
-// import 'package:app/profile/index.dart';
 import 'package:app/score_list/index.dart';
 import 'package:app/team_tournament/index.dart';
-import 'package:app/calendar/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 StateProvider<int> index = StateProvider<int>((ref) => 0);
 
 List<Widget> pages = [
-  TorunamentPlan(),
+  Dashboard(),
   PlayerSearch(),
   const ScoreList(),
   const TeamTournamentPage(),
@@ -28,10 +26,7 @@ class MainBuilder extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: pages[indexState],
-      ),
+      body: pages[indexState],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indexState,
