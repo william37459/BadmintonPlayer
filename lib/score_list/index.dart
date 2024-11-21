@@ -297,7 +297,7 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
                                           await Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) => PlayerSearch(
-                                            shuldReturnPlayer: true,
+                                            shouldReturnPlayer: true,
                                           ),
                                         ),
                                       );
