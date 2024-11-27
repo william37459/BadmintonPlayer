@@ -12,6 +12,7 @@ class PlayerPreviewWidget extends StatelessWidget {
     return CustomContainer(
       width: 200,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       child: Row(
         children: [
           const CircleAvatar(

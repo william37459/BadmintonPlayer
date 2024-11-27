@@ -11,6 +11,7 @@ class TeamTournamentResultPreviewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomContainer(
       width: 300,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

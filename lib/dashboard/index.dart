@@ -1,4 +1,5 @@
 import 'package:app/calendar/index.dart';
+
 import 'package:app/dashboard/functions/get_tournament_results_preview.dart';
 import 'package:app/dashboard/widgets/add_info_preview.dart';
 import 'package:app/dashboard/widgets/consumer_preview_widget.dart';
@@ -136,7 +137,7 @@ class Dashboard extends ConsumerWidget {
             ),
           ),
           const SizedBox(
-            height: 24,
+            height: 12,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +167,7 @@ class Dashboard extends ConsumerWidget {
             errorText: 'Ingen favorit spillere',
           ),
           const SizedBox(
-            height: 24,
+            height: 12,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,7 +209,7 @@ class Dashboard extends ConsumerWidget {
             errorText: 'Ingen holdkamp resultater',
           ),
           const SizedBox(
-            height: 24,
+            height: 12,
           ),
           PreviewHeader(
             colorThemeState: colorThemeState,

@@ -18,6 +18,7 @@ class TournamentResultPreviewWidget extends ConsumerWidget {
     CustomColorTheme colorTheme = ref.watch(colorThemeProvider);
 
     return CustomContainer(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
