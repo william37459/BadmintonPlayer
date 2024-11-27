@@ -43,15 +43,34 @@ class PlayerSearch extends ConsumerWidget {
 
   final FocusNode textFieldFocusNode = FocusNode();
 
-  final bool shuldReturnPlayer;
+  final bool shouldReturnPlayer;
+  final bool favouriteMode;
 
-  PlayerSearch({super.key, this.shuldReturnPlayer = false});
+  PlayerSearch(
+      {super.key, this.shouldReturnPlayer = false, this.favouriteMode = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: colorThemeState.primaryColor,
+        icon: Icon(
+          Icons.save,
+          color: colorThemeState.secondaryFontColor,
+        ),
+        label: Text(
+          "Færdig",
+          style: TextStyle(
+            color: colorThemeState.secondaryFontColor,
+            fontSize: 16,
+          ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -257,7 +276,8 @@ class PlayerSearch extends ConsumerWidget {
                                   ScrollViewKeyboardDismissBehavior.onDrag,
                               itemBuilder: (context, index) => PlayerResult(
                                 profile: data[index],
-                                shouldReturnPlayer: shuldReturnPlayer,
+                                shouldReturnPlayer: shouldReturnPlayer,
+                                favouriteMode: favouriteMode,
                               ),
                             ),
                           )

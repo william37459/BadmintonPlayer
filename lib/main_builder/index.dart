@@ -27,6 +27,7 @@ class MainBuilder extends ConsumerWidget {
 
     return Scaffold(
       body: pages[indexState],
+      backgroundColor: colorThemeState.secondaryFontColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indexState,

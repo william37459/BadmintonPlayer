@@ -37,12 +37,29 @@ class TeamTournamentFilter {
     };
   }
 
+  factory TeamTournamentFilter.fromJson(Map<String, dynamic> data) {
+    return TeamTournamentFilter(
+      text: "",
+      clubID: data['clubID'],
+      leagueGroupID: data['leagueGroupID'],
+      leagueGroupTeamID: data['leagueGroupTeamID'],
+      leagueMatchID: data['leagueMatchID'],
+      ageGroupID: data['ageGroupID'],
+      playerID: data['playerID'],
+      regionID: data['regionID'],
+      seasonID: data['seasonID'],
+      subPage: data['subPage'],
+    );
+  }
+
   factory TeamTournamentFilter.fromString(String data, String text) {
     List<String> params = data
         .replaceAll('return ShowStanding(', '')
         .replaceAll("'", "")
         .replaceAll(');', '')
-        .split(', ');
+        .split(',')
+        .map((e) => e.trim())
+        .toList();
     return TeamTournamentFilter(
       text: text,
       clubID: params[8],
@@ -74,4 +91,8 @@ class TeamTournamentFilterClub extends TeamTournamentFilter {
     required super.seasonID,
     required super.subPage,
   });
+
+  //Function to return all values split by comma
+  String get allValues =>
+      "$subPage,$seasonID,$leagueGroupID,$ageGroupID,$regionID,$leagueGroupTeamID,$leagueMatchID,$clubID,$playerID";
 }

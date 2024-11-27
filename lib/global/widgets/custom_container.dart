@@ -7,6 +7,8 @@ class CustomContainer extends StatelessWidget {
   final EdgeInsets? padding;
   final double? width;
   final Color? backgroundColor;
+  final bool shadow;
+  final bool border;
   const CustomContainer({
     super.key,
     this.onTap,
@@ -14,6 +16,8 @@ class CustomContainer extends StatelessWidget {
     this.padding,
     this.width,
     this.backgroundColor,
+    this.border = false,
+    this.shadow = true,
     required this.child,
   });
 
@@ -25,13 +29,17 @@ class CustomContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color: border ? Colors.grey.withOpacity(0.2) : Colors.transparent,
+          ),
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
+            if (shadow)
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: const Offset(0, 1),
+              ),
           ],
         ),
         child: SizedBox(

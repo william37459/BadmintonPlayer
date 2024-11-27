@@ -67,8 +67,6 @@ Future<List<Tournament>> getSeasonPlan(
         "${dateValues.reversed.join("-")}T00:00:00.000Z";
   }
 
-  //TODO Vis Madsen dato filter ikke virker haha
-
   http.Response response = await http.patch(
     Uri.parse(
       "https://badmintonplayer.dk/api/Tournament",
@@ -80,8 +78,6 @@ Future<List<Tournament>> getSeasonPlan(
       ...localFilterValues,
     }),
   );
-
-  print(filterValues);
 
   List<Tournament> tournamentList = [];
   List<TournamentDetails> tournamentDetailsList = [];

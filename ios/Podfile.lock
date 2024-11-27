@@ -1,35 +1,22 @@
 PODS:
   - Flutter (1.0.0)
-  - package_info_plus (0.4.5):
-    - Flutter
-  - Sentry/HybridSDK (8.36.0)
-  - sentry_flutter (8.9.0):
+  - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.36.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
-
-SPEC REPOS:
-  trunk:
-    - Sentry
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  package_info_plus:
-    :path: ".symlinks/plugins/package_info_plus/ios"
-  sentry_flutter:
-    :path: ".symlinks/plugins/sentry_flutter/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
-  Sentry: f8374b5415bc38dfb5645941b3ae31230fbeae57
-  sentry_flutter: 0eb93e5279eb41e2392212afe1ccd2fecb4f8cbe
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
 
 PODFILE CHECKSUM: 57c8aed26fba39d3ec9424816221f294a07c58eb
 

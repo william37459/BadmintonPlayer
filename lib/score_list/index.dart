@@ -6,7 +6,7 @@ import 'package:app/global/widgets/modal_bottom_sheet.dart';
 import 'package:app/player_profile_search/index.dart';
 import 'package:app/score_list/functions/get_score_list.dart';
 import 'package:app/score_list/widgets/ranking_list.dart';
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/custom_date_picker.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:app/calendar/widgets/custom_input.dart';

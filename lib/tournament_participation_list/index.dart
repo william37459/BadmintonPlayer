@@ -2,7 +2,7 @@ import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/participant.dart';
 import 'package:app/global/classes/tournament.dart';
 import 'package:app/global/constants.dart';
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:app/calendar/widgets/drop_down_selector.dart';
 import 'package:app/tournament_participation_list/functions/get_participaters.dart';

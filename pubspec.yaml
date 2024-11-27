@@ -42,7 +42,8 @@ dependencies:
   dropdown_search: ^5.0.6
   autocomplete_textfield: ^2.0.1
   flutter_launcher_icons: ^0.13.1
-  sentry_flutter: ^8.9.0
+  shared_preferences: ^2.3.3
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -5,7 +5,7 @@ import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/team_tournament_results/all_matches/functions/get_all_team_tournament_matches.dart';
 import 'package:app/team_tournament_results/all_matches/widgets/match_result_widget.dart';
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

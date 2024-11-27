@@ -4,7 +4,7 @@ import 'package:app/global/constants.dart';
 import 'package:app/calendar/functions/get_season_plan.dart';
 import 'package:app/calendar/functions/show_filter_modal_sheet.dart';
 import 'package:app/calendar/widgets/custom_autofill_input.dart';
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/tournament.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';

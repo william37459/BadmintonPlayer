@@ -1,14 +1,69 @@
 import 'package:app/calendar/index.dart';
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/dashboard/functions/get_tournament_results_preview.dart';
+import 'package:app/dashboard/widgets/add_info_preview.dart';
+import 'package:app/dashboard/widgets/consumer_preview_widget.dart';
+import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
+import 'package:app/dashboard/functions/get_player_profile_preview.dart';
+import 'package:app/dashboard/functions/get_team_tournament_results.dart';
 import 'package:app/dashboard/widgets/player_preview.dart';
+import 'package:app/dashboard/widgets/team_tournament_result_preview.dart';
 import 'package:app/dashboard/widgets/tournament_preview.dart';
+import 'package:app/dashboard/widgets/tournament_result_preview_widget.dart';
 import 'package:app/global/classes/color_theme.dart';
-import 'package:app/global/classes/profile.dart';
+import 'package:app/global/classes/player_profile.dart';
+import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
-import 'package:app/player_profile_search/index.dart';
-import 'package:app/player_profile_search/widgets/player_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+FutureProvider<List<PlayerProfile>> playerProfilePreviewProvider =
+    FutureProvider<List<PlayerProfile>>((ref) async {
+  List<String>? ids = ref.watch(favouritePlayers);
+  if (ids == null) {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    ref.read(favouritePlayers.notifier).state =
+        await asyncPrefs.getStringList("favouritePlayers") ?? [];
+  }
+
+  final result = await getPlayerProfilePreview(
+    ids ?? [],
+    contextKey,
+    ref,
+  );
+  return result;
+});
+
+FutureProvider<List<dynamic>> tournamentResultPreviewProvider =
+    FutureProvider<List<dynamic>>((ref) async {
+  List<String>? ids = ref.watch(favouritePlayers);
+  if (ids == null) {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    ref.read(favouritePlayers.notifier).state =
+        await asyncPrefs.getStringList("favouritePlayers") ?? [];
+  }
+  final result = await getTournamentResultsPreview(
+    ids ?? [],
+    contextKey,
+  );
+  return result;
+});
+
+FutureProvider<List<TeamTournamentResultPreview>> teamTournamentResultProvider =
+    FutureProvider<List<TeamTournamentResultPreview>>((ref) async {
+  List<String>? teamIds = ref.watch(favouriteTeams);
+  if (teamIds == null) {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    ref.read(favouriteTeams.notifier).state =
+        await asyncPrefs.getStringList("favouriteTeams") ?? [];
+  }
+
+  final result = await getTeamTournamentResults(
+    teamIds ?? [],
+    contextKey,
+  );
+  return result;
+});
 
 class Dashboard extends ConsumerWidget {
   final ScrollController scrollController = ScrollController();
@@ -18,201 +73,184 @@ class Dashboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: colorThemeState.primaryColor,
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(16),
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: colorThemeState.primaryColor,
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(16),
+              ),
+            ),
+            padding: const EdgeInsets.only(bottom: 32.0),
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Velkommen,",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            colorThemeState.secondaryFontColor.withOpacity(0.8),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      'Kommende turneringer',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: colorThemeState.secondaryFontColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  ConsumerPreviewWidget(
+                    child: (dynamic result) => TournamentPreviewWidget(
+                      tournament: result,
+                      width: 200,
+                    ),
+                    provider: seasonPlanFutureProvider,
+                    errorText: 'Ingen kommende turneringer',
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: AddInfoPreview(
+                      onTap: () => Navigator.of(context)
+                          .pushNamed('/TournamentOverviewPage'),
+                      text: 'Se alle turneringer',
+                      icon: Icons.info,
+                      color: colorThemeState.secondaryFontColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          padding: const EdgeInsets.only(bottom: 32.0),
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Velkommen,",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          colorThemeState.secondaryFontColor.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    'Kommende turneringer',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: colorThemeState.secondaryFontColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Consumer(
-                  builder: (context, ref, child) {
-                    final futureAsyncValue =
-                        ref.watch(seasonPlanFutureProvider);
-                    return futureAsyncValue.when(
-                      error: (error, stackTrace) => Center(
-                        child: Text(
-                          error.toString(),
-                        ),
-                      ),
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      data: (data) => data.isEmpty
-                          ? const Text("Der er ingen kommende turneringer")
-                          : SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  for (int index = 0;
-                                      index < data.length;
-                                      index++)
-                                    TournamentPreviewWidget(
-                                      tournament: data[index],
-                                    ),
-                                ],
-                              ),
-                            ),
-                    );
+          const SizedBox(
+            height: 24,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              PreviewHeader(
+                colorThemeState: colorThemeState,
+                text: 'Favorit spillere',
+              ),
+              AddInfoPreview(
+                onTap: () => Navigator.of(context).pushNamed(
+                  '/PlayerSearchPage',
+                  arguments: {
+                    'favouriteMode': true,
                   },
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Material(
-                      color: colorThemeState.secondaryFontColor,
-                      borderRadius: BorderRadius.circular(4),
-                      child: InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed('/TournamentOverviewPage'),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Se alle turneringer',
-                            style: TextStyle(
-                              color: colorThemeState.fontColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 24,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            'Favorit spillere',
-            style: TextStyle(
-              fontSize: 24,
-              color: colorThemeState.fontColor,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        Consumer(
-          builder: (context, ref, child) {
-            AsyncValue<List<Profile>> futureAsyncValue =
-                ref.watch(allScoreListProvider);
-            return futureAsyncValue.when(
-              error: (error, stackTrace) => Text(
-                error.toString(),
+                text: "Tilføj spillere",
+                icon: Icons.add,
               ),
-              loading: () => const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+            ],
+          ),
+          ConsumerPreviewWidget(
+            child: (dynamic result) => PlayerPreviewWidget(
+              profile: result,
+            ),
+            provider: playerProfilePreviewProvider,
+            errorText: 'Ingen favorit spillere',
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              PreviewHeader(
+                colorThemeState: colorThemeState,
+                text: 'Holdkampe resultater',
               ),
-              data: (data) {
-                return data.isEmpty
-                    ? SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            for (int index = 0; index < data.length; index++)
-                              PlayerPreviewWidget(
-                                profile: data[index],
-                              ),
-                          ],
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Du har ikke nogen favorit spillere endnu",
-                              style: TextStyle(
-                                color:
-                                    colorThemeState.fontColor.withOpacity(0.5),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: CustomContainer(
-                                padding: const EdgeInsets.all(0),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: InkWell(
-                                    onTap: () =>
-                                        Navigator.of(context).pushNamed(
-                                      '/PlayerSearchPage',
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Tilføj spillere",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: colorThemeState.fontColor,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-              },
-            );
-          },
+              AddInfoPreview(
+                onTap: () {
+                  ref.read(teamTournamentSearchFilterProvider.notifier).state =
+                      TeamTournamentFilter.fromJson({
+                    "ageGroupID": "",
+                    "callbackcontextkey": contextKey,
+                    "clubID": "",
+                    "leagueGroupID": "",
+                    "leagueGroupTeamID": "",
+                    "leagueMatchID": "",
+                    "playerID": "",
+                    "regionID": "",
+                    "seasonID": "2024",
+                    "subPage": "6"
+                  });
+                  Navigator.of(context).pushNamed(
+                    '/TeamTournamentSearchPage',
+                  );
+                },
+                text: "Tilføj hold",
+                icon: Icons.add,
+              ),
+            ],
+          ),
+          ConsumerPreviewWidget(
+            child: (dynamic result) => TeamTournamentResultPreviewWidget(
+              result: result,
+            ),
+            provider: teamTournamentResultProvider,
+            errorText: 'Ingen holdkamp resultater',
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          PreviewHeader(
+            colorThemeState: colorThemeState,
+            text: "Seneste resultater",
+          ),
+          ConsumerPreviewWidget(
+            child: (dynamic result) => TournamentResultPreviewWidget(
+              result: result,
+            ),
+            provider: tournamentResultPreviewProvider,
+            errorText:
+                'Der er ingen resultater for turneringer i den her sæson',
+            axis: Axis.vertical,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PreviewHeader extends StatelessWidget {
+  final String text;
+  const PreviewHeader({
+    super.key,
+    required this.colorThemeState,
+    required this.text,
+  });
+
+  final CustomColorTheme colorThemeState;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 16,
+          color: colorThemeState.fontColor.withOpacity(0.6),
+          fontWeight: FontWeight.w600,
         ),
-      ],
+      ),
     );
   }
 }

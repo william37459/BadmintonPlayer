@@ -3,7 +3,7 @@ import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/team_tournament/functions/get_setup_team_tournaments.dart';
 import 'package:app/calendar/widgets/custom_autofill_input.dart';
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/custom_input.dart';
 import 'package:app/calendar/widgets/drop_down_selector.dart';
 import 'package:flutter/material.dart';

@@ -4,7 +4,7 @@ import 'package:app/global/classes/team_tournament_position.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/team_tournament_results/position/functions/get_team_tournament_positions.dart';
 import 'package:app/team_tournament_results/position/widgets/team_position_widget.dart';
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/global/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

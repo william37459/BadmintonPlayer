@@ -37,6 +37,14 @@ StateProvider<Map<String, dynamic>> selectedPlayer =
   (ref) => {},
 );
 
+StateProvider<List<String>?> favouritePlayers = StateProvider<List<String>?>(
+  (ref) => null,
+);
+
+StateProvider<List<String>?> favouriteTeams = StateProvider<List<String>?>(
+  (ref) => null,
+);
+
 String? findKeyByValue(String? value, Map<String, dynamic> map) {
   for (var entry in map.entries) {
     if (entry.value == value) {

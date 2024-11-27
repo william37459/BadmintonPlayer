@@ -10,6 +10,7 @@ import 'package:app/team_tournament_results/match_number/index.dart';
 import 'package:app/team_tournament_results/position/index.dart';
 import 'package:app/team_tournament_results/region/index.dart';
 import 'package:app/team_tournament_results/results/index.dart';
+import 'package:app/team_tournament_search/index.dart';
 import 'package:app/tournament_participation_list/index.dart';
 import 'package:app/tournament_result_page/index.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,8 +27,20 @@ class RouteGenerator {
         return CupertinoPageRoute(builder: (_) => const MainBuilder());
       case '/TeamTournamentPage':
         return CupertinoPageRoute(builder: (_) => const TeamTournamentPage());
+      case '/TeamTournamentSearchPage':
+        return CupertinoPageRoute(builder: (_) => TeamTournamentSearch());
       case '/PlayerSearchPage':
-        return CupertinoPageRoute(builder: (_) => PlayerSearch());
+        if (args is Map) {
+          return CupertinoPageRoute(
+            builder: (_) => PlayerSearch(
+              favouriteMode: args['favouriteMode'] ?? false,
+              shouldReturnPlayer: args['shouldReturnPlayer'] ?? false,
+            ),
+          );
+        }
+        return CupertinoPageRoute(
+          builder: (_) => PlayerSearch(),
+        );
       case '/TeamTournamentRegionPage':
         if (args is Map) {
           return CupertinoPageRoute(

@@ -1,4 +1,4 @@
-import 'package:app/calendar/widgets/custom_container.dart';
+import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/tournament.dart';
 import 'package:app/global/constants.dart';
@@ -8,15 +8,20 @@ import 'package:intl/intl.dart';
 
 class TournamentPreviewWidget extends ConsumerWidget {
   final Tournament tournament;
-  const TournamentPreviewWidget({super.key, required this.tournament});
+  final double? width;
+  const TournamentPreviewWidget({
+    super.key,
+    required this.tournament,
+    this.width,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return CustomContainer(
-      width: 200,
-      margin: const EdgeInsets.only(right: 16, bottom: 8, top: 8),
+      width: width,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       padding: const EdgeInsets.all(0),
       child: Material(
         color: Colors.transparent,
