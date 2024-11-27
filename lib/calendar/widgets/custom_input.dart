@@ -10,6 +10,7 @@ class CustomInput extends ConsumerWidget {
   final int? min;
   final int? max;
   final TextInputType? inputType;
+  final bool obscureText;
 
   const CustomInput({
     super.key,
@@ -19,10 +20,12 @@ class CustomInput extends ConsumerWidget {
     this.min,
     this.max,
     this.inputType,
+    this.obscureText = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
     final TextEditingController textFieldController = TextEditingController(
       text: ref.read(provider)[providerKey] ?? "",
     );
@@ -31,27 +34,14 @@ class CustomInput extends ConsumerWidget {
       TextPosition(offset: textFieldController.text.length),
     );
 
-    CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-
     return TextField(
       controller: textFieldController,
       keyboardType: inputType,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(4),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: colorThemeState.primaryColor.withOpacity(0.3),
-          ),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: colorThemeState.primaryColor,
-          ),
-        ),
-        isDense: true,
-        isCollapsed: true,
+      obscureText: obscureText,
+      decoration: InputDecoration.collapsed(
         hintText: hint,
       ),
+      cursorColor: colorThemeState.primaryColor,
       onChanged: (value) {
         if (value.isEmpty) {
           ref.read(provider.notifier).state = {
