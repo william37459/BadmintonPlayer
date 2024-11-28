@@ -6,6 +6,7 @@ import 'package:app/setup/functions/get_profile_search_filters.dart';
 import 'package:app/setup/functions/get_ranking_search_filters.dart';
 import 'package:app/setup/functions/get_tournament_search_filters.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> getSetupValues() async {
@@ -47,6 +48,13 @@ Future<void> getSetupValues() async {
   for (Map<String, dynamic> club in allClubs) {
     clubs.add(Club.fromJson(club));
   }
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
 
   navigatorState?.pushNamedAndRemoveUntil("/MainBuilder", (route) => false);
 }
