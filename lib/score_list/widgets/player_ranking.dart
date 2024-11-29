@@ -19,15 +19,7 @@ class PlayerRanking extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
-        //! SKAL KODES BEDRE
-        // likedIdsState.contains(playerScore.id)
-        //     ? likedIdsState.remove(playerScore.id)
-        //     : likedIdsState.add(playerScore.id);
-        // ref.read(likedIds.notifier).state = [...likedIdsState];
-        ref.read(selectedPlayer.notifier).state = {
-          ...ref.read(selectedPlayer.notifier).state,
-          "id": playerScore.id,
-        };
+        ref.read(selectedPlayer.notifier).state = playerScore.id;
         Navigator.pushNamed(
           context,
           '/PlayerProfilePage',

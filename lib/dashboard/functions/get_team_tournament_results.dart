@@ -71,5 +71,5 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
 
   results.sort((a, b) => a.date.compareTo(b.date));
 
-  return results.sublist(0, 10);
+  return results.length > 10 ? results.sublist(0, 10) : results;
 }

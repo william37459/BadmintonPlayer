@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:app/global/classes/color_theme.dart';
@@ -8,9 +9,10 @@ import 'package:app/calendar/widgets/custom_input.dart';
 import 'package:app/profile/functions/get_user_info.dart';
 import 'package:app/profile/functions/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-StateProvider<bool?> isLoggedInProvider = StateProvider<bool?>((ref) => null);
+StateProvider<bool?> isLoggedInProvider = StateProvider<bool?>((ref) => true);
 
 StateProvider<User> userProvider = StateProvider<User>(
   (ref) => User(
@@ -36,7 +38,6 @@ List<String> menus = [
   "Vis kursustilmeldinger",
   "Mine kurser",
   "Min Kalender (Beta)",
-  "Foreslå en funktion",
 ];
 
 StateProvider<Map<String, dynamic>> loginProvider =
@@ -133,6 +134,36 @@ class ProfilePage extends ConsumerWidget {
                           ],
                         ),
                       ),
+                    CustomContainer(
+                      onTap: () async {
+                        final Email email = Email(
+                          body: '',
+                          subject: 'Badmintonplayer app - ny feature',
+                          recipients: ['williamdam7@gmail.com'],
+                          isHTML: false,
+                        );
+
+                        try {
+                          await FlutterEmailSender.send(email);
+                        } catch (e) {
+                          debugPrint(e.toString());
+                        }
+                      },
+                      margin: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Foreslå en feature!",
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Colors.grey[400] ?? Colors.grey,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

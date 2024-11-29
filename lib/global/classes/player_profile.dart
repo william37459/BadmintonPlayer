@@ -1,5 +1,6 @@
 class PlayerProfile {
   final String name;
+  final String id;
   final List<AttachedProfile> attachedProfiles;
   final String club;
   final String startLevel;
@@ -17,6 +18,7 @@ class PlayerProfile {
     required this.teamTournaments,
     required this.tournaments,
     required this.seasons,
+    required this.id,
   });
 }
 

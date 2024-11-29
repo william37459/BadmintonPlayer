@@ -3,6 +3,7 @@ import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -19,6 +20,31 @@ class TournamentResultPreviewWidget extends ConsumerWidget {
 
     return CustomContainer(
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+      onTap: () async {
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+
+        const AndroidNotificationDetails androidNotificationDetails =
+            AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        );
+        const NotificationDetails notificationDetails = NotificationDetails(
+          android: androidNotificationDetails,
+        );
+
+        await flutterLocalNotificationsPlugin.show(
+          0,
+          'Nyt resultat!',
+          'Nyt resultat fra turneringen i ${result.organier}, ${DateFormat('E dd/MM', 'da_DK').format(result.date)}',
+          notificationDetails,
+          payload: 'item x',
+        );
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

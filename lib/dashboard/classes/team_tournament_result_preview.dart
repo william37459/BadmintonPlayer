@@ -22,10 +22,11 @@ class TeamTournamentResultPreview {
   factory TeamTournamentResultPreview.fromElement(
       Element element, String league) {
     String date = element.querySelector(".time")?.text ?? "";
+
     DateTime dateTime = DateTime.parse(
       "${date.split(" ")[1].split("‑").reversed.join("-")} ${date.split(" ")[2]}:00",
     );
-    //2012-02-27 13:27:00
+
     String matchNumber = element.querySelector(".matchno")?.text ?? "";
     String homeTeam = element.querySelectorAll("td.team")[0].text;
     String awayTeam = element.querySelectorAll("td.team")[1].text;

@@ -32,9 +32,8 @@ StateProvider<Map<String, bool>> isExpandedProvider =
 
 StateProvider<String> selectedTournament = StateProvider<String>((ref) => "");
 
-StateProvider<Map<String, dynamic>> selectedPlayer =
-    StateProvider<Map<String, dynamic>>(
-  (ref) => {},
+StateProvider<String> selectedPlayer = StateProvider<String>(
+  (ref) => "",
 );
 
 StateProvider<List<String>?> favouritePlayers = StateProvider<List<String>?>(

@@ -44,6 +44,7 @@ class ConsumerPreviewWidget extends ConsumerWidget {
                         attachedProfiles: [],
                         club: '',
                         startLevel: '',
+                        id: '',
                         scoreData: [],
                         teamTournaments: [],
                         tournaments: [],

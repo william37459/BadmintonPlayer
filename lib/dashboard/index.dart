@@ -21,18 +21,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 FutureProvider<List<PlayerProfile>> playerProfilePreviewProvider =
     FutureProvider<List<PlayerProfile>>((ref) async {
   List<String>? ids = ref.watch(favouritePlayers);
+  final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
   if (ids == null) {
-    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
     ref.read(favouritePlayers.notifier).state =
         await asyncPrefs.getStringList("favouritePlayers") ?? [];
   }
 
-  final result = await getPlayerProfilePreview(
-    ids ?? [],
-    contextKey,
-    ref,
+  List<Future<PlayerProfile?>> futures = ids!.map((id) async {
+    return await getPlayerProfilePreview(
+      id,
+      contextKey,
+      ref,
+    );
+  }).toList();
+
+  // Wait for all requests to complete
+  List<PlayerProfile?> result = await Future.wait(futures);
+
+  result.removeWhere((element) => element == null);
+
+  await asyncPrefs.setStringList(
+    'playerScores',
+    result.map((e) => "${e!.id}:${e.startLevel}:${e.name}").toList(),
   );
-  return result;
+
+  return result.cast<PlayerProfile>();
 });
 
 FutureProvider<List<dynamic>> tournamentResultPreviewProvider =

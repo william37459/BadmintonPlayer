@@ -38,17 +38,25 @@ Future<List<TournamentResultPreview>> getTournamentResultsPreview(
     String htmlContent = formattedResponse['d']['Html'];
 
     Document document = html_parser.parse(htmlContent);
-    List<Element> allRows = document
-        .querySelectorAll(".GridView")
-        .last
-        .children
-        .first
-        .children
-        .sublist(1);
-    for (var row in allRows) {
-      results.add(
-        TournamentResultPreview.fromElement(row),
-      );
+
+    if (document
+        .querySelectorAll("h2")
+        .map((e) => e.text.toLowerCase())
+        .toList()
+        .contains("turneringer")) {
+      List<Element> allRows = document
+          .querySelectorAll(".GridView")
+          .last
+          .children
+          .first
+          .children
+          .sublist(1);
+
+      for (var row in allRows) {
+        results.add(
+          TournamentResultPreview.fromElement(row),
+        );
+      }
     }
   }
   return results.sublist(0, 10 > results.length ? results.length : 10);

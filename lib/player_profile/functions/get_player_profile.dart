@@ -6,7 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 
 Future<PlayerProfile> getPlayerProfile(
-    Map<String, dynamic> id, String contextKey) async {
+  String id,
+  String contextKey,
+) async {
   http.Response response = await http.post(
     Uri.parse(
       "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetPlayerProfile",
@@ -17,8 +19,8 @@ Future<PlayerProfile> getPlayerProfile(
     body: json.encode({
       "callbackcontextkey": contextKey,
       "getplayerdata": true,
-      "playerid": id['id'],
-      "seasonid": id['seasonid'],
+      "playerid": id,
+      "seasonid": "2024",
       "showUserProfile": true,
       "showheader": false,
     }),
@@ -30,6 +32,7 @@ Future<PlayerProfile> getPlayerProfile(
       attachedProfiles: [],
       club: "",
       startLevel: "",
+      id: id,
       scoreData: [],
       teamTournaments: [],
       tournaments: [],
@@ -151,6 +154,7 @@ Future<PlayerProfile> getPlayerProfile(
 
   return PlayerProfile(
     name: 'Player $id',
+    id: id,
     attachedProfiles: attachedProfiles,
     club: club,
     startLevel: startLevel,

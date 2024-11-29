@@ -42,10 +42,7 @@ class PlayerResult extends ConsumerWidget {
             );
           }
         } else {
-          ref.read(selectedPlayer.notifier).state = {
-            ...ref.read(selectedPlayer.notifier).state,
-            "id": profile.id,
-          };
+          ref.read(selectedPlayer.notifier).state = profile.id;
           Navigator.pushNamed(
             context,
             '/PlayerProfilePage',

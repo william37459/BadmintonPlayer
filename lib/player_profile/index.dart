@@ -19,9 +19,7 @@ StateProvider<int?> signUpLevel = StateProvider<int?>((ref) {
 });
 
 class PlayerProfilePage extends ConsumerWidget {
-  final String name;
-  final String id;
-  const PlayerProfilePage({super.key, required this.name, required this.id});
+  const PlayerProfilePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,9 +27,8 @@ class PlayerProfilePage extends ConsumerWidget {
     final signUpLevelState = ref.watch(signUpLevel);
 
     return PopScope(
-      onPopInvoked: (isPop) {
-        ref.read(signUpLevel.notifier).state = null;
-      },
+      onPopInvokedWithResult: (didPop, result) =>
+          ref.read(signUpLevel.notifier).state = null,
       child: Scaffold(
         floatingActionButton: Consumer(
           builder: (context, ref, child) {
@@ -73,7 +70,7 @@ class PlayerProfilePage extends ConsumerWidget {
                     backgroundColor: colorThemeState.primaryColor,
                     onPressed: () async {
                       ref.read(signUpLevel.notifier).state =
-                          await getPlayerLevel(id, name);
+                          await getPlayerLevel(data.id, data.name);
                     },
                   );
                 }
@@ -97,32 +94,20 @@ class PlayerProfilePage extends ConsumerWidget {
                   children: [
                     InkWell(
                       onTap: () => Navigator.pop(context),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorThemeState.secondaryColor,
-                            width: 2,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: colorThemeState.secondaryColor,
-                        ),
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: colorThemeState.fontColor.withOpacity(0.8),
                       ),
                     ),
-                    const SizedBox(
-                      width: 12,
-                    ),
                     Expanded(
-                      child: Text(
-                        name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: colorThemeState.secondaryColor,
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Profile",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: colorThemeState.fontColor.withOpacity(0.8),
+                          ),
                         ),
                       ),
                     ),
@@ -143,10 +128,25 @@ class PlayerProfilePage extends ConsumerWidget {
                       ),
                       data: (data) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
+                              const CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                                ),
+                              ),
+                              Text(
+                                data.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: colorThemeState.secondaryColor,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                               Text(
                                 "Klub: ${data.club}",
                                 style: TextStyle(
@@ -170,14 +170,6 @@ class PlayerProfilePage extends ConsumerWidget {
                                           .withOpacity(0.75),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: CustomDropDownSelector(
-                                      data: data.seasons,
-                                      provider: selectedPlayer,
-                                      providerKey: "season",
-                                      hint: "Vælg sæson",
-                                    ),
-                                  )
                                 ],
                               ),
                               const SizedBox(
