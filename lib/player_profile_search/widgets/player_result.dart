@@ -64,12 +64,13 @@ class PlayerResult extends ConsumerWidget {
                     duration: const Duration(milliseconds: 200),
                     firstChild: Icon(
                       Icons.star,
-                      color: colorThemeState.primaryColor.withOpacity(0.8),
+                      color:
+                          colorThemeState.primaryColor.withValues(alpha: 0.8),
                       size: 32,
                     ),
                     secondChild: Icon(
                       Icons.star_outline,
-                      color: colorThemeState.fontColor.withOpacity(0.3),
+                      color: colorThemeState.fontColor.withValues(alpha: 0.3),
                       size: 32,
                     ),
                     crossFadeState: favouritePlayersState.contains(profile.id)
@@ -85,7 +86,7 @@ class PlayerResult extends ConsumerWidget {
                 Text(
                   profile.name,
                   style: TextStyle(
-                    color: colorThemeState.primaryColor.withOpacity(0.8),
+                    color: colorThemeState.primaryColor.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                   ),
@@ -93,7 +94,7 @@ class PlayerResult extends ConsumerWidget {
                 Text(
                   "${profile.badmintonId}${profile.id.isNotEmpty && profile.club.isNotEmpty ? ', ' : ''}${profile.club}",
                   style: TextStyle(
-                    color: colorThemeState.fontColor.withOpacity(0.5),
+                    color: colorThemeState.fontColor.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
                 ),

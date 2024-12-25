@@ -35,7 +35,7 @@ class PlayerRanking extends ConsumerWidget {
             Text(
               playerScore.rank,
               style: TextStyle(
-                color: colorThemeState.fontColor.withOpacity(0.5),
+                color: colorThemeState.fontColor.withValues(alpha: 0.5),
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
               ),
@@ -48,7 +48,8 @@ class PlayerRanking extends ConsumerWidget {
                   Text(
                     playerScore.name,
                     style: TextStyle(
-                      color: colorThemeState.primaryColor.withOpacity(0.8),
+                      color:
+                          colorThemeState.primaryColor.withValues(alpha: 0.8),
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),
@@ -56,7 +57,7 @@ class PlayerRanking extends ConsumerWidget {
                   Text(
                     "${playerScore.rankClass}${playerScore.rankClass.isNotEmpty && playerScore.points != null ? ', ' : ''}${playerScore.points == null ? '' : '${playerScore.points} point'}",
                     style: TextStyle(
-                      color: colorThemeState.fontColor.withOpacity(0.5),
+                      color: colorThemeState.fontColor.withValues(alpha: 0.5),
                       fontSize: 14,
                     ),
                   ),

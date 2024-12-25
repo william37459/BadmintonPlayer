@@ -71,7 +71,7 @@ class TeamTournamentPage extends ConsumerWidget {
                               fontWeight: FontWeight.w600,
                               fontSize: 18,
                               color: colorThemeState.secondaryColor
-                                  .withOpacity(0.75),
+                                  .withValues(alpha: 0.75),
                             ),
                           ),
                         ),

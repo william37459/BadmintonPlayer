@@ -106,7 +106,7 @@ class TeamTournamentPositionWidget extends ConsumerWidget {
                     child: Text(
                       button.text,
                       style: TextStyle(
-                        color: colorThemeState.fontColor.withOpacity(0.5),
+                        color: colorThemeState.fontColor.withValues(alpha: 0.5),
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
                       ),

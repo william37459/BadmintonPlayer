@@ -60,14 +60,16 @@ class TournamentPreviewWidget extends ConsumerWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: colorThemeState.fontColor.withOpacity(0.8),
+                          color:
+                              colorThemeState.fontColor.withValues(alpha: 0.8),
                           fontSize: 12,
                         ),
                       ),
                       Text(
                         '${DateFormat('MM/dd').format(tournament.dateFrom)} - ${DateFormat('MM/dd').format(tournament.dateTo)}',
                         style: TextStyle(
-                          color: colorThemeState.fontColor.withOpacity(0.8),
+                          color:
+                              colorThemeState.fontColor.withValues(alpha: 0.8),
                           fontSize: 12,
                         ),
                       ),
@@ -76,7 +78,7 @@ class TournamentPreviewWidget extends ConsumerWidget {
                 ),
                 Icon(
                   Icons.info_outline,
-                  color: colorThemeState.fontColor.withOpacity(0.4),
+                  color: colorThemeState.fontColor.withValues(alpha: 0.4),
                 ),
               ],
             ),

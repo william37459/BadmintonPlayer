@@ -1,3 +1,6 @@
+import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
+import 'package:app/dashboard/classes/tournament_result_preview.dart';
+
 class PlayerProfile {
   final String name;
   final String id;
@@ -5,8 +8,8 @@ class PlayerProfile {
   final String club;
   final String startLevel;
   final List<ScoreData> scoreData;
-  final List<TeamTournament> teamTournaments;
-  final List<PlayerTournament> tournaments;
+  final List<TeamTournamentResultPreview> teamTournaments;
+  final List<TournamentResultPreview> tournaments;
   final Map<String, String> seasons;
 
   PlayerProfile({
@@ -35,7 +38,7 @@ class AttachedProfile {
 class ScoreData {
   final String type;
   final String rank;
-  final String points;
+  String points;
   final String matches;
   final String placement;
 
@@ -59,19 +62,5 @@ class TeamTournament {
     required this.rank,
     required this.team,
     required this.opponent,
-  });
-}
-
-class PlayerTournament {
-  final DateTime date;
-  final String club;
-  final String rank;
-  final String id;
-
-  PlayerTournament({
-    required this.date,
-    required this.club,
-    required this.rank,
-    required this.id,
   });
 }

@@ -61,6 +61,9 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp(
+        theme: ThemeData().copyWith(
+          scaffoldBackgroundColor: const Color(0xffF1F0F5),
+        ),
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         supportedLocales: const [
           Locale('da', 'DK'),

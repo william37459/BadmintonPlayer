@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:app/dashboard/classes/tournament_result_preview.dart';
 import 'package:app/global/classes/player_profile.dart';
 import 'package:app/player_profile/functions/get_player_level.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
@@ -10,7 +10,7 @@ import 'package:html/parser.dart' as html_parser;
 Future<PlayerProfile?> getPlayerProfilePreview(
   String id,
   String contextKey,
-  FutureProviderRef<List<PlayerProfile>> ref,
+  ref,
 ) async {
   http.Response response = await http.post(
     Uri.parse(
@@ -88,8 +88,7 @@ Future<PlayerProfile?> getPlayerProfilePreview(
 
   List<Element> gridViews = document.querySelectorAll('.GridView');
   List<ScoreData> scoreData = [];
-  List<TeamTournament> teamTournaments = [];
-  List<PlayerTournament> tournaments = [];
+  List<TournamentResultPreview> tournaments = [];
   Map<String, String> seasons = {};
 
   List<Element> allSeasons = document.querySelector('select')?.children ?? [];
@@ -119,43 +118,20 @@ Future<PlayerProfile?> getPlayerProfilePreview(
       }
     }
 
-    if (rows[0].text.contains("Kampdato")) {
-      for (Element row in rows) {
-        if (!row.text.contains("Kampdato")) {
-          teamTournaments.add(
-            TeamTournament(
-              date: DateTime.parse(
-                  "${row.children[0].text.split(" ")[0].split("-").reversed.join("-")} ${row.children[0].text.split(" ")[1]}"),
-              rank: row.children[1].text.trim(),
-              team: row.children[2].text.trim(),
-              opponent: row.children[3].text.trim(),
-            ),
-          );
-        }
-      }
-    }
-
     if (rows[0].text.contains("Dato")) {
       for (Element row in rows) {
         if (!row.text.contains("Dato")) {
           tournaments.add(
-            PlayerTournament(
-              date: DateTime.parse(
-                  row.children[0].text.trim().split("-").reversed.join("-")),
-              club: row.children[1].text.trim(),
-              rank: row.children[3].text.trim(),
-              id: row.children[3]
-                      .querySelector('a')
-                      ?.attributes['href']
-                      ?.split("#")[1]
-                      .replaceAll(RegExp(r'[^0-9]'), "") ??
-                  "",
+            TournamentResultPreview.fromElement(
+              row,
             ),
           );
         }
       }
     }
   }
+
+  scoreData[0].points = startLevel;
 
   return PlayerProfile(
     name: formattedResponse['d']['playername'].trim(),
@@ -164,7 +140,7 @@ Future<PlayerProfile?> getPlayerProfilePreview(
     id: id,
     startLevel: startLevel,
     scoreData: scoreData,
-    teamTournaments: teamTournaments,
+    teamTournaments: [],
     tournaments: tournaments,
     seasons: seasons,
   );

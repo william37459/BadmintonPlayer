@@ -25,7 +25,7 @@ class TeamPositionWidget extends ConsumerWidget {
             Navigator.of(context).push(
               PageRouteBuilder(
                 opaque: false,
-                barrierColor: Colors.black.withOpacity(0.5),
+                barrierColor: Colors.black.withValues(alpha: 0.5),
                 barrierDismissible: true,
                 pageBuilder: (BuildContext context, _, __) {
                   return InformationHero(
@@ -41,7 +41,7 @@ class TeamPositionWidget extends ConsumerWidget {
               Text(
                 team.position,
                 style: TextStyle(
-                  color: colorThemeState.fontColor.withOpacity(0.5),
+                  color: colorThemeState.fontColor.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
                 ),
@@ -62,7 +62,8 @@ class TeamPositionWidget extends ConsumerWidget {
                     Text(
                       "${team.points} points",
                       style: TextStyle(
-                        color: colorThemeState.primaryColor.withOpacity(0.5),
+                        color:
+                            colorThemeState.primaryColor.withValues(alpha: 0.5),
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
                       ),

@@ -4,15 +4,22 @@ import 'package:flutter/material.dart';
 
 class TeamTournamentResultPreviewWidget extends StatelessWidget {
   final TeamTournamentResultPreview result;
+  final double? width;
+  final EdgeInsets margin;
 
-  const TeamTournamentResultPreviewWidget({super.key, required this.result});
+  const TeamTournamentResultPreviewWidget({
+    super.key,
+    required this.result,
+    this.width = 300,
+    this.margin = const EdgeInsets.symmetric(horizontal: 8.0),
+  });
 
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      width: 300,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      width: width,
+      margin: margin,
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,7 +54,7 @@ class TeamTournamentResultPreviewWidget extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(

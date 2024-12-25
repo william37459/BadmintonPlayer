@@ -19,16 +19,16 @@ class ResultLabel extends ConsumerWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(4),
           onTap: () {
-            ref.read(tournamentResultFilterProvider.notifier).state = {
-              ...ref.read(tournamentResultFilterProvider.notifier).state,
-              "tournamenteventid": index,
-            };
+            // ref.read(tournamentResultFilterProvider.notifier).state = {
+            //   ...ref.read(tournamentResultFilterProvider.notifier).state,
+            //   "tournamenteventid": index,
+            // };
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: colorThemeState.secondaryColor.withOpacity(0.1),
+              color: colorThemeState.secondaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(

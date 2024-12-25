@@ -19,7 +19,7 @@ class MathResultWidget extends ConsumerWidget {
           Text(
             matchResult.type,
             style: TextStyle(
-              color: colorThemeState.fontColor.withOpacity(0.5),
+              color: colorThemeState.fontColor.withValues(alpha: 0.5),
               fontWeight: FontWeight.w600,
               fontSize: 18,
             ),
@@ -57,9 +57,9 @@ class MathResultWidget extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(4),
                                 color: team.winner
                                     ? colorThemeState.primaryColor
-                                        .withOpacity(0.3)
+                                        .withValues(alpha: 0.3)
                                     : colorThemeState.fontColor
-                                        .withOpacity(0.05),
+                                        .withValues(alpha: 0.05),
                               ),
                               child: Center(
                                 child: Text(

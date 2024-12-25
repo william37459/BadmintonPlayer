@@ -85,10 +85,11 @@ class WrapperSelector extends ConsumerWidget {
                   border: Border.all(
                     color: colorThemeState.primaryColor,
                   ),
-                  color: colorThemeState.primaryColor.withOpacity(
-                      (providerState[providerKey]?.contains(value) ?? false)
-                          ? 1
-                          : 0.2),
+                  color: colorThemeState.primaryColor.withValues(
+                      alpha:
+                          (providerState[providerKey]?.contains(value) ?? false)
+                              ? 1
+                              : 0.2),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 padding: const EdgeInsets.symmetric(

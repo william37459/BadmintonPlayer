@@ -3,29 +3,27 @@ import 'package:app/global/classes/tournament_result.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/modal_bottom_sheet.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
-import 'package:app/calendar/widgets/drop_down_selector.dart';
 import 'package:app/tournament_result_page/functions/get_results.dart';
 import 'package:app/tournament_result_page/widgets/result.dart';
 import 'package:app/tournament_result_page/widgets/result_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+StateProvider<Map<String, Map<String, dynamic>>> resultFilterProvider =
+    StateProvider<Map<String, Map<String, dynamic>>>((ref) => {});
+
 StateProvider<Map<String, dynamic>> tournamentResultFilterProvider =
-    StateProvider<Map<String, dynamic>>(
-  (ref) => {
+    StateProvider<Map<String, dynamic>>((ref) {
+  return {
     "clientselectfunction": "SelectTournamentClass1",
     "clubid": 0,
     "groupnumber": 0,
     "locationnumber": 0,
     "playerid": 0,
     "tabnumber": 0,
-    "tournamentclassid": "",
     "tournamenteventid": 0,
-  },
-);
-
-StateProvider<Map<String, Map<String, dynamic>>> resultFilterProvider =
-    StateProvider<Map<String, Map<String, dynamic>>>((ref) => {});
+  };
+});
 
 FutureProvider<List<TournamentResult>> tournamentResultProvider =
     FutureProvider<List<TournamentResult>>((ref) async {
@@ -107,29 +105,29 @@ class TournamentResultPage extends ConsumerWidget {
                               showModalBottomSheet(
                                 backgroundColor: Colors.transparent,
                                 context: context,
-                                builder: (context) => FilterBottomSheet(
+                                builder: (context) => const FilterBottomSheet(
                                   children: [
-                                    CustomExpander(
-                                      body: CustomDropDownSelector(
-                                        data: resultFilterProviderState['class']
-                                                ?.map((key, value) => MapEntry(
-                                                    key, value.toString())) ??
-                                            {},
-                                        provider:
-                                            tournamentResultFilterProvider,
-                                        providerKey: "tournamentclassid",
-                                        hint: "Vælg Række",
-                                      ),
-                                      header: Text(
-                                        "Række",
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600,
-                                          color: colorThemeState.secondaryColor,
-                                        ),
-                                      ),
-                                      isExpandedKey: "Række",
-                                    ),
+                                    // CustomExpander(
+                                    //   body: CustomDropDownSelector(
+                                    //     data: resultFilterProviderState['class']
+                                    //             ?.map((key, value) => MapEntry(
+                                    //                 key, value.toString())) ??
+                                    //         {},
+                                    //     provider:
+                                    //         tournamentResultFilterProvider,
+                                    //     providerKey: "tournamentclassid",
+                                    //     hint: "Vælg Række",
+                                    //   ),
+                                    //   header: Text(
+                                    //     "Række",
+                                    //     style: TextStyle(
+                                    //       fontSize: 24,
+                                    //       fontWeight: FontWeight.w600,
+                                    //       color: colorThemeState.secondaryColor,
+                                    //     ),
+                                    //   ),
+                                    //   isExpandedKey: "Række",
+                                    // ),
                                     //! Opdatér når klub søgning virker igen
                                     // CustomExpander(
                                     //   body: CustomDropDownSelector(
@@ -152,28 +150,28 @@ class TournamentResultPage extends ConsumerWidget {
                                     //   ),
                                     //   isExpandedKey: "Klub",
                                     // ),
-                                    CustomExpander(
-                                      body: CustomDropDownSelector(
-                                        data: resultFilterProviderState[
-                                                    'player']
-                                                ?.map((key, value) => MapEntry(
-                                                    key, value.toString())) ??
-                                            {},
-                                        provider:
-                                            tournamentResultFilterProvider,
-                                        providerKey: "playerid",
-                                        hint: "Vælg Spiller",
-                                      ),
-                                      header: Text(
-                                        "Spiller",
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600,
-                                          color: colorThemeState.secondaryColor,
-                                        ),
-                                      ),
-                                      isExpandedKey: "Spiller",
-                                    )
+                                    // CustomExpander(
+                                    //   body: CustomDropDownSelector(
+                                    //     data: resultFilterProviderState[
+                                    //                 'player']
+                                    //             ?.map((key, value) => MapEntry(
+                                    //                 key, value.toString())) ??
+                                    //         {},
+                                    //     provider:
+                                    //         tournamentResultFilterProvider,
+                                    //     providerKey: "playerid",
+                                    //     hint: "Vælg Spiller",
+                                    //   ),
+                                    //   header: Text(
+                                    //     "Spiller",
+                                    //     style: TextStyle(
+                                    //       fontSize: 24,
+                                    //       fontWeight: FontWeight.w600,
+                                    //       color: colorThemeState.secondaryColor,
+                                    //     ),
+                                    //   ),
+                                    //   isExpandedKey: "Spiller",
+                                    // )
                                   ],
                                 ),
                               );
@@ -225,7 +223,10 @@ class TournamentResultPage extends ConsumerWidget {
                                       children: [
                                         for (MatchResult match
                                             in data[index].matches)
-                                          ResultWidget(result: match)
+                                          ResultWidget(
+                                            result: match,
+                                            pool: data[index].resultName,
+                                          )
                                       ],
                                     ),
                                     header: Padding(

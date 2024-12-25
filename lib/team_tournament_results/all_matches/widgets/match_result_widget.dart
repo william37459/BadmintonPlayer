@@ -43,7 +43,8 @@ class MatchResultWidget extends ConsumerWidget {
                                         result.result.split("-").last.trim()) ??
                                     1)
                             ? colorThemeState.primaryColor
-                            : colorThemeState.primaryColor.withOpacity(0.5),
+                            : colorThemeState.primaryColor
+                                .withValues(alpha: 0.5),
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                   ),
@@ -52,7 +53,7 @@ class MatchResultWidget extends ConsumerWidget {
               Text(
                 "-",
                 style: TextStyle(
-                  color: colorThemeState.fontColor.withOpacity(0.5),
+                  color: colorThemeState.fontColor.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
                 ),
@@ -70,7 +71,7 @@ class MatchResultWidget extends ConsumerWidget {
                                       result.result.split("-").last.trim()) ??
                                   1)
                           ? colorThemeState.primaryColor
-                          : colorThemeState.primaryColor.withOpacity(0.5),
+                          : colorThemeState.primaryColor.withValues(alpha: 0.5),
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),
@@ -107,7 +108,8 @@ class MatchResultWidget extends ConsumerWidget {
                                         result.points.split("-").last.trim()) ??
                                     1)
                             ? colorThemeState.primaryColor
-                            : colorThemeState.primaryColor.withOpacity(0.5),
+                            : colorThemeState.primaryColor
+                                .withValues(alpha: 0.5),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -135,7 +137,8 @@ class MatchResultWidget extends ConsumerWidget {
                                         result.points.split("-").last.trim()) ??
                                     1)
                             ? colorThemeState.primaryColor
-                            : colorThemeState.primaryColor.withOpacity(0.5),
+                            : colorThemeState.primaryColor
+                                .withValues(alpha: 0.5),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -180,7 +183,8 @@ class MatchResultWidget extends ConsumerWidget {
                                         result.result.split("-").last.trim()) ??
                                     1)
                             ? colorThemeState.primaryColor
-                            : colorThemeState.primaryColor.withOpacity(0.5),
+                            : colorThemeState.primaryColor
+                                .withValues(alpha: 0.5),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -208,7 +212,8 @@ class MatchResultWidget extends ConsumerWidget {
                                         result.result.split("-").last.trim()) ??
                                     1)
                             ? colorThemeState.primaryColor
-                            : colorThemeState.primaryColor.withOpacity(0.5),
+                            : colorThemeState.primaryColor
+                                .withValues(alpha: 0.5),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -264,7 +269,7 @@ class MatchInformationWidget extends ConsumerWidget {
         children: [
           Icon(
             icon,
-            color: colorThemeState.fontColor.withOpacity(0.5),
+            color: colorThemeState.fontColor.withValues(alpha: 0.5),
           ),
           const SizedBox(
             width: 4,
@@ -272,7 +277,7 @@ class MatchInformationWidget extends ConsumerWidget {
           Text(
             text,
             style: TextStyle(
-              color: colorThemeState.fontColor.withOpacity(0.5),
+              color: colorThemeState.fontColor.withValues(alpha: 0.5),
             ),
           ),
         ],

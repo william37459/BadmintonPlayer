@@ -31,7 +31,8 @@ class InformationHero extends ConsumerWidget {
                   child: Text(
                     team.name,
                     style: TextStyle(
-                      color: colorThemeState.primaryColor.withOpacity(0.9),
+                      color:
+                          colorThemeState.primaryColor.withValues(alpha: 0.9),
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -51,7 +52,7 @@ class InformationHero extends ConsumerWidget {
                 Text(
                   "${team.points}, point",
                   style: TextStyle(
-                    color: colorThemeState.primaryColor.withOpacity(0.9),
+                    color: colorThemeState.primaryColor.withValues(alpha: 0.9),
                     fontSize: 16,
                   ),
                 ),
@@ -69,7 +70,7 @@ class InformationHero extends ConsumerWidget {
                 Text(
                   "${team.wins} ud af ${team.matches} vundne kampe",
                   style: TextStyle(
-                    color: colorThemeState.primaryColor.withOpacity(0.9),
+                    color: colorThemeState.primaryColor.withValues(alpha: 0.9),
                     fontSize: 16,
                   ),
                 ),
@@ -87,7 +88,7 @@ class InformationHero extends ConsumerWidget {
                 Text(
                   "${team.wins} ud af ${team.matches}",
                   style: TextStyle(
-                    color: colorThemeState.primaryColor.withOpacity(0.9),
+                    color: colorThemeState.primaryColor.withValues(alpha: 0.9),
                     fontSize: 16,
                   ),
                 ),

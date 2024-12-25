@@ -85,7 +85,8 @@ class ConsumerPreviewWidget extends ConsumerWidget {
                         Text(
                           errorText,
                           style: TextStyle(
-                            color: colorThemeState.fontColor.withOpacity(0.5),
+                            color: colorThemeState.fontColor
+                                .withValues(alpha: 0.5),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),

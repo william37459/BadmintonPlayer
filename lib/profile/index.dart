@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:app/global/classes/color_theme.dart';
@@ -108,7 +107,7 @@ class ProfilePage extends ConsumerWidget {
                                 userProviderState.email,
                                 style: TextStyle(
                                   color: colorThemeState.fontColor
-                                      .withOpacity(0.6),
+                                      .withValues(alpha: 0.6),
                                 ),
                               ),
                             ],
@@ -214,8 +213,8 @@ class ProfilePage extends ConsumerWidget {
                         CustomContainer(
                           margin: const EdgeInsets.all(0),
                           padding: const EdgeInsets.all(12),
-                          backgroundColor:
-                              colorThemeState.primaryColor.withOpacity(0.1),
+                          backgroundColor: colorThemeState.primaryColor
+                              .withValues(alpha: 0.1),
                           child: CustomInput(
                             provider: loginProvider,
                             providerKey: "email",
@@ -226,8 +225,8 @@ class ProfilePage extends ConsumerWidget {
                         CustomContainer(
                           margin: const EdgeInsets.all(0),
                           padding: const EdgeInsets.all(12),
-                          backgroundColor:
-                              colorThemeState.primaryColor.withOpacity(0.1),
+                          backgroundColor: colorThemeState.primaryColor
+                              .withValues(alpha: 0.1),
                           child: CustomInput(
                             obscureText: true,
                             provider: loginProvider,
@@ -242,14 +241,14 @@ class ProfilePage extends ConsumerWidget {
                               children: [
                                 Icon(
                                   Icons.error,
-                                  color: Colors.red.withOpacity(0.8),
+                                  color: Colors.red.withValues(alpha: 0.8),
                                   size: 14,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   "Du har indtastet forkert email eller adgangskode",
                                   style: TextStyle(
-                                      color: Colors.red.withOpacity(0.8)),
+                                      color: Colors.red.withValues(alpha: 0.8)),
                                 ),
                               ],
                             ),

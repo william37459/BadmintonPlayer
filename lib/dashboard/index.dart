@@ -111,8 +111,8 @@ class Dashboard extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color:
-                            colorThemeState.secondaryFontColor.withOpacity(0.8),
+                        color: colorThemeState.secondaryFontColor
+                            .withValues(alpha: 0.8),
                       ),
                     ),
                   ),
@@ -261,7 +261,7 @@ class PreviewHeader extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 16,
-          color: colorThemeState.fontColor.withOpacity(0.6),
+          color: colorThemeState.fontColor.withValues(alpha: 0.6),
           fontWeight: FontWeight.w600,
         ),
       ),

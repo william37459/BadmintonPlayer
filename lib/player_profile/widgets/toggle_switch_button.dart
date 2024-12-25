@@ -23,13 +23,14 @@ class ToggleSwitchButton extends ConsumerWidget {
     CustomColorTheme colorSchemeState = ref.watch(colorThemeProvider);
 
     return Padding(
-      padding: EdgeInsets.only(top: marginTop, left: 8, right: 8),
+      padding: EdgeInsets.only(top: marginTop),
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-            color: colorSchemeState.fontColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(4),
+            color: colorSchemeState.secondaryFontColor,
+            borderRadius: BorderRadius.circular(6),
           ),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
           child: Stack(
             children: [
               Row(
@@ -54,25 +55,23 @@ class ToggleSwitchButton extends ConsumerWidget {
                 child: FractionallySizedBox(
                   widthFactor: 0.5,
                   child: Container(
-                    decoration: BoxDecoration(
-                      color: colorSchemeState.primaryColor,
-                      borderRadius: BorderRadius.circular(4),
-                      boxShadow: [
-                        BoxShadow(
-                          color: colorSchemeState.shadowColor,
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      child: Text(
-                        choiceIndexState == 0 ? label1 : label2,
-                        style: TextStyle(
-                          color: colorSchemeState.secondaryFontColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
+                    color: colorSchemeState.secondaryFontColor,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color:
+                            colorSchemeState.fontColor.withValues(alpha: 0.025),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Text(
+                          choiceIndexState == 0 ? label1 : label2,
+                          style: TextStyle(
+                            color: colorSchemeState.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ),
@@ -90,53 +89,6 @@ class ToggleSwitchButton extends ConsumerWidget {
 void changeIndex(WidgetRef ref, int choiceIndexState, bool enabled) {
   if (enabled) {
     ref.read(choiceIndex.notifier).state = (choiceIndexState + 1) % 2;
-    if (choiceIndexState == -1) {
-      ref.read(tournamentFilterProvider.notifier).state = {
-        "age": null,
-        "agegroupids": ["0"],
-        "birthdate": null,
-        "classids": ["0"],
-        "clubid": "",
-        "disciplines": null,
-        "gender": "",
-        "georegionids": null,
-        "page": 0,
-        "playerid": "",
-        "points": null,
-        "publicseasonplan": true,
-        "regionids": null,
-        "seasonid": "2023",
-        "selectclientfunction": null,
-        "showleague": true,
-        "strfrom": "",
-        "strto": "",
-        "strweekno": "",
-        "strweekno2": "",
-      };
-    } else {
-      ref.read(tournamentFilterProvider.notifier).state = {
-        "age": null,
-        "agegroupids": ["0"],
-        "birthdate": null,
-        "classids": ["0"],
-        "clubid": "",
-        "disciplines": null,
-        "gender": "",
-        "georegionids": null,
-        "page": 0,
-        "playerid": "",
-        "points": null,
-        "publicseasonplan": true,
-        "regionids": null,
-        "seasonid": "2023",
-        "selectclientfunction": "SeasonPlan.SelectTournament",
-        "showleague": true,
-        "strfrom": "",
-        "strto": "",
-        "strweekno": "",
-        "strweekno2": "",
-      };
-    }
   }
 }
 
@@ -182,7 +134,7 @@ class ChoiceWidget extends ConsumerWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: colorSchemeState.fontColor.withOpacity(0.5),
+                  color: colorSchemeState.fontColor.withValues(alpha: 0.5),
                   fontSize: 14,
                 ),
               ),

@@ -1,17 +1,22 @@
+import 'package:app/calendar/index.dart';
+import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
+import 'package:app/dashboard/classes/tournament_result_preview.dart';
+import 'package:app/dashboard/functions/get_player_profile_preview.dart';
+import 'package:app/dashboard/widgets/team_tournament_result_preview.dart';
+import 'package:app/dashboard/widgets/tournament_result_preview_widget.dart';
 import 'package:app/global/classes/player_profile.dart';
 import 'package:app/global/constants.dart';
-import 'package:app/player_profile/functions/get_player_level.dart';
-import 'package:app/player_profile/functions/get_player_profile.dart';
-import 'package:app/calendar/widgets/drop_down_selector.dart';
+import 'package:app/player_profile/widgets/ranks_widget.dart';
+import 'package:app/player_profile/widgets/toggle_switch_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 FutureProvider<PlayerProfile> playerProfileProvider =
     FutureProvider<PlayerProfile>((ref) async {
   final selectedPlayerId = ref.watch(selectedPlayer);
-  final result = await getPlayerProfile(selectedPlayerId, contextKey);
-  return result;
+  final results =
+      await getPlayerProfilePreview(selectedPlayerId, contextKey, ref);
+  return results!;
 });
 
 StateProvider<int?> signUpLevel = StateProvider<int?>((ref) {
@@ -24,92 +29,42 @@ class PlayerProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorThemeState = ref.watch(colorThemeProvider);
-    final signUpLevelState = ref.watch(signUpLevel);
+    int choiceIndexState = ref.watch(choiceIndex);
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) =>
           ref.read(signUpLevel.notifier).state = null,
       child: Scaffold(
-        floatingActionButton: Consumer(
-          builder: (context, ref, child) {
-            AsyncValue<PlayerProfile> futureAsyncValue =
-                ref.watch(playerProfileProvider);
-            return futureAsyncValue.when(
-              error: (error, stackTrace) => Center(
-                child: Container(
-                  margin: const EdgeInsets.all(32),
-                  child: const Text(
-                    "Der er sket en fejl, udvikleren er blevet underrettet og arbejder på at løse problemet!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              loading: () => Container(),
-              data: (data) {
-                if (data.scoreData.isNotEmpty &&
-                    data.scoreData
-                        .where(
-                          (element) => element.type
-                              .toLowerCase()
-                              .contains("tilmeldingsniveau"),
-                        )
-                        .first
-                        .points
-                        .isEmpty) {
-                  return FloatingActionButton.extended(
-                    label: Text(
-                      "Beregn tilmeldings niveau",
-                      style: TextStyle(
-                        color: colorThemeState.secondaryFontColor,
-                      ),
-                    ),
-                    backgroundColor: colorThemeState.primaryColor,
-                    onPressed: () async {
-                      ref.read(signUpLevel.notifier).state =
-                          await getPlayerLevel(data.id, data.name);
-                    },
-                  );
-                }
-                return Container();
-              },
-            );
-          },
-        ),
         body: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(
                   8,
                   12,
                   8,
-                  0,
+                  16,
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
                       onTap: () => Navigator.pop(context),
                       child: Icon(
                         Icons.chevron_left,
-                        color: colorThemeState.fontColor.withOpacity(0.8),
+                        color: colorThemeState.fontColor.withValues(alpha: 0.8),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Profile",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: colorThemeState.fontColor.withOpacity(0.8),
-                          ),
-                        ),
+                    Text(
+                      "Profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: colorThemeState.fontColor.withValues(alpha: 0.8),
                       ),
+                    ),
+                    const Icon(
+                      Icons.chevron_left,
+                      color: Colors.transparent,
                     ),
                   ],
                 ),
@@ -129,403 +84,111 @@ class PlayerProfilePage extends ConsumerWidget {
                       data: (data) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
-                                ),
-                              ),
-                              Text(
-                                data.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: colorThemeState.secondaryColor,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "Klub: ${data.club}",
-                                style: TextStyle(
-                                  color: colorThemeState.primaryColor
-                                      .withOpacity(0.8),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Sæson:",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
-                                      color: colorThemeState.secondaryColor
-                                          .withOpacity(0.75),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: FractionallySizedBox(
+                                    widthFactor: 0.25,
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                                            ),
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      if (data.attachedProfiles.isNotEmpty)
-                                        Text(
-                                          "TILKNYTTEDE BURGERKOTNI",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color:
-                                                colorThemeState.secondaryColor,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      for (AttachedProfile profile
-                                          in data.attachedProfiles)
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          child: Material(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            child: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        border: Border.all(
-                                                          color: colorThemeState
-                                                              .secondaryColor,
-                                                          width: 2,
-                                                        ),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.person_outline,
-                                                        color: colorThemeState
-                                                            .secondaryColor,
-                                                        size: 18,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Text(
-                                                      profile.name,
-                                                      style: TextStyle(
-                                                        color: colorThemeState
-                                                            .fontColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      if (data.scoreData.isNotEmpty)
-                                        Text(
-                                          "RANGLISTER",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color:
-                                                colorThemeState.secondaryColor,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      for (ScoreData score in data.scoreData)
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          child: Material(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            child: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      score.placement.isEmpty &&
-                                                              signUpLevelState !=
-                                                                  null
-                                                          ? signUpLevelState
-                                                              .toString()
-                                                          : score.placement,
-                                                      style: TextStyle(
-                                                        color: colorThemeState
-                                                            .fontColor
-                                                            .withOpacity(0.5),
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    if (score.placement
-                                                            .isNotEmpty ||
-                                                        signUpLevelState !=
-                                                            null)
-                                                      const SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "${score.type} ${score.rank}",
-                                                          style: TextStyle(
-                                                            color:
-                                                                colorThemeState
-                                                                    .fontColor,
-                                                            fontSize: 18,
-                                                          ),
-                                                        ),
-                                                        if (score
-                                                            .points.isNotEmpty)
-                                                          Text(
-                                                            "${score.points} point, over ${score.matches} kampe",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  colorThemeState
-                                                                      .fontColor,
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      if (data.teamTournaments.isNotEmpty)
-                                        Text(
-                                          "HOLDKAMPE",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color:
-                                                colorThemeState.secondaryColor,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      for (TeamTournament teamTournament
-                                          in data.teamTournaments)
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 2,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          child: Material(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            child: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "${teamTournament.team} - ${teamTournament.opponent}",
-                                                    ),
-                                                    Text(
-                                                      teamTournament.rank,
-                                                    ),
-                                                    Text(
-                                                      DateFormat("EEE d. MMMM",
-                                                              'da_dk')
-                                                          .format(teamTournament
-                                                              .date),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      if (data.teamTournaments.isNotEmpty)
-                                        Text(
-                                          "TURNERNINGER",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color:
-                                                colorThemeState.secondaryColor,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      for (PlayerTournament tournament
-                                          in data.tournaments)
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 4),
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          child: Material(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            child: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              onTap: () {
-                                                ref
-                                                    .read(selectedTournament
-                                                        .notifier)
-                                                    .state = tournament.id;
-                                                Navigator.of(context).pushNamed(
-                                                  "/TournamentResultPage",
-                                                  arguments: {
-                                                    "tournament":
-                                                        tournament.club
-                                                  },
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          tournament.club,
-                                                          style: TextStyle(
-                                                            color:
-                                                                colorThemeState
-                                                                    .fontColor,
-                                                            fontSize: 16,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          tournament.rank,
-                                                          style: TextStyle(
-                                                            color:
-                                                                colorThemeState
-                                                                    .fontColor,
-                                                            fontSize: 16,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          DateFormat(
-                                                                  "EEE d. MMMM",
-                                                                  'da_dk')
-                                                              .format(tournament
-                                                                  .date),
-                                                          style: TextStyle(
-                                                            color:
-                                                                colorThemeState
-                                                                    .fontColor,
-                                                            fontSize: 16,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Icon(
-                                                      Icons.info_outline,
-                                                      color: colorThemeState
-                                                          .primaryColor,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      const SizedBox(
-                                        height: 64,
-                                      )
-                                    ],
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  data.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: colorThemeState.fontColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  data.club,
+                                  style: TextStyle(
+                                    color: colorThemeState.fontColor
+                                        .withValues(alpha: 0.6),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                RanksWidget(scores: data.scoreData),
+                                const SizedBox(
+                                  height: 32,
+                                ),
+                                const ToggleSwitchButton(
+                                  label1: "Holdkampe",
+                                  label2: "Turneringer",
+                                  enabled: true,
+                                ),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                Stack(
+                                  children: [
+                                    AnimatedOpacity(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      opacity: choiceIndexState == 0 ? 1 : 0,
+                                      child: Column(
+                                        children: [
+                                          if (choiceIndexState == 0)
+                                            for (TeamTournamentResultPreview teamTournament
+                                                in data.teamTournaments)
+                                              TeamTournamentResultPreviewWidget(
+                                                result: teamTournament,
+                                                width: null,
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 4,
+                                                ),
+                                              ),
+                                        ],
+                                      ),
+                                    ),
+                                    AnimatedOpacity(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      opacity: choiceIndexState == 1 ? 1 : 0,
+                                      child: Column(
+                                        spacing: 8,
+                                        children: [
+                                          if (choiceIndexState == 1)
+                                            for (TournamentResultPreview tournament
+                                                in data.tournaments)
+                                              TournamentResultPreviewWidget(
+                                                result: tournament,
+                                                margin: const EdgeInsets.all(0),
+                                              ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 32,
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

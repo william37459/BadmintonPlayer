@@ -52,12 +52,13 @@ class TeamTournamentTeamWidget extends ConsumerWidget {
                     duration: const Duration(milliseconds: 200),
                     firstChild: Icon(
                       Icons.star,
-                      color: colorThemeState.primaryColor.withOpacity(0.8),
+                      color:
+                          colorThemeState.primaryColor.withValues(alpha: 0.8),
                       size: 32,
                     ),
                     secondChild: Icon(
                       Icons.star_outline,
-                      color: colorThemeState.fontColor.withOpacity(0.3),
+                      color: colorThemeState.fontColor.withValues(alpha: 0.3),
                       size: 32,
                     ),
                     crossFadeState: favouriteTeamsState.contains(

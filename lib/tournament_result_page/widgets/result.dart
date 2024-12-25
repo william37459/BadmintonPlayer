@@ -7,142 +7,98 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ResultWidget extends ConsumerWidget {
   final MatchResult result;
-  const ResultWidget({super.key, required this.result});
+  final String pool;
+
+  const ResultWidget({
+    super.key,
+    required this.result,
+    required this.pool,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Material(
         color: colorThemeState.secondaryFontColor,
         borderRadius: BorderRadius.circular(4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          Row(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () {},
+          child: Column(
+            spacing: 12,
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (Profile winner in result.winner)
-                      Text(
-                        textAlign: TextAlign.left,
-                        winner.name,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: colorThemeState.primaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  "-",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w600,
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey.withValues(alpha: 0.2),
+                      width: 1,
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    for (Profile loser in result.loser)
-                      Text(
-                        loser.name,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: colorThemeState.primaryColor.withOpacity(0.5),
-                          fontWeight: FontWeight.w600,
-                        ),
+                    Text(
+                      pool,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
+                    ),
+                    const Icon(
+                      Icons.info_outlined,
+                    ),
                   ],
                 ),
+              ),
+              for (List<Profile> profiles in [result.winner, result.loser])
+                Opacity(
+                  opacity: [
+                    1.0,
+                    0.6
+                  ][[result.winner, result.loser].indexOf(profiles)],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      spacing: 16,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              profiles.map((player) => player.name).join(", "),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              profiles.map((player) => player.club).join(", "),
+                            ),
+                          ],
+                        ),
+                        Expanded(child: Container()),
+                        for (String score in result.result)
+                          Text(
+                            score.split("/")[[result.winner, result.loser]
+                                .indexOf(profiles)],
+                            style: const TextStyle(),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              const SizedBox(
+                height: 0,
               ),
             ],
           ),
-          for (String point in result.result)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: int.tryParse(point.split("/").first) ?? 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(8),
-                        ),
-                        color: (int.tryParse(point.split("/").last.trim()) ??
-                                    1) <
-                                (int.tryParse(point.split("/").first.trim()) ??
-                                    1)
-                            ? colorThemeState.primaryColor
-                            : colorThemeState.primaryColor.withOpacity(0.5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          point.split("/").first,
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: colorThemeState.secondaryFontColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: int.tryParse(point.split("/").last) ?? 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.horizontal(
-                          right: Radius.circular(8),
-                        ),
-                        color: (int.tryParse(point.split("/").first.trim()) ??
-                                    1) <
-                                (int.tryParse(point.split("/").last.trim()) ??
-                                    1)
-                            ? colorThemeState.primaryColor
-                            : colorThemeState.primaryColor.withOpacity(0.5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          point.split("/").last,
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: colorThemeState.secondaryFontColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

@@ -49,7 +49,7 @@ class CustomDatePicker extends ConsumerWidget {
             borderRadius: BorderRadius.circular(4),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withValues(alpha: 0.5),
                 spreadRadius: 1,
                 blurRadius: 2,
                 offset: const Offset(0, 1),
@@ -67,7 +67,7 @@ class CustomDatePicker extends ConsumerWidget {
                   style: TextStyle(
                     color: filterState[providerKey] == null ||
                             filterState[providerKey].isEmpty
-                        ? colorThemeState.fontColor.withOpacity(0.5)
+                        ? colorThemeState.fontColor.withValues(alpha: 0.5)
                         : colorThemeState.fontColor,
                   ),
                 ),

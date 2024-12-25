@@ -26,13 +26,13 @@ class MainBuilder extends ConsumerWidget {
 
     return Scaffold(
       body: pages[indexState],
-      backgroundColor: const Color(0xffF1F0F5),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indexState,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: colorThemeState.primaryColor,
-        unselectedItemColor: colorThemeState.primaryColor.withOpacity(0.5),
+        unselectedItemColor:
+            colorThemeState.primaryColor.withValues(alpha: 0.5),
         onTap: (value) => ref.read(index.notifier).state = value,
         items: const [
           BottomNavigationBarItem(

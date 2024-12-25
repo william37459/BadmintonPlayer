@@ -20,7 +20,7 @@ Future<int> getPlayerLevel(String id, String name) async {
         "callbackcontextkey": contextKey,
         "rankinglistagegroupid": "",
         "rankinglistid": "287",
-        "seasonid": "2023",
+        "seasonid": "2024",
         "rankinglistversiondate": "",
         "agegroupid": "",
         "classid": "",

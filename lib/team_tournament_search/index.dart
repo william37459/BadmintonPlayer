@@ -59,8 +59,8 @@ class TeamTournamentSearch extends ConsumerWidget {
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color:
-                                colorThemeState.primaryColor.withOpacity(0.3),
+                            color: colorThemeState.primaryColor
+                                .withValues(alpha: 0.3),
                           ),
                         ),
                         focusedBorder: UnderlineInputBorder(
