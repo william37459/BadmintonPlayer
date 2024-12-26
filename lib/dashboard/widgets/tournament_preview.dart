@@ -21,7 +21,7 @@ class TournamentPreviewWidget extends ConsumerWidget {
 
     return CustomContainer(
       width: width,
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(0),
       child: Material(
         color: Colors.transparent,

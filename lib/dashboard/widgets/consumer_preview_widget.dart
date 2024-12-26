@@ -61,7 +61,9 @@ class ConsumerPreviewWidget extends ConsumerWidget {
                     ? SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
+                          spacing: 16,
                           children: [
+                            const SizedBox(width: 0),
                             for (dynamic result in data)
                               child(
                                 result,

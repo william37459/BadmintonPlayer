@@ -13,14 +13,13 @@ class PlayerPreviewWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomContainer(
       width: 200,
+      margin: const EdgeInsets.all(0),
       onTap: () {
         ref.read(selectedPlayer.notifier).state = profile.id;
         Navigator.of(context).pushNamed(
           "/PlayerProfilePage",
         );
       },
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       child: Row(
         children: [
           const CircleAvatar(

@@ -69,6 +69,10 @@ class PlayerSearch extends ConsumerWidget {
         ),
         onPressed: () {
           Navigator.of(context).pop();
+          ref.read(profileFilterProvider.notifier).state = {
+            ...ref.read(profileFilterProvider.notifier).state,
+            "name": "",
+          };
         },
       ),
       body: SafeArea(

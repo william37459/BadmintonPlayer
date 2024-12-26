@@ -40,6 +40,14 @@ class TeamTournamentSearch extends ConsumerWidget {
         ),
         onPressed: () {
           Navigator.of(context).pop();
+          ref.read(teamTournamentSearchFilterProvider.notifier).state =
+              TeamTournamentFilter.fromJson({
+            ...ref
+                .read(teamTournamentSearchFilterProvider.notifier)
+                .state
+                .toJson(),
+            "clubID": "",
+          });
         },
       ),
       body: SafeArea(

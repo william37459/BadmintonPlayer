@@ -99,13 +99,15 @@ class Dashboard extends ConsumerWidget {
                 bottom: Radius.circular(16),
               ),
             ),
-            padding: const EdgeInsets.only(bottom: 32.0),
+            padding: const EdgeInsets.only(
+              bottom: 32.0,
+            ),
             child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       "Velkommen,",
                       style: TextStyle(
@@ -117,7 +119,7 @@ class Dashboard extends ConsumerWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       'Kommende turneringer',
                       style: TextStyle(
@@ -152,25 +154,28 @@ class Dashboard extends ConsumerWidget {
           const SizedBox(
             height: 12,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              PreviewHeader(
-                colorThemeState: colorThemeState,
-                text: 'Favorit spillere',
-              ),
-              AddInfoPreview(
-                onTap: () => Navigator.of(context).pushNamed(
-                  '/PlayerSearchPage',
-                  arguments: {
-                    'favouriteMode': true,
-                  },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                PreviewHeader(
+                  colorThemeState: colorThemeState,
+                  text: 'Favorit spillere',
                 ),
-                text: "Tilføj spillere",
-                icon: Icons.add,
-              ),
-            ],
+                AddInfoPreview(
+                  onTap: () => Navigator.of(context).pushNamed(
+                    '/PlayerSearchPage',
+                    arguments: {
+                      'favouriteMode': true,
+                    },
+                  ),
+                  text: "Tilføj spillere",
+                  icon: Icons.add,
+                ),
+              ],
+            ),
           ),
           ConsumerPreviewWidget(
             child: (dynamic result) => PlayerPreviewWidget(
@@ -182,41 +187,46 @@ class Dashboard extends ConsumerWidget {
           const SizedBox(
             height: 12,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              PreviewHeader(
-                colorThemeState: colorThemeState,
-                text: 'Holdkampe resultater',
-              ),
-              AddInfoPreview(
-                onTap: () {
-                  ref.read(teamTournamentSearchFilterProvider.notifier).state =
-                      TeamTournamentFilter.fromJson({
-                    "ageGroupID": "",
-                    "callbackcontextkey": contextKey,
-                    "clubID": "",
-                    "leagueGroupID": "",
-                    "leagueGroupTeamID": "",
-                    "leagueMatchID": "",
-                    "playerID": "",
-                    "regionID": "",
-                    "seasonID": "2024",
-                    "subPage": "6"
-                  });
-                  Navigator.of(context).pushNamed(
-                    '/TeamTournamentSearchPage',
-                  );
-                },
-                text: "Tilføj hold",
-                icon: Icons.add,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                PreviewHeader(
+                  colorThemeState: colorThemeState,
+                  text: 'Holdkampe resultater',
+                ),
+                AddInfoPreview(
+                  onTap: () {
+                    ref
+                        .read(teamTournamentSearchFilterProvider.notifier)
+                        .state = TeamTournamentFilter.fromJson({
+                      "ageGroupID": "",
+                      "callbackcontextkey": contextKey,
+                      "clubID": "",
+                      "leagueGroupID": "",
+                      "leagueGroupTeamID": "",
+                      "leagueMatchID": "",
+                      "playerID": "",
+                      "regionID": "",
+                      "seasonID": "2024",
+                      "subPage": "6"
+                    });
+                    Navigator.of(context).pushNamed(
+                      '/TeamTournamentSearchPage',
+                    );
+                  },
+                  text: "Tilføj hold",
+                  icon: Icons.add,
+                ),
+              ],
+            ),
           ),
           ConsumerPreviewWidget(
             child: (dynamic result) => TeamTournamentResultPreviewWidget(
               result: result,
+              margin: const EdgeInsets.all(0),
             ),
             provider: teamTournamentResultProvider,
             errorText: 'Ingen holdkamp resultater',
@@ -224,9 +234,12 @@ class Dashboard extends ConsumerWidget {
           const SizedBox(
             height: 12,
           ),
-          PreviewHeader(
-            colorThemeState: colorThemeState,
-            text: "Seneste resultater",
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: PreviewHeader(
+              colorThemeState: colorThemeState,
+              text: "Seneste resultater",
+            ),
           ),
           ConsumerPreviewWidget(
             child: (dynamic result) => TournamentResultPreviewWidget(
@@ -236,7 +249,7 @@ class Dashboard extends ConsumerWidget {
             errorText:
                 'Der er ingen resultater for turneringer i den her sæson',
             axis: Axis.vertical,
-          ),
+          )
         ],
       ),
     );
@@ -255,15 +268,12 @@ class PreviewHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 16,
-          color: colorThemeState.fontColor.withValues(alpha: 0.6),
-          fontWeight: FontWeight.w600,
-        ),
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 16,
+        color: colorThemeState.fontColor.withValues(alpha: 0.6),
+        fontWeight: FontWeight.w600,
       ),
     );
   }

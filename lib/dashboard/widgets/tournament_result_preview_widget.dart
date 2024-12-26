@@ -14,7 +14,7 @@ class TournamentResultPreviewWidget extends ConsumerWidget {
   const TournamentResultPreviewWidget({
     super.key,
     required this.result,
-    this.margin = const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+    this.margin = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
   });
 
   @override
