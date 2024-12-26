@@ -30,7 +30,7 @@ class TournamentResultPreviewWidget extends ConsumerWidget {
           "locationnumber": 0,
           "playerid": 0,
           "tabnumber": 0,
-          "tournamenteventid": 0,
+          "tournamenteventid": 452477,
         };
 
         ref.read(selectedTournament.notifier).state = result.id;

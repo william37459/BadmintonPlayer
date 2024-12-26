@@ -27,6 +27,9 @@ class CustomExpander extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(
+          height: 8.0,
+        ),
         InkWell(
           onTap: () {
             if (isExpandedKey.isNotEmpty) {
@@ -51,7 +54,7 @@ class CustomExpander extends ConsumerWidget {
                 duration: const Duration(milliseconds: 250),
                 child: Icon(
                   Icons.keyboard_arrow_down_sharp,
-                  color: colorThemeState.secondaryColor,
+                  color: colorThemeState.fontColor,
                 ),
               ),
             ],

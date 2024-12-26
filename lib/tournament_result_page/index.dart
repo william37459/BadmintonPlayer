@@ -54,221 +54,112 @@ class TournamentResultPage extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            spacing: 16,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
                     onTap: () => Navigator.pop(context),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: colorThemeState.secondaryColor,
-                          width: 2,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: colorThemeState.secondaryColor,
-                      ),
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
                     ),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 12),
-                      child: Text(
-                        tournamentTitle,
-                        style: TextStyle(
-                          color: colorThemeState.secondaryColor,
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                  Text(
+                    tournamentTitle,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: colorThemeState.fontColor,
+                      fontSize: 16,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 8.0,
-                    ),
-                    child: InkWell(
-                      onTap: resultFilterProviderState.entries.isEmpty
-                          ? null
-                          : () {
-                              FocusScope.of(context).unfocus();
-                              ref.read(isExpandedProvider.notifier).state = {};
-
-                              showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (context) => const FilterBottomSheet(
-                                  children: [
-                                    // CustomExpander(
-                                    //   body: CustomDropDownSelector(
-                                    //     data: resultFilterProviderState['class']
-                                    //             ?.map((key, value) => MapEntry(
-                                    //                 key, value.toString())) ??
-                                    //         {},
-                                    //     provider:
-                                    //         tournamentResultFilterProvider,
-                                    //     providerKey: "tournamentclassid",
-                                    //     hint: "Vælg Række",
-                                    //   ),
-                                    //   header: Text(
-                                    //     "Række",
-                                    //     style: TextStyle(
-                                    //       fontSize: 24,
-                                    //       fontWeight: FontWeight.w600,
-                                    //       color: colorThemeState.secondaryColor,
-                                    //     ),
-                                    //   ),
-                                    //   isExpandedKey: "Række",
-                                    // ),
-                                    //! Opdatér når klub søgning virker igen
-                                    // CustomExpander(
-                                    //   body: CustomDropDownSelector(
-                                    //     data: resultFilterProviderState['club']
-                                    //             ?.map((key, value) => MapEntry(
-                                    //                 key, value.toString())) ??
-                                    //         {},
-                                    //     provider:
-                                    //         tournamentResultFilterProvider,
-                                    //     providerKey: "clubid",
-                                    //     hint: "Vælg Klub",
-                                    //   ),
-                                    //   header: Text(
-                                    //     "Klub",
-                                    //     style: TextStyle(
-                                    //       fontSize: 24,
-                                    //       fontWeight: FontWeight.w600,
-                                    //       color: colorThemeState.secondaryColor,
-                                    //     ),
-                                    //   ),
-                                    //   isExpandedKey: "Klub",
-                                    // ),
-                                    // CustomExpander(
-                                    //   body: CustomDropDownSelector(
-                                    //     data: resultFilterProviderState[
-                                    //                 'player']
-                                    //             ?.map((key, value) => MapEntry(
-                                    //                 key, value.toString())) ??
-                                    //         {},
-                                    //     provider:
-                                    //         tournamentResultFilterProvider,
-                                    //     providerKey: "playerid",
-                                    //     hint: "Vælg Spiller",
-                                    //   ),
-                                    //   header: Text(
-                                    //     "Spiller",
-                                    //     style: TextStyle(
-                                    //       fontSize: 24,
-                                    //       fontWeight: FontWeight.w600,
-                                    //       color: colorThemeState.secondaryColor,
-                                    //     ),
-                                    //   ),
-                                    //   isExpandedKey: "Spiller",
-                                    // )
-                                  ],
-                                ),
-                              );
-                            },
-                      child: AnimatedOpacity(
-                        opacity:
-                            resultFilterProviderState.entries.isEmpty ? 0.5 : 1,
-                        duration: const Duration(milliseconds: 250),
-                        child: Icon(
-                          Icons.tune,
-                          color: colorThemeState.secondaryColor,
-                        ),
-                      ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {},
+                    child: Icon(
+                      Icons.info_outline_rounded,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                      size: 24,
                     ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 32,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (var filter in (resultFilterProviderState['matchType']
-                          ?.keys
-                          .toList() ??
-                      []))
-                    ResultLabel(
-                      label: filter,
-                      index:
-                          resultFilterProviderState['matchType']?[filter] ?? 0,
-                    ),
-                ],
+              SizedBox(
+                height: 32,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (var filter in (resultFilterProviderState['matchType']
+                            ?.keys
+                            .toList() ??
+                        []))
+                      ResultLabel(
+                        label: filter,
+                        index: resultFilterProviderState['matchType']
+                                ?[filter] ??
+                            0,
+                      ),
+                  ],
+                ),
               ),
-            ),
-            futureAsyncValue.when(
-              data: (data) {
-                return data.isNotEmpty
-                    ? Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: ListView.builder(
-                                itemBuilder: (context, index) => Padding(
-                                  padding: const EdgeInsets.only(top: 12.0),
-                                  child: CustomExpander(
-                                    selfSpaced: true,
-                                    body: Column(
-                                      children: [
-                                        for (MatchResult match
-                                            in data[index].matches)
-                                          ResultWidget(
-                                            result: match,
-                                            pool: data[index].resultName,
-                                          )
-                                      ],
-                                    ),
-                                    header: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 8.0,
-                                      ),
-                                      child: Text(
-                                        data[index].resultName,
-                                        style: TextStyle(
-                                          color: colorThemeState.secondaryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    isExpandedKey: data[index].resultName,
-                                    isExpanded: true,
-                                  ),
-                                ),
-                                itemCount: data.length,
-                              ),
+              futureAsyncValue.when(
+                data: (data) {
+                  return data.isNotEmpty
+                      ? Expanded(
+                          child: ListView.separated(
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 16,
                             ),
-                          ],
-                        ),
-                      )
-                    : const Center(
-                        child: Text(
-                            "Der er sket en fejl, udvikleren er underrete, prøv igen senere"),
-                      );
-              },
-              loading: () => const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
+                            itemBuilder: (context, index) => CustomExpander(
+                              selfSpaced: true,
+                              body: Column(
+                                spacing: 8,
+                                children: [
+                                  for (MatchResult match in data[index].matches)
+                                    ResultWidget(
+                                      result: match,
+                                      pool: data[index].resultName,
+                                    )
+                                ],
+                              ),
+                              header: Text(
+                                data[index].resultName,
+                                style: TextStyle(
+                                  color: colorThemeState.fontColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              isExpandedKey: data[index].resultName,
+                              isExpanded: true,
+                            ),
+                            itemCount: data.length,
+                          ),
+                        )
+                      : const Center(
+                          child: Text(
+                              "Der er sket en fejl, udvikleren er underrete, prøv igen senere"),
+                        );
+                },
+                loading: () => const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                error: (error, stackTrace) => Center(
+                  child: Text(
+                    error.toString(),
+                  ),
                 ),
               ),
-              error: (error, stackTrace) => Center(
-                child: Text(
-                  error.toString(),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

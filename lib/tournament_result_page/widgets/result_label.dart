@@ -13,29 +13,36 @@ class ResultLabel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(4),
-          onTap: () {
-            // ref.read(tournamentResultFilterProvider.notifier).state = {
-            //   ...ref.read(tournamentResultFilterProvider.notifier).state,
-            //   "tournamenteventid": index,
-            // };
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: colorThemeState.secondaryColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              label,
-              style: TextStyle(
-                color: colorThemeState.primaryColor,
-                fontSize: 12,
+    bool isSelected =
+        ref.read(tournamentResultFilterProvider)["tournamenteventid"] == index;
+
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 300),
+      opacity: isSelected ? 1 : 0.5,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(4),
+            onTap: () {
+              ref.read(tournamentResultFilterProvider.notifier).state = {
+                ...ref.read(tournamentResultFilterProvider.notifier).state,
+                "tournamenteventid": index,
+              };
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: colorThemeState.secondaryFontColor,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: colorThemeState.fontColor,
+                  fontSize: 12,
+                ),
               ),
             ),
           ),
