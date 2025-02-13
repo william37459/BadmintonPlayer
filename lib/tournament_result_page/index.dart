@@ -1,11 +1,11 @@
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/tournament_result.dart';
 import 'package:app/global/constants.dart';
-import 'package:app/global/widgets/modal_bottom_sheet.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:app/tournament_result_page/functions/get_results.dart';
 import 'package:app/tournament_result_page/widgets/result.dart';
 import 'package:app/tournament_result_page/widgets/result_label.dart';
+import 'package:app/tournament_result_page/widgets/tournament_info_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,12 +25,17 @@ StateProvider<Map<String, dynamic>> tournamentResultFilterProvider =
   };
 });
 
+StateProvider<TournamentInfo?> tournamentInfoProvider =
+    StateProvider<TournamentInfo?>((ref) => null);
+
 FutureProvider<List<TournamentResult>> tournamentResultProvider =
     FutureProvider<List<TournamentResult>>((ref) async {
   final filterProvider = ref.watch(tournamentResultFilterProvider);
   final selectedTournamentState = ref.watch(selectedTournament);
   final result =
       await getResults(filterProvider, contextKey, selectedTournamentState);
+
+  ref.read(tournamentInfoProvider.notifier).state = result['info'];
 
   if (ref.read(resultFilterProvider.notifier).state.isEmpty) {
     ref.read(resultFilterProvider.notifier).state = result['filters'];
@@ -51,6 +56,7 @@ class TournamentResultPage extends ConsumerWidget {
         ref.watch(tournamentResultProvider);
     Map<String, Map<String, dynamic>> resultFilterProviderState =
         ref.watch(resultFilterProvider);
+    TournamentInfo? tournamentInfo = ref.watch(tournamentInfoProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -80,10 +86,17 @@ class TournamentResultPage extends ConsumerWidget {
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    onTap: () {},
+                    onTap: tournamentInfo == null
+                        ? null
+                        : () => showDialog(
+                              context: context,
+                              builder: (context) => TournamentInfoDialog(
+                                tournamentInfo: tournamentInfo,
+                              ),
+                            ),
                     child: Icon(
                       Icons.info_outline_rounded,
-                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                      color: colorThemeState.primaryColor,
                       size: 24,
                     ),
                   ),
@@ -91,20 +104,28 @@ class TournamentResultPage extends ConsumerWidget {
               ),
               SizedBox(
                 height: 32,
-                child: ListView(
+                child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    for (var filter in (resultFilterProviderState['matchType']
+                  itemBuilder: (context, index) {
+                    String filter = resultFilterProviderState['matchType']
                             ?.keys
-                            .toList() ??
-                        []))
-                      ResultLabel(
-                        label: filter,
-                        index: resultFilterProviderState['matchType']
-                                ?[filter] ??
-                            0,
-                      ),
-                  ],
+                            .toList()[index] ??
+                        '';
+                    return ResultLabel(
+                      label: filter,
+                      index:
+                          resultFilterProviderState['matchType']?[filter] ?? 0,
+                    );
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(
+                    width: 8,
+                  ),
+                  itemCount: (resultFilterProviderState['matchType']
+                              ?.keys
+                              .toList()
+                              .length ??
+                          1) -
+                      1,
                 ),
               ),
               futureAsyncValue.when(

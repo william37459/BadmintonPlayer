@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/global/classes/profile.dart';
 import 'package:app/global/classes/tournament_result.dart';
+import 'package:app/tournament_result_page/functions/get_info.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
@@ -24,6 +25,7 @@ Future<Map<String, dynamic>> getResults(
   List<TournamentResult> result = [];
 
   if (response.statusCode == 200) {
+    TournamentInfo info = await getInfo(response);
     String htmlContent = json.decode(response.body)['d']['Html'];
 
     Document document = html_parser.parse(htmlContent);
@@ -184,9 +186,11 @@ Future<Map<String, dynamic>> getResults(
         matches: matches,
       ),
     );
+
     return {
       "results": result,
       "filters": filters,
+      "info": info,
     };
   }
   return {};

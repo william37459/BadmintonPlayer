@@ -65,24 +65,29 @@ class ProfilePage extends ConsumerWidget {
           child: SingleChildScrollView(
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(4.0),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Column(
+                  spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text(
-                      "Profil",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Profil",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const SizedBox(
-                      height: 24,
+                      height: 16,
                     ),
                     CustomContainer(
-                      margin: const EdgeInsets.only(bottom: 16),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      borderRadius: 0,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+                        horizontal: 16,
                         vertical: 16,
                       ),
                       child: Row(
@@ -118,8 +123,12 @@ class ProfilePage extends ConsumerWidget {
                     for (String menu in menus)
                       CustomContainer(
                         onTap: () {},
-                        margin: const EdgeInsets.only(top: 8),
-                        padding: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 16,
+                        ),
+                        borderRadius: 0,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

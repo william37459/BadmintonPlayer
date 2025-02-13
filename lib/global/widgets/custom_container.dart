@@ -6,6 +6,7 @@ class CustomContainer extends StatelessWidget {
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final double? width;
+  final double? borderRadius;
   final Color? backgroundColor;
   final bool border;
   const CustomContainer({
@@ -14,6 +15,7 @@ class CustomContainer extends StatelessWidget {
     this.margin,
     this.padding,
     this.width,
+    this.borderRadius,
     this.backgroundColor,
     this.border = false,
     required this.child,
@@ -26,7 +28,7 @@ class CustomContainer extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(borderRadius ?? 4),
         ),
         child: SizedBox(
           width: width,

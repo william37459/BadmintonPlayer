@@ -33,6 +33,7 @@ class ConsumerPreviewWidget extends ConsumerWidget {
           loading: () => SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
+              spacing: 16,
               children: [
                 for (int i = 0; i < 10; i++)
                   Shimmer.fromColors(

@@ -88,170 +88,177 @@ class Dashboard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: colorThemeState.primaryColor,
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(16),
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: colorThemeState.primaryColor,
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(16),
             ),
-            padding: const EdgeInsets.only(
-              bottom: 32.0,
-            ),
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      "Velkommen,",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: colorThemeState.secondaryFontColor
-                            .withValues(alpha: 0.8),
-                      ),
+          ),
+          padding: const EdgeInsets.only(
+            bottom: 32.0,
+          ),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Velkommen,",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: colorThemeState.secondaryFontColor
+                          .withValues(alpha: 0.8),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Kommende turneringer',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: colorThemeState.secondaryFontColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  ConsumerPreviewWidget(
-                    child: (dynamic result) => TournamentPreviewWidget(
-                      tournament: result,
-                      width: 200,
-                    ),
-                    provider: seasonPlanFutureProvider,
-                    errorText: 'Ingen kommende turneringer',
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: AddInfoPreview(
-                      onTap: () => Navigator.of(context)
-                          .pushNamed('/TournamentOverviewPage'),
-                      text: 'Se alle turneringer',
-                      icon: Icons.info,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Kommende turneringer',
+                    style: TextStyle(
+                      fontSize: 18,
                       color: colorThemeState.secondaryFontColor,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                PreviewHeader(
-                  colorThemeState: colorThemeState,
-                  text: 'Favorit spillere',
                 ),
-                AddInfoPreview(
-                  onTap: () => Navigator.of(context).pushNamed(
-                    '/PlayerSearchPage',
-                    arguments: {
-                      'favouriteMode': true,
-                    },
+                ConsumerPreviewWidget(
+                  child: (dynamic result) => TournamentPreviewWidget(
+                    tournament: result,
+                    width: 200,
                   ),
-                  text: "Tilføj spillere",
-                  icon: Icons.add,
+                  provider: seasonPlanFutureProvider,
+                  errorText: 'Ingen kommende turneringer',
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: AddInfoPreview(
+                    onTap: () => Navigator.of(context)
+                        .pushNamed('/TournamentOverviewPage'),
+                    text: 'Se alle turneringer',
+                    icon: Icons.info,
+                    color: colorThemeState.secondaryFontColor,
+                  ),
                 ),
               ],
             ),
           ),
-          ConsumerPreviewWidget(
-            child: (dynamic result) => PlayerPreviewWidget(
-              profile: result,
-            ),
-            provider: playerProfilePreviewProvider,
-            errorText: 'Ingen favorit spillere',
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PreviewHeader(
-                  colorThemeState: colorThemeState,
-                  text: 'Holdkampe resultater',
+                const SizedBox(
+                  height: 12,
                 ),
-                AddInfoPreview(
-                  onTap: () {
-                    ref
-                        .read(teamTournamentSearchFilterProvider.notifier)
-                        .state = TeamTournamentFilter.fromJson({
-                      "ageGroupID": "",
-                      "callbackcontextkey": contextKey,
-                      "clubID": "",
-                      "leagueGroupID": "",
-                      "leagueGroupTeamID": "",
-                      "leagueMatchID": "",
-                      "playerID": "",
-                      "regionID": "",
-                      "seasonID": "2024",
-                      "subPage": "6"
-                    });
-                    Navigator.of(context).pushNamed(
-                      '/TeamTournamentSearchPage',
-                    );
-                  },
-                  text: "Tilføj hold",
-                  icon: Icons.add,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PreviewHeader(
+                        colorThemeState: colorThemeState,
+                        text: 'Favorit spillere',
+                      ),
+                      AddInfoPreview(
+                        onTap: () => Navigator.of(context).pushNamed(
+                          '/PlayerSearchPage',
+                          arguments: {
+                            'favouriteMode': true,
+                          },
+                        ),
+                        text: "Tilføj spillere",
+                        icon: Icons.add,
+                      ),
+                    ],
+                  ),
                 ),
+                ConsumerPreviewWidget(
+                  child: (dynamic result) => PlayerPreviewWidget(
+                    profile: result,
+                  ),
+                  provider: playerProfilePreviewProvider,
+                  errorText: 'Ingen favorit spillere',
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PreviewHeader(
+                        colorThemeState: colorThemeState,
+                        text: 'Holdkampe resultater',
+                      ),
+                      AddInfoPreview(
+                        onTap: () {
+                          ref
+                              .read(teamTournamentSearchFilterProvider.notifier)
+                              .state = TeamTournamentFilter.fromJson({
+                            "ageGroupID": "",
+                            "callbackcontextkey": contextKey,
+                            "clubID": "",
+                            "leagueGroupID": "",
+                            "leagueGroupTeamID": "",
+                            "leagueMatchID": "",
+                            "playerID": "",
+                            "regionID": "",
+                            "seasonID": "2024",
+                            "subPage": "6"
+                          });
+                          Navigator.of(context).pushNamed(
+                            '/TeamTournamentSearchPage',
+                          );
+                        },
+                        text: "Tilføj hold",
+                        icon: Icons.add,
+                      ),
+                    ],
+                  ),
+                ),
+                ConsumerPreviewWidget(
+                  child: (dynamic result) => TeamTournamentResultPreviewWidget(
+                    result: result,
+                    margin: const EdgeInsets.all(0),
+                  ),
+                  provider: teamTournamentResultProvider,
+                  errorText: 'Ingen holdkamp resultater',
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: PreviewHeader(
+                    colorThemeState: colorThemeState,
+                    text: "Seneste resultater",
+                  ),
+                ),
+                ConsumerPreviewWidget(
+                  child: (dynamic result) => TournamentResultPreviewWidget(
+                    result: result,
+                  ),
+                  provider: tournamentResultPreviewProvider,
+                  errorText:
+                      'Der er ingen resultater for turneringer i den her sæson',
+                  axis: Axis.vertical,
+                )
               ],
             ),
           ),
-          ConsumerPreviewWidget(
-            child: (dynamic result) => TeamTournamentResultPreviewWidget(
-              result: result,
-              margin: const EdgeInsets.all(0),
-            ),
-            provider: teamTournamentResultProvider,
-            errorText: 'Ingen holdkamp resultater',
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: PreviewHeader(
-              colorThemeState: colorThemeState,
-              text: "Seneste resultater",
-            ),
-          ),
-          ConsumerPreviewWidget(
-            child: (dynamic result) => TournamentResultPreviewWidget(
-              result: result,
-            ),
-            provider: tournamentResultPreviewProvider,
-            errorText:
-                'Der er ingen resultater for turneringer i den her sæson',
-            axis: Axis.vertical,
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

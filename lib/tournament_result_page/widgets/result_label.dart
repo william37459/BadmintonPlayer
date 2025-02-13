@@ -18,10 +18,11 @@ class ResultLabel extends ConsumerWidget {
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
-      opacity: isSelected ? 1 : 0.5,
+      opacity: 1,
       child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Material(
+          elevation: isSelected ? 1 : 0,
+          borderRadius: BorderRadius.circular(4),
           child: InkWell(
             borderRadius: BorderRadius.circular(4),
             onTap: () {
