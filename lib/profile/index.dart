@@ -15,8 +15,8 @@ StateProvider<bool?> isLoggedInProvider = StateProvider<bool?>((ref) => true);
 
 StateProvider<User> userProvider = StateProvider<User>(
   (ref) => User(
-    email: "Williamdam7@gmail.com",
-    name: "William Dam Høedt-Rasmussen",
+    email: "",
+    name: "",
     telephone: "",
     street: "",
     postalCode: "",
@@ -62,118 +62,161 @@ class ProfilePage extends ConsumerWidget {
           imageFilter: isLoggedInState ?? false
               ? ImageFilter.blur(sigmaX: 0, sigmaY: 0)
               : ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Column(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        "Profil",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      "Profil",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    CustomContainer(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      borderRadius: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
-                      ),
-                      child: Row(
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        spacing: 8,
                         children: [
-                          const CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          CustomContainer(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            borderRadius: 0,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                            child: Row(
+                              children: [
+                                const CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      userProviderState.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      userProviderState.email,
+                                      style: TextStyle(
+                                        color: colorThemeState.fontColor
+                                            .withValues(alpha: 0.6),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                userProviderState.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
+                          for (String menu in menus)
+                            CustomContainer(
+                              onTap: () {},
+                              margin: const EdgeInsets.all(0),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 16,
                               ),
-                              Text(
-                                userProviderState.email,
-                                style: TextStyle(
-                                  color: colorThemeState.fontColor
-                                      .withValues(alpha: 0.6),
-                                ),
+                              borderRadius: 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    menu,
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right,
+                                    color: Colors.grey[400] ?? Colors.grey,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    for (String menu in menus)
-                      CustomContainer(
-                        onTap: () {},
-                        margin: const EdgeInsets.all(0),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
-                        borderRadius: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              menu,
                             ),
-                            Icon(
-                              Icons.chevron_right,
-                              color: Colors.grey[400] ?? Colors.grey,
-                            ),
-                          ],
-                        ),
-                      ),
-                    CustomContainer(
-                      onTap: () async {
-                        final Email email = Email(
-                          body: '',
-                          subject: 'Badmintonplayer app - ny feature',
-                          recipients: ['williamdam7@gmail.com'],
-                          isHTML: false,
-                        );
+                          CustomContainer(
+                            onTap: () async {
+                              final Email email = Email(
+                                body: '',
+                                subject: 'Badmintonplayer app - ny feature',
+                                recipients: ['williamdam7@gmail.com'],
+                                isHTML: false,
+                              );
 
-                        try {
-                          await FlutterEmailSender.send(email);
-                        } catch (e) {
-                          debugPrint(e.toString());
-                        }
-                      },
-                      margin: const EdgeInsets.only(top: 8),
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Foreslå en feature!",
+                              try {
+                                await FlutterEmailSender.send(email);
+                              } catch (e) {
+                                debugPrint(e.toString());
+                              }
+                            },
+                            margin: const EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Foreslå en feature!",
+                                ),
+                                Icon(
+                                  Icons.chevron_right,
+                                  color: Colors.grey[400] ?? Colors.grey,
+                                ),
+                              ],
+                            ),
                           ),
-                          Icon(
-                            Icons.chevron_right,
-                            color: Colors.grey[400] ?? Colors.grey,
+                          CustomContainer(
+                            onTap: () {
+                              ref.read(isLoggedInProvider.notifier).state =
+                                  null;
+                              ref.read(loginProvider.notifier).state = {
+                                "email": "",
+                                "password": "",
+                              };
+                              ref.read(userProvider.notifier).state = User(
+                                email: "",
+                                name: "",
+                                telephone: "",
+                                street: "",
+                                postalCode: "",
+                                town: "",
+                              );
+                            },
+                            margin: const EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.all(8),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Log ud",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.logout,
+                                  color: Colors.red,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
