@@ -20,56 +20,57 @@ class PlayerResult extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
     List<String> favouritePlayersState = ref.watch(favouritePlayers) ?? [];
-    return InkWell(
-      onTap: () async {
-        if (shouldReturnPlayer) {
-          Navigator.pop(context, profile);
-        } else if (favouriteMode) {
-          if (favouritePlayersState.contains(profile.id)) {
-            ref.read(favouritePlayers.notifier).state = [
-              ...favouritePlayersState
-                  .where((element) => element != profile.id),
-            ];
-          } else {
-            ref.read(favouritePlayers.notifier).state = [
-              ...favouritePlayersState,
-              profile.id,
-            ];
-          }
-          final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-          await asyncPrefs.setStringList(
-            'favouritePlayers',
-            ref.read(favouritePlayers.notifier).state ?? [],
-          );
-        } else {
-          ref.read(selectedPlayer.notifier).state = profile.id;
-          Navigator.pushNamed(
-            context,
-            '/PlayerProfilePage',
-            arguments: {
-              'name': profile.name,
-              'id': profile.id,
-            },
-          );
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            if (favouriteMode)
-              Stack(
-                children: [
+    return Column(
+      children: [
+        InkWell(
+          onTap: () async {
+            if (shouldReturnPlayer) {
+              Navigator.pop(context, profile);
+            } else if (favouriteMode) {
+              if (favouritePlayersState.contains(profile.id)) {
+                ref.read(favouritePlayers.notifier).state = [
+                  ...favouritePlayersState
+                      .where((element) => element != profile.id),
+                ];
+              } else {
+                ref.read(favouritePlayers.notifier).state = [
+                  ...favouritePlayersState,
+                  profile.id,
+                ];
+              }
+              final SharedPreferencesAsync asyncPrefs =
+                  SharedPreferencesAsync();
+              await asyncPrefs.setStringList(
+                'favouritePlayers',
+                ref.read(favouritePlayers.notifier).state ?? [],
+              );
+            } else {
+              ref.read(selectedPlayer.notifier).state = profile.id;
+              // Navigator.pushNamed(
+              //   context,
+              //   '/PlayerProfilePage',
+              //   arguments: {
+              //     'name': profile.name,
+              //     'id': profile.id,
+              //   },
+              // );
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              children: [
+                if (favouriteMode)
                   AnimatedCrossFade(
                     duration: const Duration(milliseconds: 200),
                     firstChild: Icon(
-                      Icons.star,
+                      Icons.star_rounded,
                       color:
                           colorThemeState.primaryColor.withValues(alpha: 0.8),
                       size: 32,
                     ),
                     secondChild: Icon(
-                      Icons.star_outline,
+                      Icons.star_outline_rounded,
                       color: colorThemeState.fontColor.withValues(alpha: 0.3),
                       size: 32,
                     ),
@@ -77,41 +78,50 @@ class PlayerResult extends ConsumerWidget {
                         ? CrossFadeState.showFirst
                         : CrossFadeState.showSecond,
                   ),
-                ],
-              ),
-            if (favouriteMode) const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  profile.name,
-                  style: TextStyle(
-                    color: colorThemeState.primaryColor.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
+                if (favouriteMode) const SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      profile.name,
+                      style: TextStyle(
+                        color: colorThemeState.fontColor,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Text(
+                      "${profile.badmintonId}${profile.id.isNotEmpty && profile.club.isNotEmpty ? ', ' : ''}${profile.club}",
+                      style: TextStyle(
+                        color: colorThemeState.fontColor.withValues(alpha: 0.5),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  "${profile.badmintonId}${profile.id.isNotEmpty && profile.club.isNotEmpty ? ', ' : ''}${profile.club}",
-                  style: TextStyle(
-                    color: colorThemeState.fontColor.withValues(alpha: 0.5),
-                    fontSize: 14,
-                  ),
+                Expanded(
+                  child: Container(),
                 ),
+                if (!favouriteMode)
+                  Icon(
+                    Icons.chevron_right,
+                    color: colorThemeState.primaryColor,
+                  ),
+                // Text(profile.rankClass),
               ],
             ),
-            Expanded(
-              child: Container(),
-            ),
-            if (!favouriteMode)
-              Icon(
-                Icons.chevron_right,
-                color: colorThemeState.primaryColor,
-              ),
-            // Text(profile.rankClass),
-          ],
+          ),
         ),
-      ),
+        Container(
+          margin: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
+          decoration: BoxDecoration(
+            color: colorThemeState.fontColor.withValues(alpha: 0.5),
+            borderRadius: BorderRadiusDirectional.circular(2),
+          ),
+          height: 0.25,
+        ),
+      ],
     );
   }
 }

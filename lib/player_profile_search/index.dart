@@ -56,6 +56,7 @@ class PlayerSearch extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Scaffold(
+      backgroundColor: colorThemeState.backgroundColor,
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: colorThemeState.primaryColor,
         icon: Icon(
@@ -82,7 +83,7 @@ class PlayerSearch extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
+                horizontal: 16.0,
                 vertical: 12,
               ),
               child: Row(
@@ -91,28 +92,20 @@ class PlayerSearch extends ConsumerWidget {
                   Text(
                     "Profil Søgning",
                     style: TextStyle(
-                      color: colorThemeState.secondaryColor,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-              padding: const EdgeInsets.all(4),
+              margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.5),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
+                color: const Color(0xffEBEBEB),
+                borderRadius: BorderRadius.circular(42),
               ),
               child: Row(
                 children: [
@@ -252,7 +245,7 @@ class PlayerSearch extends ConsumerWidget {
                         child: Icon(
                           Icons.tune,
                           size: 18,
-                          color: colorThemeState.secondaryColor,
+                          color: colorThemeState.primaryColor,
                         ),
                       ),
                     ),
@@ -277,7 +270,7 @@ class PlayerSearch extends ConsumerWidget {
                     return data.isNotEmpty
                         ? Expanded(
                             child: ListView.builder(
-                              itemCount: min(data.length, 100),
+                              itemCount: min(data.length, 25),
                               keyboardDismissBehavior:
                                   ScrollViewKeyboardDismissBehavior.onDrag,
                               itemBuilder: (context, index) => PlayerResult(
