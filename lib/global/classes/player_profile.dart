@@ -40,7 +40,7 @@ class ScoreData {
   final String rank;
   String points;
   final String matches;
-  final String placement;
+  String placement;
 
   ScoreData({
     required this.type,

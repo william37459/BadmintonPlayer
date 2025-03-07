@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/profile.dart';
 import 'package:app/global/constants.dart';
@@ -275,7 +277,7 @@ class PlayerSearch extends ConsumerWidget {
                     return data.isNotEmpty
                         ? Expanded(
                             child: ListView.builder(
-                              itemCount: data.length,
+                              itemCount: min(data.length, 100),
                               keyboardDismissBehavior:
                                   ScrollViewKeyboardDismissBehavior.onDrag,
                               itemBuilder: (context, index) => PlayerResult(

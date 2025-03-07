@@ -21,7 +21,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 FutureProvider<List<PlayerProfile>> playerProfilePreviewProvider =
     FutureProvider<List<PlayerProfile>>((ref) async {
   List<String>? ids = ref.watch(favouritePlayers);
+
   final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+
   if (ids == null) {
     ref.read(favouritePlayers.notifier).state =
         await asyncPrefs.getStringList("favouritePlayers") ?? [];
@@ -75,6 +77,7 @@ FutureProvider<List<TeamTournamentResultPreview>> teamTournamentResultProvider =
   final result = await getTeamTournamentResults(
     teamIds ?? [],
     contextKey,
+    null,
   );
   return result;
 });

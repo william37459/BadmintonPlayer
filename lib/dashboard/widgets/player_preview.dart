@@ -18,6 +18,9 @@ class PlayerPreviewWidget extends ConsumerWidget {
         ref.read(selectedPlayer.notifier).state = profile.id;
         Navigator.of(context).pushNamed(
           "/PlayerProfilePage",
+          arguments: {
+            "player": profile,
+          },
         );
       },
       child: Row(

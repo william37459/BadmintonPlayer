@@ -6,13 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 
 Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
-  List<String> matches,
+  List<String> leagues,
   String contextKey,
+  List<String>? matchIds,
 ) async {
-  List<TeamTournamentResultPreview> results = [];
-
-  for (String match in matches) {
-    List<String> formattedMatch = match.split(",");
+  List<Future<List<TeamTournamentResultPreview>>> futures =
+      leagues.map((league) async {
+    List<TeamTournamentResultPreview> results = [];
+    List<String> leagueAttributes = league.split(",");
     http.Response response = await http.post(
       Uri.parse(
         "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetLeagueStanding",
@@ -21,21 +22,22 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
         "Content-Type": "application/json; charset=UTF-8",
       },
       body: json.encode({
-        "ageGroupID": formattedMatch[3],
-        "clubID": formattedMatch[8],
-        "leagueGroupID": formattedMatch[5],
-        "seasonID": formattedMatch[1],
+        "ageGroupID": leagueAttributes[3],
+        "clubID": matchIds != null ? "" : leagueAttributes[8],
+        "leagueGroupID":
+            matchIds != null ? leagueAttributes[2] : leagueAttributes[5],
+        "seasonID": leagueAttributes[1],
         "leagueGroupTeamID": "",
-        "leagueMatchID": "",
+        "leagueMatchID": matchIds != null ? leagueAttributes[6] : "",
         "playerID": "",
-        "regionID": "",
+        "regionID": matchIds != null ? leagueAttributes[4] : "",
         "callbackcontextkey": contextKey,
         "subPage": "4",
       }),
     );
 
     if (response.statusCode != 200) {
-      continue;
+      return [] as List<TeamTournamentResultPreview>;
     }
 
     Map formattedResponse = json.decode(response.body);
@@ -52,12 +54,22 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
         results.add(
           TeamTournamentResultPreview.fromElement(
             row,
-            document.querySelector("h2")?.text ?? "Kamp",
+            document.querySelector("h3")?.text ??
+                document.querySelector("h2")?.text ??
+                "Kamp",
           ),
         );
       }
     }
-  }
+    return results;
+  }).toList();
+
+  // Wait for all requests to complete
+  List<TeamTournamentResultPreview> results = [
+    for (List<TeamTournamentResultPreview> result
+        in (await Future.wait(futures)))
+      ...result
+  ];
 
   Set<String> seenMatchNumbers = {};
   results = results.where((item) {
@@ -69,7 +81,13 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
     }
   }).toList();
 
-  results.sort((a, b) => a.date.compareTo(b.date));
+  if (matchIds != null) {
+    results.retainWhere((element) => matchIds.contains(element.matchNumber));
 
-  return results.length > 10 ? results.sublist(0, 10) : results;
+    return results;
+  } else {
+    results.sort((a, b) => a.date.compareTo(b.date));
+
+    return results.length > 10 ? results.sublist(0, 10) : results;
+  }
 }

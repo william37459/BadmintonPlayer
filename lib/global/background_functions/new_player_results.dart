@@ -19,10 +19,10 @@ Future<bool> newPlayerResults() async {
           [];
 
   for (Map<String, dynamic> player in lastPlayerCount) {
-    int newPoints = await getPlayerLevel(
+    int newPoints = (await getPlayerLevel(
       player['player'].toString(),
       player['name'],
-    );
+    ))[0];
     if (newPoints != player['points']) {
       return true;
     }

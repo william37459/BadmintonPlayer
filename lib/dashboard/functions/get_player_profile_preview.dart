@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
 import 'package:app/dashboard/classes/tournament_result_preview.dart';
+import 'package:app/dashboard/functions/get_team_tournament_results.dart';
 import 'package:app/global/classes/player_profile.dart';
 import 'package:app/player_profile/functions/get_player_level.dart';
 import 'package:html/dom.dart';
@@ -65,31 +67,12 @@ Future<PlayerProfile?> getPlayerProfilePreview(
       break;
     }
   }
-  Element startLevelElement = document
-      .querySelectorAll('.GridView')
-      .where(
-        (element) => element.text.contains("Tilmeldingsniveau"),
-      )
-      .toList()
-      .first
-      .children
-      .first
-      .children[1];
-
-  String startLevel = "";
-
-  if (startLevelElement.children.length > 3) {
-    startLevel = startLevelElement.children[3].text;
-  } else {
-    startLevel =
-        (await getPlayerLevel(id, formattedResponse['d']['playername'].trim()))
-            .toString();
-  }
 
   List<Element> gridViews = document.querySelectorAll('.GridView');
   List<ScoreData> scoreData = [];
   List<TournamentResultPreview> tournaments = [];
   Map<String, String> seasons = {};
+  String startLevel = "";
 
   List<Element> allSeasons = document.querySelector('select')?.children ?? [];
 
@@ -99,21 +82,41 @@ Future<PlayerProfile?> getPlayerProfilePreview(
 
   for (Element gridView in gridViews) {
     List<Element> rows = gridView.querySelectorAll('tr');
+
     if (rows[0].text.contains("Placering")) {
       for (Element row in rows) {
         if (!row.text.contains("Placering")) {
-          scoreData.add(
-            ScoreData(
-              type: row.children[0].text.trim(),
-              rank: row.children[2].text.trim(),
-              points:
-                  row.children.length > 3 ? row.children[3].text.trim() : "",
-              matches:
-                  row.children.length > 4 ? row.children[4].text.trim() : "",
-              placement:
-                  row.children.length > 5 ? row.children[5].text.trim() : "",
-            ),
-          );
+          if (row.text.contains("Tilmeldingsniveau") &&
+              row.querySelectorAll("a").length < 3) {
+            List<int> startValues = (await getPlayerLevel(
+                id, formattedResponse['d']['playername'].trim()));
+
+            startLevel = startValues[0].toString();
+
+            scoreData.add(
+              ScoreData(
+                type: row.children[0].text.trim(),
+                rank: row.children[2].text.trim(),
+                points: startValues[0].toString(),
+                matches:
+                    row.children.length > 4 ? row.children[4].text.trim() : "",
+                placement: startValues[1].toString(),
+              ),
+            );
+          } else {
+            scoreData.add(
+              ScoreData(
+                type: row.children[0].text.trim(),
+                rank: row.children[2].text.trim(),
+                points:
+                    row.children.length > 3 ? row.children[3].text.trim() : "",
+                matches:
+                    row.children.length > 4 ? row.children[4].text.trim() : "",
+                placement:
+                    row.children.length > 5 ? row.children[5].text.trim() : "",
+              ),
+            );
+          }
         }
       }
     }
@@ -131,7 +134,36 @@ Future<PlayerProfile?> getPlayerProfilePreview(
     }
   }
 
-  scoreData[0].points = startLevel;
+  List<Element> allTeamTournaments = document
+      .querySelectorAll('.GridView')
+      .where(
+        (element) => element.text.contains("Kampdato"),
+      )
+      .first
+      .children
+      .first
+      .children;
+  allTeamTournaments.removeAt(0);
+
+  List<String> teamTournamentAttributes = [];
+  List<String> teamTournamentMatchIds = [];
+
+  for (Element teamTournament in allTeamTournaments) {
+    List<String> allAttributes = teamTournament
+            .querySelectorAll("a")
+            .first
+            .attributes['href']
+            ?.split(",") ??
+        [];
+    teamTournamentAttributes.add(allAttributes.join(","));
+
+    allAttributes.removeLast();
+    teamTournamentMatchIds.add(allAttributes.last);
+  }
+
+  List<TeamTournamentResultPreview> teamTournaments =
+      await getTeamTournamentResults(
+          teamTournamentAttributes, contextKey, teamTournamentMatchIds);
 
   return PlayerProfile(
     name: formattedResponse['d']['playername'].trim(),
@@ -140,7 +172,7 @@ Future<PlayerProfile?> getPlayerProfilePreview(
     id: id,
     startLevel: startLevel,
     scoreData: scoreData,
-    teamTournaments: [],
+    teamTournaments: teamTournaments,
     tournaments: tournaments,
     seasons: seasons,
   );

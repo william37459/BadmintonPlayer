@@ -52,9 +52,12 @@ class RouteGenerator {
         }
         return _errorRoute();
       case '/PlayerProfilePage':
-        return CupertinoPageRoute(
-          builder: (_) => const PlayerProfilePage(),
-        );
+        if (args is Map) {
+          return CupertinoPageRoute(
+            builder: (_) => PlayerProfilePage(player: args['player']),
+          );
+        }
+        return _errorRoute();
       case '/TournamentResultPage':
         if (args is Map) {
           return CupertinoPageRoute(

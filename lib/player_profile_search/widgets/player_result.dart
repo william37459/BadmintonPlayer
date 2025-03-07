@@ -35,12 +35,12 @@ class PlayerResult extends ConsumerWidget {
               ...favouritePlayersState,
               profile.id,
             ];
-            final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-            await asyncPrefs.setStringList(
-              'favouritePlayers',
-              ref.read(favouritePlayers.notifier).state ?? [],
-            );
           }
+          final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+          await asyncPrefs.setStringList(
+            'favouritePlayers',
+            ref.read(favouritePlayers.notifier).state ?? [],
+          );
         } else {
           ref.read(selectedPlayer.notifier).state = profile.id;
           Navigator.pushNamed(

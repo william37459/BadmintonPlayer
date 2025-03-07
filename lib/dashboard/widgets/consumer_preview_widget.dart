@@ -39,17 +39,19 @@ class ConsumerPreviewWidget extends ConsumerWidget {
                   Shimmer.fromColors(
                     highlightColor: Colors.grey[200] ?? Colors.grey,
                     baseColor: Colors.grey[100] ?? Colors.grey,
-                    child: PlayerPreviewWidget(
-                      profile: PlayerProfile(
-                        name: '',
-                        attachedProfiles: [],
-                        club: '',
-                        startLevel: '',
-                        id: '',
-                        scoreData: [],
-                        teamTournaments: [],
-                        tournaments: [],
-                        seasons: {},
+                    child: IgnorePointer(
+                      child: PlayerPreviewWidget(
+                        profile: PlayerProfile(
+                          name: '',
+                          attachedProfiles: [],
+                          club: '',
+                          startLevel: '',
+                          id: '',
+                          scoreData: [],
+                          teamTournaments: [],
+                          tournaments: [],
+                          seasons: {},
+                        ),
                       ),
                     ),
                   ),
