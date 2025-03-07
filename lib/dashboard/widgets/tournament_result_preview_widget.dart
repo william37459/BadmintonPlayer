@@ -40,7 +40,7 @@ class TournamentResultPreviewWidget extends ConsumerWidget {
         });
       },
       margin: margin,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

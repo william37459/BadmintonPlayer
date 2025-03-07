@@ -139,14 +139,17 @@ class Dashboard extends ConsumerWidget {
                   provider: seasonPlanFutureProvider,
                   errorText: 'Ingen kommende turneringer',
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: AddInfoPreview(
-                    onTap: () => Navigator.of(context)
-                        .pushNamed('/TournamentOverviewPage'),
-                    text: 'Se alle turneringer',
-                    icon: Icons.info,
-                    color: colorThemeState.secondaryFontColor,
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: AddInfoPreview(
+                      onTap: () => Navigator.of(context)
+                          .pushNamed('/TournamentOverviewPage'),
+                      text: 'Se alle turneringer',
+                      icon: Icons.info,
+                      color: colorThemeState.secondaryFontColor,
+                    ),
                   ),
                 ),
               ],
@@ -162,7 +165,10 @@ class Dashboard extends ConsumerWidget {
                   height: 12,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 2,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -233,7 +239,7 @@ class Dashboard extends ConsumerWidget {
                 ConsumerPreviewWidget(
                   child: (dynamic result) => TeamTournamentResultPreviewWidget(
                     result: result,
-                    margin: const EdgeInsets.all(0),
+                    margin: const EdgeInsets.symmetric(vertical: 4),
                   ),
                   provider: teamTournamentResultProvider,
                   errorText: 'Ingen holdkamp resultater',

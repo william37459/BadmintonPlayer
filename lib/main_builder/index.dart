@@ -25,14 +25,15 @@ class MainBuilder extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Scaffold(
+      backgroundColor: colorThemeState.backgroundColor,
       body: pages[indexState],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indexState,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: colorThemeState.primaryColor,
-        unselectedItemColor:
-            colorThemeState.primaryColor.withValues(alpha: 0.5),
+        unselectedItemColor: colorThemeState.fontColor.withValues(alpha: 0.5),
+        backgroundColor: colorThemeState.backgroundColor,
         onTap: (value) => ref.read(index.notifier).state = value,
         items: const [
           BottomNavigationBarItem(

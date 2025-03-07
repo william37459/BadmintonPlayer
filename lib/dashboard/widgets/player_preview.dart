@@ -13,7 +13,9 @@ class PlayerPreviewWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomContainer(
       width: 200,
-      margin: const EdgeInsets.all(0),
+      margin: const EdgeInsets.symmetric(
+        vertical: 4,
+      ),
       onTap: () {
         ref.read(selectedPlayer.notifier).state = profile.id;
         Navigator.of(context).pushNamed(

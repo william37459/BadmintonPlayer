@@ -23,6 +23,7 @@ StateProvider<CustomColorTheme> colorThemeProvider =
     secondaryColor: const Color(0xff960E13),
     fontColor: Colors.black,
     secondaryFontColor: Colors.white,
+    backgroundColor: Colors.white,
     shadowColor: Colors.black.withValues(alpha: 0.3),
   );
 });

@@ -20,64 +20,77 @@ class PlayerRanking extends ConsumerWidget {
     return InkWell(
       onTap: () {
         ref.read(selectedPlayer.notifier).state = playerScore.id;
-        Navigator.pushNamed(
-          context,
-          '/PlayerProfilePage',
-          arguments: {
-            'name': playerScore.name,
-          },
-        );
+        // Navigator.pushNamed(
+        //   context,
+        //   '/PlayerProfilePage',
+        //   arguments: {
+        //     'name': playerScore.name,
+        //   },
+        // );
       },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Text(
-              playerScore.rank,
-              style: TextStyle(
-                color: colorThemeState.fontColor.withValues(alpha: 0.5),
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    playerScore.name,
-                    style: TextStyle(
-                      color:
-                          colorThemeState.primaryColor.withValues(alpha: 0.8),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                    ),
-                  ),
-                  Text(
-                    "${playerScore.rankClass}${playerScore.rankClass.isNotEmpty && playerScore.points != null ? ', ' : ''}${playerScore.points == null ? '' : '${playerScore.points} point'}",
-                    style: TextStyle(
-                      color: colorThemeState.fontColor.withValues(alpha: 0.5),
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(),
-            ),
-            Column(
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            child: Row(
               children: [
-                Icon(
-                  Icons.info_outline,
-                  color: colorThemeState.primaryColor,
+                Text(
+                  playerScore.rank,
+                  style: TextStyle(
+                    color: colorThemeState.primaryColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        playerScore.name,
+                        style: TextStyle(
+                          color: colorThemeState.fontColor,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        "${playerScore.rankClass}${playerScore.rankClass.isNotEmpty && playerScore.points != null ? ', ' : ''}${playerScore.points == null ? '' : '${playerScore.points} point'}",
+                        style: TextStyle(
+                          color:
+                              colorThemeState.fontColor.withValues(alpha: 0.5),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                Column(
+                  children: [
+                    Icon(
+                      Icons.chevron_right,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.6),
+                    ),
+                  ],
+                ),
+                // Text(playerScore.rankClass),
               ],
             ),
-            // Text(playerScore.rankClass),
-          ],
-        ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(
+              horizontal: 12,
+            ),
+            decoration: BoxDecoration(
+              color: colorThemeState.fontColor.withValues(alpha: 0.5),
+              borderRadius: BorderRadiusDirectional.circular(2),
+            ),
+            height: 0.25,
+          )
+        ],
       ),
     );
   }

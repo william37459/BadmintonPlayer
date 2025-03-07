@@ -24,26 +24,23 @@ class AddInfoPreview extends ConsumerWidget {
       borderRadius: BorderRadius.circular(4),
       child: InkWell(
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: color ?? colorThemeState.primaryColor,
+              size: 20,
+            ),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
                 color: color ?? colorThemeState.primaryColor,
-                size: 20,
+                fontSize: 14,
               ),
-              Text(
-                text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: color ?? colorThemeState.primaryColor,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

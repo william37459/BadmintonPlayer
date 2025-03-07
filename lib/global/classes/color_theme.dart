@@ -5,6 +5,7 @@ class CustomColorTheme {
   Color secondaryColor;
   Color fontColor;
   Color secondaryFontColor;
+  Color backgroundColor;
   Color shadowColor;
 
   CustomColorTheme({
@@ -12,6 +13,7 @@ class CustomColorTheme {
     required this.secondaryColor,
     required this.fontColor,
     required this.secondaryFontColor,
+    required this.backgroundColor,
     required this.shadowColor,
   });
 }
