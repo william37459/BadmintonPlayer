@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-StateProvider<bool?> isLoggedInProvider = StateProvider<bool?>((ref) => true);
+StateProvider<bool?> isLoggedInProvider = StateProvider<bool?>((ref) => null);
 
 StateProvider<User> userProvider = StateProvider<User>(
   (ref) => User(

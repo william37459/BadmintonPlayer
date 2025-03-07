@@ -192,7 +192,7 @@ class Dashboard extends ConsumerWidget {
                   errorText: 'Ingen favorit spillere',
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 16,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -239,7 +239,7 @@ class Dashboard extends ConsumerWidget {
                   errorText: 'Ingen holdkamp resultater',
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 16,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
