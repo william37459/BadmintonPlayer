@@ -1,4 +1,6 @@
+import 'package:app/dashboard/functions/get_player_profile_preview.dart';
 import 'package:app/global/classes/color_theme.dart';
+import 'package:app/global/classes/player_profile.dart';
 import 'package:app/global/classes/player_score.dart';
 import 'package:app/global/constants.dart';
 // import 'package:app/score_list/index.dart';
@@ -18,15 +20,25 @@ class PlayerRanking extends ConsumerWidget {
     // final List<String> likedIdsState = ref.watch(likedIds);
 
     return InkWell(
-      onTap: () {
-        ref.read(selectedPlayer.notifier).state = playerScore.id;
-        // Navigator.pushNamed(
-        //   context,
-        //   '/PlayerProfilePage',
-        //   arguments: {
-        //     'name': playerScore.name,
-        //   },
-        // );
+      onTap: () async {
+        NavigatorState navigatorState = Navigator.of(context);
+
+        showDialog(
+          context: context,
+          builder: (context) => const CustomCircularProgressIndicator(),
+        );
+
+        PlayerProfile? selectedPlayer =
+            await getPlayerProfilePreview(playerScore.id, contextKey, ref);
+
+        navigatorState.pop();
+
+        navigatorState.pushNamed(
+          '/PlayerProfilePage',
+          arguments: {
+            'player': selectedPlayer,
+          },
+        );
       },
       child: Column(
         children: [
@@ -91,6 +103,61 @@ class PlayerRanking extends ConsumerWidget {
             height: 0.25,
           )
         ],
+      ),
+    );
+  }
+}
+
+class CustomCircularProgressIndicator extends StatefulWidget {
+  const CustomCircularProgressIndicator({
+    super.key,
+  });
+
+  @override
+  State<CustomCircularProgressIndicator> createState() =>
+      _CustomCircularProgressIndicatorState();
+}
+
+class _CustomCircularProgressIndicatorState
+    extends State<CustomCircularProgressIndicator>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      upperBound: 1,
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: RotationTransition(
+        turns: controller,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.width * 0.5,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FractionallySizedBox(
+                widthFactor: 0.25,
+                child: Image.asset(
+                  "assets/Foreground.png",
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

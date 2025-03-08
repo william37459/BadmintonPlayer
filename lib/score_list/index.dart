@@ -51,7 +51,9 @@ FutureProvider<Map<String, List<PlayerScore>>> allScoreListProvider =
 });
 
 class ScoreList extends ConsumerStatefulWidget {
-  const ScoreList({super.key});
+  const ScoreList({
+    super.key,
+  });
 
   @override
   ScoreListState createState() => ScoreListState();

@@ -1,8 +1,10 @@
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/constants.dart';
-import 'package:app/calendar/index.dart';
+import 'package:app/player_profile/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+StateProvider<int> choiceIndex = StateProvider<int>((ref) => 0);
 
 class ToggleSwitchButton extends ConsumerWidget {
   final String label1;
@@ -27,10 +29,10 @@ class ToggleSwitchButton extends ConsumerWidget {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-            color: colorSchemeState.secondaryFontColor,
+            color: const Color(0xffEBEBEB),
             borderRadius: BorderRadius.circular(6),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Stack(
             children: [
               Row(
@@ -38,11 +40,11 @@ class ToggleSwitchButton extends ConsumerWidget {
                 children: [
                   ChoiceWidget(
                     label: label1,
-                    index: -1,
+                    index: 0,
                   ),
                   ChoiceWidget(
                     label: label2,
-                    index: 0,
+                    index: 1,
                     enabled: enabled,
                   ),
                 ],
@@ -55,23 +57,19 @@ class ToggleSwitchButton extends ConsumerWidget {
                 child: FractionallySizedBox(
                   widthFactor: 0.5,
                   child: Container(
-                    color: colorSchemeState.secondaryFontColor,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color:
-                            colorSchemeState.fontColor.withValues(alpha: 0.025),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: Text(
-                          choiceIndexState == 0 ? label1 : label2,
-                          style: TextStyle(
-                            color: colorSchemeState.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Text(
+                        choiceIndexState == 0 ? label1 : label2,
+                        style: TextStyle(
+                          color: colorSchemeState.primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -86,9 +84,10 @@ class ToggleSwitchButton extends ConsumerWidget {
   }
 }
 
-void changeIndex(WidgetRef ref, int choiceIndexState, bool enabled) {
+void changeIndex(WidgetRef ref, int newIndex, bool enabled) {
+  tabController.animateTo(newIndex);
   if (enabled) {
-    ref.read(choiceIndex.notifier).state = (choiceIndexState + 1) % 2;
+    ref.read(choiceIndex.notifier).state = newIndex;
   }
 }
 

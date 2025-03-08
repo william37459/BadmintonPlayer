@@ -37,20 +37,21 @@ class RanksWidget extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      RankTextWidget(
-                        score: scores[2],
-                        colorThemeState: colorThemeState,
-                      ),
-                      RankTextWidget(
-                        score: scores[3],
-                        colorThemeState: colorThemeState,
-                      ),
-                    ],
-                  ),
+                  if (scores.length > 2)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        RankTextWidget(
+                          score: scores[2],
+                          colorThemeState: colorThemeState,
+                        ),
+                        RankTextWidget(
+                          score: scores[3],
+                          colorThemeState: colorThemeState,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),

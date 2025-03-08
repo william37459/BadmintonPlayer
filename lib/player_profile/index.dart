@@ -1,4 +1,3 @@
-import 'package:app/calendar/index.dart';
 import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
 import 'package:app/dashboard/classes/tournament_result_preview.dart';
 import 'package:app/dashboard/widgets/team_tournament_result_preview.dart';
@@ -10,7 +9,9 @@ import 'package:app/player_profile/widgets/toggle_switch_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PlayerProfilePage extends ConsumerWidget {
+late TabController tabController;
+
+class PlayerProfilePage extends ConsumerStatefulWidget {
   final PlayerProfile player;
   const PlayerProfilePage({
     required this.player,
@@ -18,76 +19,105 @@ class PlayerProfilePage extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final colorThemeState = ref.watch(colorThemeProvider);
-    int choiceIndexState = ref.watch(choiceIndex);
+  PlayerProfilePageState createState() => PlayerProfilePageState();
+}
 
-    return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              8,
-              12,
-              8,
-              16,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(
+class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(vsync: this, length: 2);
+
+    tabController.addListener(
+      () {
+        ref.read(choiceIndex.notifier).state = tabController.index;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorThemeState = ref.watch(colorThemeProvider);
+
+    return Material(
+      color: colorThemeState.backgroundColor,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                8,
+                12,
+                8,
+                16,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  Text(
+                    "Profil",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Icon(
                     Icons.chevron_left,
-                    color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                    color: Colors.transparent,
                   ),
-                ),
-                Text(
-                  "Profil",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: colorThemeState.fontColor.withValues(alpha: 0.8),
-                    fontSize: 16,
-                  ),
-                ),
-                const Icon(
-                  Icons.chevron_left,
-                  color: Colors.transparent,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: FractionallySizedBox(
-                        widthFactor: 0.25,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
-                                ),
-                                fit: BoxFit.contain,
+            Expanded(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16.0,
+                      left: 16.0,
+                      right: 16.0,
+                    ),
+                    child: FractionallySizedBox(
+                      widthFactor: 0.25,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
                               ),
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      player.name,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      widget.player.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -96,75 +126,92 @@ class PlayerProfilePage extends ConsumerWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Text(
-                      player.club,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      widget.player.club,
                       style: TextStyle(
                         color: colorThemeState.fontColor.withValues(alpha: 0.6),
                         fontSize: 14,
                       ),
                     ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    RanksWidget(scores: player.scoreData),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    const ToggleSwitchButton(
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: RanksWidget(scores: widget.player.scoreData),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ToggleSwitchButton(
                       label1: "Holdkampe",
                       label2: "Turneringer",
                       enabled: true,
                     ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Stack(
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: tabController,
                       children: [
-                        AnimatedOpacity(
-                          duration: const Duration(milliseconds: 300),
-                          opacity: choiceIndexState == 0 ? 1 : 0,
+                        SingleChildScrollView(
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 8,
                             children: [
-                              if (choiceIndexState == 0)
-                                for (TeamTournamentResultPreview teamTournament
-                                    in player.teamTournaments)
-                                  TeamTournamentResultPreviewWidget(
-                                    result: teamTournament,
-                                    width: null,
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 6,
-                                    ),
+                              for (TeamTournamentResultPreview teamTournament
+                                  in widget.player.teamTournaments)
+                                TeamTournamentResultPreviewWidget(
+                                  result: teamTournament,
+                                  width: null,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 16,
                                   ),
+                                ),
+                              const SizedBox(
+                                height: 0,
+                              ),
                             ],
                           ),
                         ),
-                        AnimatedOpacity(
-                          duration: const Duration(milliseconds: 300),
-                          opacity: choiceIndexState == 1 ? 1 : 0,
+                        SingleChildScrollView(
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             spacing: 8,
                             children: [
-                              if (choiceIndexState == 1)
-                                for (TournamentResultPreview tournament
-                                    in player.tournaments)
-                                  TournamentResultPreviewWidget(
-                                    result: tournament,
-                                    margin: const EdgeInsets.all(0),
+                              for (TournamentResultPreview tournament
+                                  in widget.player.tournaments)
+                                TournamentResultPreviewWidget(
+                                  result: tournament,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 16,
                                   ),
+                                ),
+                              const SizedBox(
+                                height: 0,
+                              ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

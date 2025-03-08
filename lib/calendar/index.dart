@@ -23,8 +23,6 @@ StateProvider<Map<String, dynamic>> tournamentFilterProvider =
   },
 );
 
-StateProvider<int> choiceIndex = StateProvider<int>((ref) => 0);
-
 FutureProvider<List<Tournament>> seasonPlanFutureProvider =
     FutureProvider<List<Tournament>>((ref) async {
   final filterValues = ref.watch(tournamentFilterProvider);

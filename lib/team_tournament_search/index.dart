@@ -1,4 +1,3 @@
-import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';

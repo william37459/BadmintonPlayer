@@ -91,16 +91,17 @@ Future<PlayerProfile?> getPlayerProfilePreview(
             List<int> startValues = (await getPlayerLevel(
                 id, formattedResponse['d']['playername'].trim()));
 
-            startLevel = startValues[0].toString();
+            startLevel = startValues[0] == -1 ? "" : startValues[0].toString();
 
             scoreData.add(
               ScoreData(
                 type: row.children[0].text.trim(),
                 rank: row.children[2].text.trim(),
-                points: startValues[0].toString(),
+                points: startValues[0] == -1 ? "" : startValues[0].toString(),
                 matches:
                     row.children.length > 4 ? row.children[4].text.trim() : "",
-                placement: startValues[1].toString(),
+                placement:
+                    startValues[1] == -1 ? "" : startValues[0].toString(),
               ),
             );
           } else {
@@ -135,15 +136,16 @@ Future<PlayerProfile?> getPlayerProfilePreview(
   }
 
   List<Element> allTeamTournaments = document
-      .querySelectorAll('.GridView')
-      .where(
-        (element) => element.text.contains("Kampdato"),
-      )
-      .first
-      .children
-      .first
-      .children;
-  allTeamTournaments.removeAt(0);
+          .querySelectorAll('.GridView')
+          .where(
+            (element) => element.text.contains("Kampdato"),
+          )
+          .firstOrNull
+          ?.children
+          .firstOrNull
+          ?.children ??
+      [];
+  if (allTeamTournaments.isNotEmpty) allTeamTournaments.removeAt(0);
 
   List<String> teamTournamentAttributes = [];
   List<String> teamTournamentMatchIds = [];
@@ -151,8 +153,8 @@ Future<PlayerProfile?> getPlayerProfilePreview(
   for (Element teamTournament in allTeamTournaments) {
     List<String> allAttributes = teamTournament
             .querySelectorAll("a")
-            .first
-            .attributes['href']
+            .firstOrNull
+            ?.attributes['href']
             ?.split(",") ??
         [];
     teamTournamentAttributes.add(allAttributes.join(","));
@@ -164,7 +166,6 @@ Future<PlayerProfile?> getPlayerProfilePreview(
   List<TeamTournamentResultPreview> teamTournaments =
       await getTeamTournamentResults(
           teamTournamentAttributes, contextKey, teamTournamentMatchIds);
-
   return PlayerProfile(
     name: formattedResponse['d']['playername'].trim(),
     attachedProfiles: [],
