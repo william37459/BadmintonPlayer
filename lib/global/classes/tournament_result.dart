@@ -61,9 +61,17 @@ class TournamentInfo {
     DateTime startDate = DateTime.parse(
       elements[1].children[1].text.split(" ")[1].split("-").reversed.join("-"),
     );
-    DateTime endDate = DateTime.parse(
-      elements[1].children[1].text.split(" ")[4].split("-").reversed.join("-"),
-    );
+    DateTime endDate = elements[1].children[1].text.split(" ").length > 3
+        ? DateTime.parse(
+            elements[1]
+                .children[1]
+                .text
+                .split(" ")[4]
+                .split("-")
+                .reversed
+                .join("-"),
+          )
+        : startDate;
 
     DateTime lastUpdated = DateTime.parse(
       "${elements[5].children[1].text.split(" ")[0].split("-").reversed.join("-")} ${elements[5].children[1].text.split(" ")[1]}",

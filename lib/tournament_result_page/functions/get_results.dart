@@ -180,12 +180,14 @@ Future<Map<String, dynamic>> getResults(
         );
       }
     }
-    result.add(
-      TournamentResult(
-        resultName: resultName,
-        matches: matches,
-      ),
-    );
+    if (matches.isNotEmpty) {
+      result.add(
+        TournamentResult(
+          resultName: resultName,
+          matches: matches,
+        ),
+      );
+    }
 
     return {
       "results": result,

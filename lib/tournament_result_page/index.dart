@@ -5,7 +5,7 @@ import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:app/tournament_result_page/functions/get_results.dart';
 import 'package:app/tournament_result_page/widgets/result.dart';
 import 'package:app/tournament_result_page/widgets/result_label.dart';
-import 'package:app/tournament_result_page/widgets/tournament_info_dialog.dart';
+import 'package:app/tournament_result_page/widgets/tournament_info_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,13 +60,13 @@ class TournamentResultPage extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            spacing: 16,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Column(
+          spacing: 16,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
@@ -88,10 +88,10 @@ class TournamentResultPage extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     onTap: tournamentInfo == null
                         ? null
-                        : () => showDialog(
+                        : () => showModalBottomSheet(
                               context: context,
-                              builder: (context) => TournamentInfoDialog(
-                                tournamentInfo: tournamentInfo,
+                              builder: (context) => TournamentInfoBottomSheet(
+                                info: tournamentInfo,
                               ),
                             ),
                     child: Icon(
@@ -102,42 +102,64 @@ class TournamentResultPage extends ConsumerWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 32,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    String filter = resultFilterProviderState['matchType']
-                            ?.keys
-                            .toList()[index] ??
-                        '';
-                    return ResultLabel(
-                      label: filter,
-                      index:
-                          resultFilterProviderState['matchType']?[filter] ?? 0,
+            ),
+            Container(
+              height: 48,
+              width: double.infinity,
+              color: Colors.white,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final filters = resultFilterProviderState['matchType']!
+                      .keys
+                      .toList()
+                      .sublist(0, 5);
+                  double totalWidth = filters.length * 100;
+                  if (totalWidth < constraints.maxWidth) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (String filter in filters)
+                          ResultLabel(
+                            label: filter,
+                            index: resultFilterProviderState['matchType']
+                                    ?[filter] ??
+                                0,
+                          ),
+                      ],
                     );
-                  },
-                  separatorBuilder: (context, index) => const SizedBox(
-                    width: 8,
-                  ),
-                  itemCount: (resultFilterProviderState['matchType']
-                              ?.keys
-                              .toList()
-                              .length ??
-                          1) -
-                      1,
-                ),
-              ),
-              futureAsyncValue.when(
-                data: (data) {
-                  return data.isNotEmpty
-                      ? Expanded(
-                          child: ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: 16,
+                  } else {
+                    // Scroll if overflowing
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          for (String filter in filters)
+                            ResultLabel(
+                              label: filter,
+                              index: resultFilterProviderState['matchType']
+                                      ?[filter] ??
+                                  0,
                             ),
-                            itemBuilder: (context, index) => CustomExpander(
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+            futureAsyncValue.when(
+              data: (data) {
+                return data.isNotEmpty
+                    ? Expanded(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => const SizedBox(
+                            height: 16,
+                          ),
+                          itemBuilder: (context, index) => Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: CustomExpander(
                               selfSpaced: true,
                               body: Column(
                                 spacing: 8,
@@ -160,27 +182,28 @@ class TournamentResultPage extends ConsumerWidget {
                               isExpandedKey: data[index].resultName,
                               isExpanded: true,
                             ),
-                            itemCount: data.length,
                           ),
-                        )
-                      : const Center(
-                          child: Text(
-                              "Der er sket en fejl, udvikleren er underrete, prøv igen senere"),
-                        );
-                },
-                loading: () => const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                error: (error, stackTrace) => Center(
-                  child: Text(
-                    error.toString(),
-                  ),
+                          itemCount: data.length,
+                        ),
+                      )
+                    : const Center(
+                        child: Text(
+                          "Der er ingen resultater tilgængelige",
+                        ),
+                      );
+              },
+              loading: () => const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
-            ],
-          ),
+              error: (error, stackTrace) => Center(
+                child: Text(
+                  error.toString(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

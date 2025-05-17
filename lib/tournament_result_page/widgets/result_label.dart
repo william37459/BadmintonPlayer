@@ -21,8 +21,8 @@ class ResultLabel extends ConsumerWidget {
       opacity: 1,
       child: Center(
         child: Material(
-          elevation: isSelected ? 1 : 0,
           borderRadius: BorderRadius.circular(4),
+          color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(4),
             onTap: () {
@@ -34,14 +34,25 @@ class ResultLabel extends ConsumerWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              height: 48,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: colorThemeState.secondaryFontColor,
-                borderRadius: BorderRadius.circular(4),
+                border: isSelected
+                    ? Border(
+                        bottom: BorderSide(
+                          color: colorThemeState.primaryColor,
+                          width: 1,
+                        ),
+                      )
+                    : null,
               ),
               child: Text(
                 label,
                 style: TextStyle(
-                  color: colorThemeState.fontColor,
+                  color: isSelected
+                      ? colorThemeState.primaryColor
+                      : colorThemeState.fontColor,
+                  fontWeight: isSelected ? FontWeight.w600 : null,
                   fontSize: 12,
                 ),
               ),
