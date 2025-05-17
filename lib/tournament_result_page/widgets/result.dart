@@ -8,11 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ResultWidget extends ConsumerWidget {
   final MatchResult result;
   final String pool;
+  final bool showInfo;
 
   const ResultWidget({
     super.key,
     required this.result,
     required this.pool,
+    this.showInfo = true,
   });
 
   @override
@@ -48,9 +50,10 @@ class ResultWidget extends ConsumerWidget {
                       fontSize: 16,
                     ),
                   ),
-                  const Icon(
-                    Icons.info_outlined,
-                  ),
+                  if (showInfo)
+                    const Icon(
+                      Icons.info_outlined,
+                    ),
                 ],
               ),
             ),
@@ -88,7 +91,7 @@ class ResultWidget extends ConsumerWidget {
                       for (String score in result.result)
                         Text(
                           score.split("/").length == 1
-                              ? ["21", "-"][[result.winner, result.loser]
+                              ? score.split("-")[[result.winner, result.loser]
                                   .indexOf(profiles)]
                               : score.split("/")[[result.winner, result.loser]
                                   .indexOf(profiles)],

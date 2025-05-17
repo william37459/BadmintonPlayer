@@ -29,10 +29,9 @@ class ToggleSwitchButton extends ConsumerWidget {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xffEBEBEB),
-            borderRadius: BorderRadius.circular(6),
+            color: colorSchemeState.fontColor.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(128),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Stack(
             children: [
               Row(
@@ -58,8 +57,8 @@ class ToggleSwitchButton extends ConsumerWidget {
                   widthFactor: 0.5,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(4),
+                      color: colorSchemeState.primaryColor,
+                      borderRadius: BorderRadius.circular(128),
                     ),
                     alignment: Alignment.center,
                     child: Padding(
@@ -67,8 +66,8 @@ class ToggleSwitchButton extends ConsumerWidget {
                       child: Text(
                         choiceIndexState == 0 ? label1 : label2,
                         style: TextStyle(
-                          color: colorSchemeState.primaryColor,
-                          fontWeight: FontWeight.bold,
+                          color: colorSchemeState.backgroundColor,
+                          fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
                       ),

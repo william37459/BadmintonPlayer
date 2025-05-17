@@ -9,7 +9,7 @@ import 'package:app/team_tournament_results/club/index.dart';
 import 'package:app/team_tournament_results/match_number/index.dart';
 import 'package:app/team_tournament_results/position/index.dart';
 import 'package:app/team_tournament_results/region/index.dart';
-import 'package:app/team_tournament_results/results/index.dart';
+import 'package:app/team_tournament_results/match_result/index.dart';
 import 'package:app/team_tournament_search/index.dart';
 import 'package:app/tournament_participation_list/index.dart';
 import 'package:app/tournament_result_page/index.dart';
@@ -111,6 +111,7 @@ class RouteGenerator {
         return CupertinoPageRoute(
           builder: (_) => const TeamTournamentClubResultsWidget(),
         );
+
       case '/AllTeamTournamentMatchesPage':
         return CupertinoPageRoute(
           builder: (_) => const AllTeamTournamentMatchesWidget(),

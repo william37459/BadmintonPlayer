@@ -1,8 +1,10 @@
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
+import 'package:app/team_tournament_results/match_result/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TeamTournamentResultPreviewWidget extends StatelessWidget {
+class TeamTournamentResultPreviewWidget extends ConsumerWidget {
   final TeamTournamentResultPreview result;
   final double? width;
   final EdgeInsets margin;
@@ -15,11 +17,18 @@ class TeamTournamentResultPreviewWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return CustomContainer(
       width: width,
       margin: margin,
       padding: const EdgeInsets.symmetric(vertical: 8),
+      onTap: () {
+        ref.read(leagueMatchIDProvider.notifier).state = result.matchNumber;
+        Navigator.pushNamed(
+          context,
+          '/TeamTournamentResultPage',
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

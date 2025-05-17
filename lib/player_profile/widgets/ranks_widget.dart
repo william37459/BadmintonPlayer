@@ -17,60 +17,57 @@ class RanksWidget extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Column(
+      spacing: 4,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          spacing: 4,
           children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      RankTextWidget(
-                        score: scores[0],
-                        colorThemeState: colorThemeState,
-                      ),
-                      RankTextWidget(
-                        score: scores[1],
-                        colorThemeState: colorThemeState,
-                      ),
-                    ],
-                  ),
-                  if (scores.length > 2)
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        RankTextWidget(
-                          score: scores[2],
-                          colorThemeState: colorThemeState,
-                        ),
-                        RankTextWidget(
-                          score: scores[3],
-                          colorThemeState: colorThemeState,
-                        ),
-                      ],
-                    ),
-                ],
-              ),
+            RankTextWidget(
+              score: scores[0],
+              colorThemeState: colorThemeState,
+            ),
+            RankTextWidget(
+              score: scores[1],
+              colorThemeState: colorThemeState,
             ),
           ],
         ),
+        if (scores.length > 2)
+          Row(
+            spacing: 4,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RankTextWidget(
+                score: scores[2],
+                colorThemeState: colorThemeState,
+              ),
+              RankTextWidget(
+                score: scores[3],
+                colorThemeState: colorThemeState,
+              ),
+            ],
+          ),
       ],
     );
   }
 }
 
 class RankTextWidget extends StatelessWidget {
+  final ScoreData score;
+  final CustomColorTheme colorThemeState;
+  final TextStyle? headerStyle;
+  final List<String>? footers;
+
   const RankTextWidget({
     super.key,
     required this.score,
     required this.colorThemeState,
+    this.headerStyle,
+    this.footers,
   });
-
-  final ScoreData score;
-  final CustomColorTheme colorThemeState;
 
   @override
   Widget build(BuildContext context) {
@@ -80,19 +77,19 @@ class RankTextWidget extends StatelessWidget {
           color: colorThemeState.primaryColor,
           borderRadius: BorderRadius.circular(4),
         ),
-        margin: const EdgeInsets.all(4),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "${score.rank}, ${score.type.replaceAll("Rangliste ", "").replaceAll("Tilmeldingsniveau", "Samlet")}",
+              "${score.rank}${score.type.isNotEmpty && score.rank.isNotEmpty ? ', ' : ''}${score.type.replaceAll("Rangliste ", "").replaceAll("Tilmeldingsniveau", "Samlet")}",
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color:
-                    colorThemeState.secondaryFontColor.withValues(alpha: 0.8),
-                fontSize: 10,
-              ),
+              style: headerStyle ??
+                  TextStyle(
+                    color: colorThemeState.secondaryFontColor
+                        .withValues(alpha: 0.8),
+                    fontSize: 10,
+                  ),
             ),
             const SizedBox(
               height: 8,
@@ -112,7 +109,7 @@ class RankTextWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "Point",
+                        footers?.elementAtOrNull(0) ?? "Point",
                         style: TextStyle(
                           color: colorThemeState.secondaryFontColor,
                           fontSize: 12,
@@ -144,7 +141,7 @@ class RankTextWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "Placering",
+                        footers?.elementAtOrNull(1) ?? "Placering",
                         style: TextStyle(
                           color: colorThemeState.secondaryFontColor,
                           fontSize: 12,

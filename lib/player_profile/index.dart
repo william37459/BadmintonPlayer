@@ -155,9 +155,6 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                       enabled: true,
                     ),
                   ),
-                  const SizedBox(
-                    height: 12,
-                  ),
                   Expanded(
                     child: TabBarView(
                       controller: tabController,
@@ -167,8 +164,11 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                             mainAxisSize: MainAxisSize.min,
                             spacing: 8,
                             children: [
+                              const SizedBox(
+                                height: 8,
+                              ),
                               for (TeamTournamentResultPreview teamTournament
-                                  in widget.player.teamTournaments)
+                                  in widget.player.teamTournaments.reversed)
                                 TeamTournamentResultPreviewWidget(
                                   result: teamTournament,
                                   width: null,
@@ -187,6 +187,9 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                             mainAxisSize: MainAxisSize.min,
                             spacing: 8,
                             children: [
+                              const SizedBox(
+                                height: 8,
+                              ),
                               for (TournamentResultPreview tournament
                                   in widget.player.tournaments)
                                 TournamentResultPreviewWidget(

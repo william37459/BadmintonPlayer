@@ -265,8 +265,7 @@ class ProfilePage extends ConsumerWidget {
                         CustomContainer(
                           margin: const EdgeInsets.all(0),
                           padding: const EdgeInsets.all(12),
-                          backgroundColor: colorThemeState.primaryColor
-                              .withValues(alpha: 0.1),
+                          backgroundColor: colorThemeState.backgroundColor,
                           child: CustomInput(
                             provider: loginProvider,
                             providerKey: "email",
@@ -277,8 +276,7 @@ class ProfilePage extends ConsumerWidget {
                         CustomContainer(
                           margin: const EdgeInsets.all(0),
                           padding: const EdgeInsets.all(12),
-                          backgroundColor: colorThemeState.primaryColor
-                              .withValues(alpha: 0.1),
+                          backgroundColor: colorThemeState.backgroundColor,
                           child: CustomInput(
                             obscureText: true,
                             provider: loginProvider,

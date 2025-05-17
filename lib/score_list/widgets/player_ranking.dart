@@ -47,7 +47,7 @@ class PlayerRanking extends ConsumerWidget {
             child: Row(
               children: [
                 Text(
-                  playerScore.rank,
+                  playerScore.rank.padLeft(3, ' '),
                   style: TextStyle(
                     color: colorThemeState.primaryColor,
                     fontWeight: FontWeight.w600,

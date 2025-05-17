@@ -73,6 +73,32 @@ class TeamTournamentFilter {
       subPage: params[0],
     );
   }
+
+  TeamTournamentFilter copyWith({
+    String? text,
+    String? clubID,
+    String? leagueGroupID,
+    String? leagueGroupTeamID,
+    String? leagueMatchID,
+    String? ageGroupID,
+    String? playerID,
+    String? regionID,
+    String? seasonID,
+    String? subPage,
+  }) {
+    return TeamTournamentFilter(
+      text: text ?? this.text,
+      clubID: clubID ?? this.clubID,
+      leagueGroupID: leagueGroupID ?? this.leagueGroupID,
+      leagueGroupTeamID: leagueGroupTeamID ?? this.leagueGroupTeamID,
+      leagueMatchID: leagueMatchID ?? this.leagueMatchID,
+      ageGroupID: ageGroupID ?? this.ageGroupID,
+      playerID: playerID ?? this.playerID,
+      regionID: regionID ?? this.regionID,
+      seasonID: seasonID ?? this.seasonID,
+      subPage: subPage ?? this.subPage,
+    );
+  }
 }
 
 class TeamTournamentFilterClub extends TeamTournamentFilter {
