@@ -1,9 +1,11 @@
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/player_profile.dart';
+import 'package:app/global/classes/team_tournament_result.dart';
 import 'package:app/global/classes/tournament_result.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/player_profile/widgets/ranks_widget.dart';
 import 'package:app/team_tournament_results/match_result/functions/get_match_result.dart';
+import 'package:app/team_tournament_results/match_result/widgets/torunament_info_bottom_sheet.dart';
 import 'package:app/tournament_result_page/widgets/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,10 +13,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 StateProvider<String> leagueMatchIDProvider =
     StateProvider<String>((ref) => "");
 
-FutureProvider<List<TournamentResult>> teamTournaments =
-    FutureProvider<List<TournamentResult>>((ref) async {
+FutureProvider<TeamTournamentResult> teamTournaments =
+    FutureProvider<TeamTournamentResult>((ref) async {
   String leagueMatchID = ref.watch(leagueMatchIDProvider);
-  List<TournamentResult> result =
+  TeamTournamentResult result =
       await getTeamTournamentMatchResult(contextKey, leagueMatchID);
   return result;
 });
@@ -54,7 +56,18 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                     ),
                     InkWell(
                       borderRadius: BorderRadius.circular(100),
-                      onTap: () => print("Info"),
+                      onTap: () => showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(16)),
+                        ),
+                        builder: (BuildContext context) =>
+                            TorunamentInfoBottomSheet(
+                          entries: data.info.entries,
+                        ),
+                      ),
                       child: Icon(
                         Icons.info_outline,
                         color: colorThemeState.primaryColor,
@@ -77,11 +90,11 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                           "Vundne",
                         ],
                         score: ScoreData(
-                          type: "Vejgaard 1",
+                          type: data.homeTeam,
                           rank: "",
-                          points: "9",
+                          points: data.points.split("-")[0],
                           matches: "",
-                          placement: "7",
+                          placement: data.result.split("-")[0],
                         ),
                         colorThemeState: colorThemeState,
                       ),
@@ -103,11 +116,11 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                           "Vundne",
                         ],
                         score: ScoreData(
-                          type: "Skødstrup",
+                          type: data.awayTeam,
                           rank: "",
-                          points: "9",
+                          points: data.points.split("-")[1],
                           matches: "",
-                          placement: "7",
+                          placement: data.result.split("-")[1],
                         ),
                         colorThemeState: colorThemeState,
                       ),
@@ -119,7 +132,7 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                     child: Column(
                       spacing: 12,
                       children: [
-                        for (TournamentResult result in data)
+                        for (TournamentResult result in data.matches)
                           ResultWidget(
                             result: result.matches[0],
                             pool: result.resultName,

@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:app/global/classes/profile.dart';
+import 'package:app/global/classes/team_tournament_result.dart';
 import 'package:app/global/classes/tournament_result.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 
-Future<List<TournamentResult>> getTeamTournamentMatchResult(
+Future<TeamTournamentResult> getTeamTournamentMatchResult(
     String contextKey, String leagueMatchID) async {
   http.Response response = await http.post(
     Uri.parse(
@@ -31,12 +32,34 @@ Future<List<TournamentResult>> getTeamTournamentMatchResult(
     ),
   );
 
-  List<TournamentResult> results = [];
+  List<TournamentResult> matches = [];
+  Map<String, List<String>> info = {};
+  String result = "";
+  String points = "";
 
   if (response.statusCode == 200) {
     final document = html_parser.parse(json.decode(response.body)['d']['html']);
 
     List<Element> rows = document.querySelector('body')?.children ?? [];
+
+    rows =
+        document.querySelector(".matchinfo")?.children.firstOrNull?.children ??
+            [];
+
+    for (Element row in rows) {
+      String lbl = row.querySelector(".lbl")?.text.trim().toLowerCase() ?? "";
+      String val = row.querySelector(".val")?.innerHtml ?? "";
+      if (lbl == "resultat") {
+        result = val;
+      } else if (lbl == "point") {
+        points = val;
+      } else if (lbl.isNotEmpty && val.isNotEmpty) {
+        info[lbl] = val
+            .replaceAllMapped(
+                RegExp(r'<a[^>]*>(.*?)<\/a>'), (match) => match.group(1) ?? "")
+            .split("<br>");
+      }
+    }
 
     rows = document
             .querySelector('.matchresultschema.showmatch')
@@ -101,7 +124,7 @@ Future<List<TournamentResult>> getTeamTournamentMatchResult(
           }
         }
 
-        results.add(
+        matches.add(
           TournamentResult(
             resultName: type,
             matches: [
@@ -116,5 +139,13 @@ Future<List<TournamentResult>> getTeamTournamentMatchResult(
       }
     }
   }
-  return results;
+
+  return TeamTournamentResult(
+    info: info,
+    result: result,
+    points: points,
+    homeTeam: info["hjemmehold"]?.elementAtOrNull(0)?.trim() ?? "Hjemmehold",
+    awayTeam: info["udehold"]?.elementAtOrNull(0)?.trim() ?? "Udehold",
+    matches: matches,
+  );
 }

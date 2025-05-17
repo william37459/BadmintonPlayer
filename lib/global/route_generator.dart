@@ -6,7 +6,6 @@ import 'package:app/setup/index.dart';
 import 'package:app/team_tournament/index.dart';
 import 'package:app/team_tournament_results/all_matches/index.dart';
 import 'package:app/team_tournament_results/club/index.dart';
-import 'package:app/team_tournament_results/match_number/index.dart';
 import 'package:app/team_tournament_results/position/index.dart';
 import 'package:app/team_tournament_results/region/index.dart';
 import 'package:app/team_tournament_results/match_result/index.dart';
@@ -81,15 +80,6 @@ class RouteGenerator {
           return CupertinoPageRoute(
             builder: (_) => TeamTournamentClubPage(
               club: args['club'],
-            ),
-          );
-        }
-        return _errorRoute();
-      case '/TeamTournamentMatchResultPage':
-        if (args is Map) {
-          return CupertinoPageRoute(
-            builder: (_) => TeamTournamentResultWidget(
-              matchNumber: args['matchNumber'],
             ),
           );
         }
