@@ -50,14 +50,12 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
     return Material(
       color: colorThemeState.backgroundColor,
       child: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                8,
-                12,
-                8,
-                16,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,9 +153,13 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                       enabled: true,
                     ),
                   ),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Expanded(
                     child: TabBarView(
                       controller: tabController,
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         SingleChildScrollView(
                           child: Column(
@@ -165,7 +167,7 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                             spacing: 8,
                             children: [
                               const SizedBox(
-                                height: 8,
+                                height: 0,
                               ),
                               for (TeamTournamentResultPreview teamTournament
                                   in widget.player.teamTournaments.reversed)
@@ -188,7 +190,7 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                             spacing: 8,
                             children: [
                               const SizedBox(
-                                height: 8,
+                                height: 0,
                               ),
                               for (TournamentResultPreview tournament
                                   in widget.player.tournaments)

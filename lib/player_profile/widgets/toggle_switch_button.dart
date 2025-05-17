@@ -108,6 +108,7 @@ class ChoiceWidget extends ConsumerWidget {
 
     return Expanded(
       child: InkWell(
+        borderRadius: BorderRadius.circular(128),
         onTap: () => changeIndex(ref, index, enabled),
         child: Container(
           alignment: Alignment.center,
