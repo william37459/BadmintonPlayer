@@ -59,6 +59,7 @@ class TournamentResultPage extends ConsumerWidget {
     TournamentInfo? tournamentInfo = ref.watch(tournamentInfoProvider);
 
     return Scaffold(
+      backgroundColor: colorThemeState.backgroundColor,
       body: SafeArea(
         child: Column(
           spacing: 16,
@@ -156,22 +157,23 @@ class TournamentResultPage extends ConsumerWidget {
                           separatorBuilder: (context, index) => const SizedBox(
                             height: 16,
                           ),
-                          itemBuilder: (context, index) => Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: CustomExpander(
-                              selfSpaced: true,
-                              body: Column(
-                                spacing: 8,
-                                children: [
-                                  for (MatchResult match in data[index].matches)
-                                    ResultWidget(
-                                      result: match,
-                                      pool: data[index].resultName,
-                                    )
-                                ],
-                              ),
-                              header: Text(
+                          itemBuilder: (context, index) => CustomExpander(
+                            selfSpaced: true,
+                            body: Column(
+                              spacing: 2,
+                              children: [
+                                for (MatchResult match in data[index].matches)
+                                  ResultWidget(
+                                    result: match,
+                                    pool: data[index].resultName,
+                                    showHeader: false,
+                                  )
+                              ],
+                            ),
+                            header: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
                                 data[index].resultName,
                                 style: TextStyle(
                                   color: colorThemeState.fontColor,
@@ -179,9 +181,9 @@ class TournamentResultPage extends ConsumerWidget {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              isExpandedKey: data[index].resultName,
-                              isExpanded: true,
                             ),
+                            isExpandedKey: data[index].resultName,
+                            isExpanded: true,
                           ),
                           itemCount: data.length,
                         ),

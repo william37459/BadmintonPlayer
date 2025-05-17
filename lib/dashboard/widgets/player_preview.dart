@@ -1,6 +1,7 @@
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/global/classes/player_profile.dart';
+import 'package:app/player_profile/widgets/toggle_switch_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +19,7 @@ class PlayerPreviewWidget extends ConsumerWidget {
       ),
       onTap: () {
         ref.read(selectedPlayer.notifier).state = profile.id;
+        ref.read(choiceIndex.notifier).state = 0;
         Navigator.of(context).pushNamed(
           "/PlayerProfilePage",
           arguments: {
