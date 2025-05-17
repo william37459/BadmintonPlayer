@@ -91,10 +91,22 @@ class ResultWidget extends ConsumerWidget {
                       for (String score in result.result)
                         Text(
                           score.split("/").length == 1
-                              ? score.split("-")[[result.winner, result.loser]
-                                  .indexOf(profiles)]
-                              : score.split("/")[[result.winner, result.loser]
-                                  .indexOf(profiles)],
+                              ? (score.isEmpty
+                                          ? ["W.O", "-"]
+                                          : score.split("-"))
+                                      .elementAtOrNull([
+                                    result.winner,
+                                    result.loser
+                                  ].indexOf(profiles)) ??
+                                  "W.O"
+                              : (score.isEmpty
+                                          ? ["W.O", "-"]
+                                          : score.split("/"))
+                                      .elementAtOrNull([
+                                    result.winner,
+                                    result.loser
+                                  ].indexOf(profiles)) ??
+                                  "W.O",
                         ),
                     ],
                   ),
