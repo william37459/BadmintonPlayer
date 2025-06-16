@@ -27,9 +27,6 @@ class CustomExpander extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 8.0,
-        ),
         InkWell(
           onTap: () {
             if (isExpandedKey.isNotEmpty) {
@@ -42,25 +39,27 @@ class CustomExpander extends ConsumerWidget {
             }
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              header,
-              AnimatedRotation(
-                turns: (isExpandedState.containsKey(isExpandedKey)
-                        ? isExpandedState[isExpandedKey] ?? false
-                        : isExpanded ?? false)
-                    ? 0.5
-                    : 0,
-                duration: const Duration(milliseconds: 250),
-                child: Icon(
-                  Icons.keyboard_arrow_down_sharp,
-                  color: colorThemeState.fontColor,
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: AnimatedRotation(
+                  turns: (isExpandedState.containsKey(isExpandedKey)
+                          ? isExpandedState[isExpandedKey] ?? false
+                          : isExpanded ?? false)
+                      ? 0.5
+                      : 0,
+                  duration: const Duration(milliseconds: 250),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_sharp,
+                    color: colorThemeState.fontColor,
+                  ),
                 ),
               ),
+              header,
             ],
           ),
         ),
-        if (!selfSpaced) const SizedBox(height: 8.0),
         AnimatedCrossFade(
           firstChild: body,
           secondChild: Container(),

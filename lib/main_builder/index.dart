@@ -25,8 +25,8 @@ class MainBuilder extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Scaffold(
-      backgroundColor: colorThemeState.backgroundColor,
       body: pages[indexState],
+      backgroundColor: Colors.white, //TODO REMOVE!
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indexState,

@@ -128,7 +128,7 @@ class TorunamentPlan extends ConsumerWidget {
                           };
                         }
 
-                        showFilterModalSheet(context, colorThemeState);
+                        showFilterModalSheet(context, colorThemeState, ref);
                       },
                       child: Icon(
                         Icons.tune,

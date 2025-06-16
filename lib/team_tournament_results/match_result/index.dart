@@ -32,118 +32,124 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
 
     return futureAsyncValue.when(
       data: (data) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: colorThemeState.primaryColor,
+          title: Text(
+            "Resultat for #$leagueMatchID",
+            style: TextStyle(
+              fontSize: 18,
+              color: colorThemeState.secondaryFontColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          centerTitle: true,
+          leading: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: const Icon(
+              Icons.chevron_left,
+              color: Colors.white,
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(100),
+                onTap: () => showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  builder: (BuildContext context) => TorunamentInfoBottomSheet(
+                    entries: data.info.entries,
+                  ),
+                ),
+                child: Icon(
+                  Icons.info_outline,
+                  color: colorThemeState.backgroundColor,
+                ),
+              ),
+            ),
+          ],
+        ),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 12,
-              children: [
-                Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 12,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 16,
+                ),
+                child: Row(
+                  spacing: 12,
                   children: [
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.chevron_left),
+                    RankTextWidget(
+                      headerStyle: TextStyle(
+                        fontSize: 16,
+                        color: colorThemeState.secondaryFontColor,
+                      ),
+                      footers: const [
+                        "Point",
+                        "Vundne",
+                      ],
+                      score: ScoreData(
+                        type: data.homeTeam,
+                        rank: "",
+                        points: data.points.split("-")[0],
+                        matches: "",
+                        placement: data.result.split("-")[0],
+                      ),
+                      colorThemeState: colorThemeState,
                     ),
-                    Expanded(
-                      child: Text(
-                        "Resultat for #$leagueMatchID",
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
-                        textAlign: TextAlign.center,
+                    const Text(
+                      "VS",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(100),
-                      onTap: () => showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(16)),
-                        ),
-                        builder: (BuildContext context) =>
-                            TorunamentInfoBottomSheet(
-                          entries: data.info.entries,
-                        ),
+                    RankTextWidget(
+                      headerStyle: TextStyle(
+                        fontSize: 16,
+                        color: colorThemeState.secondaryFontColor,
                       ),
-                      child: Icon(
-                        Icons.info_outline,
-                        color: colorThemeState.primaryColor,
+                      footers: const [
+                        "Point",
+                        "Vundne",
+                      ],
+                      score: ScoreData(
+                        type: data.awayTeam,
+                        rank: "",
+                        points: data.points.split("-")[1],
+                        matches: "",
+                        placement: data.result.split("-")[1],
                       ),
-                    )
+                      colorThemeState: colorThemeState,
+                    ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
                     spacing: 12,
                     children: [
-                      RankTextWidget(
-                        headerStyle: TextStyle(
-                          fontSize: 16,
-                          color: colorThemeState.secondaryFontColor,
+                      for (TournamentResult result in data.matches)
+                        ResultWidget(
+                          result: result.matches[0],
+                          pool: result.resultName,
+                          showInfo: false,
                         ),
-                        footers: const [
-                          "Point",
-                          "Vundne",
-                        ],
-                        score: ScoreData(
-                          type: data.homeTeam,
-                          rank: "",
-                          points: data.points.split("-")[0],
-                          matches: "",
-                          placement: data.result.split("-")[0],
-                        ),
-                        colorThemeState: colorThemeState,
-                      ),
-                      const Text(
-                        "VS",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      RankTextWidget(
-                        headerStyle: TextStyle(
-                          fontSize: 16,
-                          color: colorThemeState.secondaryFontColor,
-                        ),
-                        footers: const [
-                          "Point",
-                          "Vundne",
-                        ],
-                        score: ScoreData(
-                          type: data.awayTeam,
-                          rank: "",
-                          points: data.points.split("-")[1],
-                          matches: "",
-                          placement: data.result.split("-")[1],
-                        ),
-                        colorThemeState: colorThemeState,
-                      ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      spacing: 12,
-                      children: [
-                        for (TournamentResult result in data.matches)
-                          ResultWidget(
-                            result: result.matches[0],
-                            pool: result.resultName,
-                            showInfo: false,
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

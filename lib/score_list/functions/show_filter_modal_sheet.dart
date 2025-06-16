@@ -38,8 +38,13 @@ void showFilterModalSheet(
           ),
           body: CustomDropDownSelector(
             data: rankSearchFilters['season'] ?? {},
-            provider: rankFilterProvider,
-            providerKey: "seasonid",
+            onChanged: (value) {
+              ref.read(rankFilterProvider.notifier).state = {
+                ...ref.read(rankFilterProvider.notifier).state,
+                "seasonid": value,
+              };
+            },
+            initalValue: "Vælg sæson",
             hint: "Vælg sæson",
           ),
         ),
@@ -98,8 +103,13 @@ void showFilterModalSheet(
           ),
           body: CustomDropDownSelector(
             data: rankSearchFilters['geoRegions'] ?? {},
-            providerKey: "regionid",
-            provider: rankFilterProvider,
+            onChanged: (value) {
+              ref.read(rankFilterProvider.notifier).state = {
+                ...ref.read(rankFilterProvider.notifier).state,
+                "regionid": value,
+              };
+            },
+            initalValue: "Vælg kreds eller landsdel",
             hint: "Vælg kreds eller landsdel",
           ),
         ),

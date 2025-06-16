@@ -12,7 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void showFilterModalSheet(
-    BuildContext context, CustomColorTheme colorThemeState) {
+  BuildContext context,
+  CustomColorTheme colorThemeState,
+  WidgetRef ref,
+) {
   final StateProvider<Profile?> selectedPlayer =
       StateProvider<Profile?>((ref) => null);
   showModalBottomSheet(
@@ -39,8 +42,13 @@ void showFilterModalSheet(
               for (var element in seasonPlanSearchFilters['seasons'] ?? [])
                 element.seasonId.toString(): element.name
             },
-            provider: tournamentFilterProvider,
-            providerKey: "seasonid",
+            onChanged: (value) {
+              ref.read(tournamentFilterProvider.notifier).state = {
+                ...ref.read(tournamentFilterProvider.notifier).state,
+                "seasonid": value,
+              };
+            },
+            initalValue: "Vælg sæson",
             hint: "Vælg sæson",
           ),
         ),
@@ -66,8 +74,13 @@ void showFilterModalSheet(
               for (var element in seasonPlanSearchFilters['ageGroups'] ?? [])
                 element.ageGroupId.toString(): element.ageGroupName
             },
-            providerKey: "ageGroupList",
-            provider: tournamentFilterProvider,
+            onChanged: (value) {
+              ref.read(tournamentFilterProvider.notifier).state = {
+                ...ref.read(tournamentFilterProvider.notifier).state,
+                "agegroupid": value,
+              };
+            },
+            initalValue: "Vælg årgang",
             hint: "Årgang",
           ),
         ),
@@ -93,8 +106,13 @@ void showFilterModalSheet(
               for (var element in seasonPlanSearchFilters['class'] ?? [])
                 element.classID.toString(): element.className
             },
-            providerKey: "classIdList",
-            provider: tournamentFilterProvider,
+            onChanged: (value) {
+              ref.read(tournamentFilterProvider.notifier).state = {
+                ...ref.read(tournamentFilterProvider.notifier).state,
+                "classid": value,
+              };
+            },
+            initalValue: "Vælg række",
             hint: "Række",
           ),
         ),
@@ -219,8 +237,13 @@ void showFilterModalSheet(
               for (var element in seasonPlanSearchFilters['geoRegions'] ?? [])
                 element.geoRegionID.toString(): element.name
             },
-            providerKey: "georegionids",
-            provider: tournamentFilterProvider,
+            onChanged: (value) {
+              ref.read(tournamentFilterProvider.notifier).state = {
+                ...ref.read(tournamentFilterProvider.notifier).state,
+                "georegionid": value,
+              };
+            },
+            initalValue: "Vælg område",
             hint: "Område",
           ),
         ),
@@ -248,8 +271,13 @@ void showFilterModalSheet(
               for (var element in seasonPlanSearchFilters['regions'] ?? [])
                 element.regionId.toString(): element.name
             },
-            providerKey: "regionids",
-            provider: tournamentFilterProvider,
+            onChanged: (value) {
+              ref.read(tournamentFilterProvider.notifier).state = {
+                ...ref.read(tournamentFilterProvider.notifier).state,
+                "regionids": value,
+              };
+            },
+            initalValue: "Vælg område",
             hint: "Turneringer i din egn",
           ),
         ),

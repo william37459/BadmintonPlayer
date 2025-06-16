@@ -24,7 +24,7 @@ class ResultWidget extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Material(
         color: colorThemeState.secondaryFontColor,
         elevation: 1,
@@ -37,7 +37,10 @@ class ResultWidget extends ConsumerWidget {
             children: [
               if (showHeader)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
