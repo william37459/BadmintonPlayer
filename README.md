@@ -1,16 +1,62 @@
-# app
+# BadmintonPlayer App
 
-A new Flutter project.
+A Flutter application for managing and viewing badminton player profiles, tournaments, team tournaments, and results. The app is designed for Danish badminton clubs and players, providing a modern and user-friendly interface for tracking scores, rankings, and match details.
+
+## Features
+
+- Player profile pages with ranking and tournament history
+- Team tournament search and results by region and year
+- Tournament results with expandable match details
+- Filter and search functionality for tournaments and teams
+- Modern, responsive UI with custom theming
+- Integration with badmintonplayer.dk for live data
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- [Flutter](https://flutter.dev/docs/get-started/install) (latest stable)
+- Dart SDK
+- Android Studio or Xcode (for mobile development)
 
-A few resources to get you started if this is your first Flutter project:
+### Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/badmintonplayer.git
+   cd badmintonplayer/app
+   ```
+2. Install dependencies:
+   ```sh
+   flutter pub get
+   ```
+3. Run the app:
+   ```sh
+   flutter run
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Project Structure
+- `lib/` - Main Dart source code
+  - `calendar/` - Calendar and date-related widgets
+  - `dashboard/` - Dashboard and overview widgets
+  - `global/` - Shared classes, constants, and utilities
+  - `player_profile/` - Player profile pages and widgets
+  - `score_list/` - Score and ranking lists
+  - `team_tournament/` - Team tournament search and results
+  - `tournament_result_page/` - Tournament results and details
+- `assets/` - Images and static assets
+- `android/`, `ios/` - Platform-specific code
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## General Structure
+- `screen/`
+  - `widgets/`
+  - `functions/`
+  - `index.dart`
+
+## Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](LICENSE)
+
+## Acknowledgements
+- [badmintonplayer.dk](https://badmintonplayer.dk/) for data integration
+- Flutter and Dart teams for the framework
