@@ -1,10 +1,7 @@
 import 'package:app/global/classes/color_theme.dart';
-import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/tab_bar_label.dart';
 import 'package:app/team_tournament/functions/get_setup_team_tournaments.dart';
-import 'package:app/global/widgets/custom_container.dart';
-import 'package:app/calendar/widgets/custom_input.dart';
 import 'package:app/team_tournament/widgets/search_by_club.dart';
 import 'package:app/team_tournament/widgets/search_by_number.dart';
 import 'package:app/team_tournament/widgets/search_by_region.dart';
