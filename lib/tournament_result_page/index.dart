@@ -160,7 +160,6 @@ class TournamentResultPage extends ConsumerWidget {
                           itemBuilder: (context, index) => CustomExpander(
                             selfSpaced: true,
                             body: Column(
-                              spacing: 2,
                               children: [
                                 for (MatchResult match in data[index].matches)
                                   ResultWidget(

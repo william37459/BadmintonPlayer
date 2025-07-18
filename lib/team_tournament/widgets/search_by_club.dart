@@ -11,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 FutureProvider<List<TeamTournamentClub>> clubProvider =
     FutureProvider<List<TeamTournamentClub>>((ref) async {
   final filterProviderState = ref.watch(teamTournamentSearchFilterProvider);
-  print("HEJ");
   final result = await getByClub(
     contextKey,
     filterProviderState.clubID,
