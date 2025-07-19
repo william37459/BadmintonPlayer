@@ -91,11 +91,8 @@ class TeamTournamentPageState extends ConsumerState
   @override
   Widget build(BuildContext context) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-    final Map<String, dynamic> filterProviderState =
-        ref.watch(teamTournamentFilterProvider);
 
     final futureAsyncValue = ref.watch(seasonPlanFutureProvider);
-    final showingSearchState = ref.watch(showingSearch);
     final currentIndexState = ref.watch(currentIndex);
 
     return SafeArea(

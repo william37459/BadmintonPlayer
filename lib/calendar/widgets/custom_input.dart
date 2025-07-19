@@ -40,6 +40,7 @@ class CustomInput extends ConsumerWidget {
       obscureText: obscureText,
       decoration: InputDecoration.collapsed(
         hintText: hint,
+        hintStyle: const TextStyle(fontSize: 14),
       ),
       cursorColor: colorThemeState.primaryColor,
       onChanged: (value) {

@@ -53,6 +53,8 @@ void onStart(FlutterBackgroundService service) async {
   });
 }
 
+final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   // This widget is the root of your application.
@@ -61,6 +63,7 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp(
+        scaffoldMessengerKey: scaffoldKey,
         theme: ThemeData().copyWith(
           scaffoldBackgroundColor: const Color(0xffF1F0F5),
         ),
