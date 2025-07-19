@@ -208,7 +208,7 @@ class Dashboard extends ConsumerWidget {
                     children: [
                       PreviewHeader(
                         colorThemeState: colorThemeState,
-                        text: 'Holdkampe resultater',
+                        text: 'Seneste Holdkamp resultater',
                       ),
                       AddInfoPreview(
                         onTap: () {

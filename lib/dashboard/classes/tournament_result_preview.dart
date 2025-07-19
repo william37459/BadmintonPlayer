@@ -25,6 +25,7 @@ class TournamentResultPreview {
             .last
             .replaceAll(",", "") ??
         "";
+
     return TournamentResultPreview(
       date: DateTime.parse(allColumns[0].text.split("-").reversed.join("-")),
       organiser: allColumns[1].text,

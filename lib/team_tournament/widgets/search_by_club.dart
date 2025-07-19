@@ -3,6 +3,7 @@ import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/team_tournament_club.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/team_tournament/functions/get_by_club.dart';
 import 'package:app/team_tournament/index.dart';
 import 'package:flutter/material.dart';
@@ -32,39 +33,29 @@ class SearchByClub extends ConsumerWidget {
     final futureAsyncValue = ref.watch(clubProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(
             height: 12,
           ),
-          CustomAutoFill(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            hint: "Søg efter klub",
-            provider: teamTournamentFilterProvider,
-            providerKey: "club",
-            onSubmitted: (item) {
+          CustomDropDownSelector(
+            hint: "Vælg klub",
+            onChanged: (item) {
               ref.read(teamTournamentSearchFilterProvider.notifier).state =
                   filterProviderState.copyWith(
-                clubID: item.isEmpty
-                    ? null
-                    : clubs
-                        .firstWhere((e) => e.fullClubName == item)
-                        .clubId
-                        .toString(),
+                clubID: item,
               );
             },
-            converter: {
-              for (var element in clubs)
-                element.fullClubName: element.clubId.toString(),
+            data: {
+              for (var club in clubs) club.clubId.toString(): club.fullClubName
             },
-            suggestions: clubs.map((e) => e.fullClubName).toList(),
           ),
           (filterProviderState.clubID.isEmpty)
               ? const Expanded(
                   child: Center(
-                    child: Text("Vælg årgang og badminton kreds for at søge"),
+                    child: Text("Vælg en klub for at søge"),
                   ),
                 )
               : Expanded(
@@ -72,9 +63,6 @@ class SearchByClub extends ConsumerWidget {
                     data: (data) => ListView.separated(
                       itemCount: data.length,
                       separatorBuilder: (context, index) => Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                        ),
                         decoration: BoxDecoration(
                           color:
                               colorThemeState.fontColor.withValues(alpha: 0.5),
@@ -91,7 +79,8 @@ class SearchByClub extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(8),
                             onTap: () {},
                             child: Padding(
-                              padding: const EdgeInsets.all(12.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

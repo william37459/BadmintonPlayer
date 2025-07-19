@@ -137,7 +137,6 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    spacing: 12,
                     children: [
                       for (TournamentResult result in data.matches)
                         ResultWidget(

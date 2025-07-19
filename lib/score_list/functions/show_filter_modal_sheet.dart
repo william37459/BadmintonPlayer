@@ -1,7 +1,7 @@
 import 'package:app/calendar/widgets/custom_date_picker.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:app/calendar/widgets/custom_input.dart';
-import 'package:app/calendar/widgets/drop_down_selector.dart';
+import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/calendar/widgets/wrapper_selector.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/profile.dart';

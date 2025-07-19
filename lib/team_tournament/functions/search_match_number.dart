@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/main.dart';
 import 'package:app/team_tournament/index.dart';
+import 'package:app/team_tournament/widgets/search_by_number.dart';
 import 'package:app/team_tournament_results/match_result/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,8 +13,8 @@ import 'package:html/parser.dart' as html_parser;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future searchMatchNumber(
-    String matchNumber, WidgetRef ref, BuildContext context) async {
+Future searchMatchNumber(String matchNumber, WidgetRef ref,
+    BuildContext context, TextEditingController controller) async {
   http.Response response = await http.post(
     Uri.parse(
       "https://www.badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetLeagueStanding",
@@ -59,6 +61,7 @@ Future searchMatchNumber(
         backgroundColor: Colors.transparent,
       ),
     );
+    return;
   }
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -69,23 +72,15 @@ Future searchMatchNumber(
 
   final document = html_parser.parse(htmlContent);
 
-  List<html.Element> matchElement =
-      document.querySelector('.toprow')?.children ?? [];
+  TeamTournamentResultPreview preview =
+      TeamTournamentResultPreview.fromDocument(document);
 
-  String homeTeam =
-      matchElement.elementAtOrNull(1)?.text.trim() ?? "Hjemmehold";
-  String awayTeam = matchElement.elementAtOrNull(2)?.text.trim() ?? "Udehold";
+  String encodedMatch = json.encode(preview.toJson());
 
-  await prefs.clear();
-
-  await prefs.setStringList("latestMatchNumberSearches", [
-    json.encode({
-      "matchnumber": matchNumber,
-      "homeTeam": homeTeam,
-      "awayTeam": awayTeam,
-    }),
-    ...searchesJson ?? []
-  ]);
+  if (!(searchesJson?.contains(encodedMatch) ?? false)) {
+    await prefs.setStringList("latestMatchNumberSearches",
+        [json.encode(preview.toJson()), ...searchesJson ?? []]);
+  }
 
   ref.read(leagueMatchIDProvider.notifier).state = matchNumber;
 
@@ -96,6 +91,11 @@ Future searchMatchNumber(
     "matchNumber": null,
     "season": "2023",
   };
+
+  // Invalidate the latestSearchesProvider to trigger a refresh
+  ref.invalidate(latestSearchesProvider);
+
+  controller.clear();
 
   if (!context.mounted) return;
   Navigator.pushNamed(

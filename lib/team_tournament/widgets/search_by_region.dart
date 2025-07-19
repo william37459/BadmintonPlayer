@@ -1,4 +1,4 @@
-import 'package:app/calendar/widgets/drop_down_selector.dart';
+import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/global/classes/team_tournament_region.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/team_tournament/functions/get_by_region.dart';

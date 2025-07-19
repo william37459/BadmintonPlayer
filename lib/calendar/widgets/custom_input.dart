@@ -11,6 +11,7 @@ class CustomInput extends ConsumerWidget {
   final int? max;
   final TextInputType? inputType;
   final bool obscureText;
+  final TextEditingController? controller;
 
   const CustomInput({
     super.key,
@@ -21,11 +22,15 @@ class CustomInput extends ConsumerWidget {
     this.max,
     this.inputType,
     this.obscureText = false,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
+    if (controller != null) {
+      controller!.text = ref.read(provider)[providerKey] ?? "";
+    }
     final TextEditingController textFieldController = TextEditingController(
       text: ref.read(provider)[providerKey] ?? "",
     );
@@ -35,7 +40,7 @@ class CustomInput extends ConsumerWidget {
     );
 
     return TextField(
-      controller: textFieldController,
+      controller: controller ?? textFieldController,
       keyboardType: inputType,
       obscureText: obscureText,
       decoration: InputDecoration.collapsed(

@@ -1,4 +1,5 @@
 import 'package:html/dom.dart';
+import 'package:html/dom.dart' as html;
 
 class TeamTournamentResultPreview {
   final DateTime date;
@@ -53,6 +54,96 @@ class TeamTournamentResultPreview {
       league: league,
     );
   }
+
+  factory TeamTournamentResultPreview.fromDocument(Document document) {
+    List<html.Element> matchElement =
+        document.querySelectorAll('table.matchinfo tr');
+    String matchNumber =
+        matchElement.elementAtOrNull(0)?.querySelector('td.val')?.text ?? "";
+    String timeText =
+        matchElement.elementAtOrNull(2)?.querySelector('td.val')?.text ?? "";
+    String location = matchElement
+            .elementAtOrNull(3)
+            ?.querySelector('td.val')
+            ?.innerHtml
+            .replaceAll("<br>", "\n")
+            .split('\n')
+            .first ??
+        "";
+    String homeTeamName =
+        matchElement.elementAtOrNull(4)?.querySelector('td.val a')?.text ?? "";
+    String awayTeamName =
+        matchElement.elementAtOrNull(5)?.querySelector('td.val a')?.text ?? "";
+    String result =
+        matchElement.elementAtOrNull(6)?.querySelector('td.val')?.text ?? "0-0";
+    String points =
+        matchElement.elementAtOrNull(7)?.querySelector('td.val')?.text ?? "0-0";
+    String league = document.querySelector('h3')?.text ?? "";
+
+    DateTime dateTime = DateTime.now();
+    if (timeText.isNotEmpty) {
+      try {
+        List<String> parts = timeText.split(' ');
+        if (parts.length >= 3) {
+          String datePart = parts[1];
+          String timePart = parts[2];
+
+          List<String> dateParts = datePart.split('-');
+          if (dateParts.length == 3) {
+            String day = dateParts[0];
+            String month = dateParts[1];
+            String year = dateParts[2];
+
+            dateTime = DateTime.parse("$year-$month-$day $timePart:00");
+          }
+        }
+      } catch (e) {
+        dateTime = DateTime.now();
+      }
+    }
+
+    return TeamTournamentResultPreview(
+      date: dateTime,
+      matchNumber: matchNumber,
+      homeTeam: TeamTournamentTeamPreview.fromStringList([
+        homeTeamName,
+        result.split("-")[0],
+        points.split("-")[0],
+      ]),
+      awayTeam: TeamTournamentTeamPreview.fromStringList([
+        awayTeamName,
+        result.split("-")[1],
+        points.split("-")[1],
+      ]),
+      organizer: "", // Not clearly available in this HTML structure
+      location: location,
+      league: league,
+    );
+  }
+
+  factory TeamTournamentResultPreview.fromJson(Map<String, dynamic> json) {
+    return TeamTournamentResultPreview(
+      date: DateTime.parse(json['date']),
+      matchNumber: json['matchNumber'],
+      homeTeam: TeamTournamentTeamPreview.fromJson(json['homeTeam']),
+      awayTeam: TeamTournamentTeamPreview.fromJson(json['awayTeam']),
+      organizer: json['organizer'],
+      location: json['location'],
+      league: json['league'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date.toIso8601String(),
+      'matchNumber': matchNumber,
+      'homeTeam': homeTeam.toJson(),
+      'awayTeam': awayTeam.toJson(),
+      'organizer': organizer,
+      'location': location,
+      'league': league,
+    };
+  }
 }
 
 class TeamTournamentTeamPreview {
@@ -74,5 +165,21 @@ class TeamTournamentTeamPreview {
         point: int.tryParse(list[2]) ?? 0,
       );
     }
+  }
+
+  factory TeamTournamentTeamPreview.fromJson(Map<String, dynamic> json) {
+    return TeamTournamentTeamPreview(
+      name: json['name'],
+      result: json['result'],
+      point: json['point'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'result': result,
+      'point': point,
+    };
   }
 }

@@ -9,32 +9,6 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// const SizedBox(height: 12),
-// Row(
-//   children: [
-//     Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//       child: Text(
-//         "Sæson:",
-//         style: TextStyle(
-//           fontWeight: FontWeight.w600,
-//           fontSize: 18,
-//           color: colorThemeState.secondaryColor
-//               .withValues(alpha: 0.75),
-//         ),
-//       ),
-//     ),
-//     Expanded(
-//       child: CustomDropDownSelector(
-//         data: data[2],
-//         provider: teamTournamentFilterProvider,
-//         providerKey: "season",
-//         hint: "Vælg sæson",
-//       ),
-//     ),
-//   ],
-// ),
-
 StateProvider<int> currentIndex = StateProvider((ref) => 0);
 
 StateProvider<Map<String, dynamic>> teamTournamentFilterProvider =
@@ -76,6 +50,8 @@ class TeamTournamentPageState extends ConsumerState
   void initState() {
     super.initState();
     tabController = TabController(vsync: this, length: 3);
+
+    tabController.index = ref.read(currentIndex.notifier).state;
 
     tabController.addListener(() {
       ref.read(currentIndex.notifier).state = tabController.index;
