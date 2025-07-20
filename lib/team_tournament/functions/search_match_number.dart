@@ -8,7 +8,6 @@ import 'package:app/team_tournament/widgets/search_by_number.dart';
 import 'package:app/team_tournament_results/match_result/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:html/dom.dart' as html;
 import 'package:html/parser.dart' as html_parser;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

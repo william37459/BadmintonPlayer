@@ -54,8 +54,10 @@ class TournamentResultPage extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
     AsyncValue<List<TournamentResult>> futureAsyncValue =
         ref.watch(tournamentResultProvider);
+
     Map<String, Map<String, dynamic>> resultFilterProviderState =
         ref.watch(resultFilterProvider);
+
     TournamentInfo? tournamentInfo = ref.watch(tournamentInfoProvider);
 
     return Scaffold(
@@ -104,36 +106,22 @@ class TournamentResultPage extends ConsumerWidget {
                 ],
               ),
             ),
-            Container(
-              height: 48,
-              width: double.infinity,
-              color: Colors.white,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final filters = resultFilterProviderState['matchType']!
-                      .keys
-                      .toList()
-                      .sublist(0, 5);
-                  double totalWidth = filters.length * 100;
-                  if (totalWidth < constraints.maxWidth) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (String filter in filters)
-                          ResultLabel(
-                            label: filter,
-                            index: resultFilterProviderState['matchType']
-                                    ?[filter] ??
-                                0,
-                          ),
-                      ],
-                    );
-                  } else {
-                    // Scroll if overflowing
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+            if (resultFilterProviderState.isNotEmpty &&
+                resultFilterProviderState['matchType'] != null)
+              Container(
+                height: 48,
+                width: double.infinity,
+                color: Colors.white,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final filters = resultFilterProviderState['matchType']!
+                        .keys
+                        .toList()
+                        .sublist(0, 5);
+                    double totalWidth = filters.length * 100;
+                    if (totalWidth < constraints.maxWidth) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           for (String filter in filters)
                             ResultLabel(
@@ -143,12 +131,28 @@ class TournamentResultPage extends ConsumerWidget {
                                   0,
                             ),
                         ],
-                      ),
-                    );
-                  }
-                },
+                      );
+                    } else {
+                      // Scroll if overflowing
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            for (String filter in filters)
+                              ResultLabel(
+                                label: filter,
+                                index: resultFilterProviderState['matchType']
+                                        ?[filter] ??
+                                    0,
+                              ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
               ),
-            ),
             futureAsyncValue.when(
               data: (data) {
                 return data.isNotEmpty
