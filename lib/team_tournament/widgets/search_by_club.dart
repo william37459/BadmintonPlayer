@@ -1,3 +1,4 @@
+import 'package:app/global/classes/club.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/team_tournament_club.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
@@ -9,24 +10,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 FutureProvider<List<TeamTournamentClub>> clubProvider =
     FutureProvider<List<TeamTournamentClub>>((ref) async {
-  final filterProviderState = ref.watch(teamTournamentSearchFilterProvider);
-  final result = await getByClub(
-    contextKey,
-    filterProviderState.clubID,
-  );
+      final filterProviderState = ref.watch(teamTournamentSearchFilterProvider);
+      final result = await getByClub(contextKey, filterProviderState.clubID);
 
-  return result;
-});
+      return result;
+    });
 
 class SearchByClub extends ConsumerWidget {
-  const SearchByClub({
-    super.key,
-  });
+  const SearchByClub({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TeamTournamentFilter filterProviderState =
-        ref.watch(teamTournamentSearchFilterProvider);
+    final TeamTournamentFilter filterProviderState = ref.watch(
+      teamTournamentSearchFilterProvider,
+    );
     final CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
     final futureAsyncValue = ref.watch(clubProvider);
 
@@ -35,26 +32,30 @@ class SearchByClub extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
           CustomDropDownSelector(
             hint: "Vælg klub",
             onChanged: (item) {
-              ref.read(teamTournamentSearchFilterProvider.notifier).state =
-                  filterProviderState.copyWith(
-                clubID: item,
+              ref
+                  .read(teamTournamentSearchFilterProvider.notifier)
+                  .state = filterProviderState.copyWith(
+                clubID: (item as Club).clubId.toString(),
               );
             },
-            data: {
-              for (var club in clubs) club.clubId.toString(): club.fullClubName
-            },
+            itemAsString: (item) => (item as Club).clubName,
+            items: (filter, props) => clubs,
+            compareFn: (item1, item2) =>
+                (item1 as Club).clubId == (item2 as Club).clubId,
+            itemBuilder: (context, item, isDisabled, isSelected) => ListTile(
+              title: Text(
+                (item as Club).clubName,
+                style: TextStyle(color: colorThemeState.fontColor),
+              ),
+            ),
           ),
           (filterProviderState.clubID.isEmpty)
               ? const Expanded(
-                  child: Center(
-                    child: Text("Vælg en klub for at søge"),
-                  ),
+                  child: Center(child: Text("Vælg en klub for at søge")),
                 )
               : Expanded(
                   child: futureAsyncValue.when(
@@ -62,8 +63,9 @@ class SearchByClub extends ConsumerWidget {
                       itemCount: data.length,
                       separatorBuilder: (context, index) => Container(
                         decoration: BoxDecoration(
-                          color:
-                              colorThemeState.fontColor.withValues(alpha: 0.5),
+                          color: colorThemeState.fontColor.withValues(
+                            alpha: 0.5,
+                          ),
                           borderRadius: BorderRadiusDirectional.circular(2),
                         ),
                         height: 0.25,
@@ -77,8 +79,9 @@ class SearchByClub extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(8),
                             onTap: () {},
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                              ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -117,9 +120,8 @@ class SearchByClub extends ConsumerWidget {
                         );
                       },
                     ),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (error, stack) => Center(
                       child: Text("Fejl ved hentning af data: $error"),
                     ),

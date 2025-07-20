@@ -11,17 +11,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 StateProvider<Map<String, dynamic>> tournamentParticipationFilterProvider =
     StateProvider<Map<String, dynamic>>(
-  (ref) => {
-    "clientselectfunction": "SelectTournamentClass1",
-    "clubid": 0,
-    "groupnumber": 0,
-    "locationnumber": 0,
-    "playerid": 0,
-    "tabnumber": 0,
-    "tournamentclassid": null,
-    "tournamenteventid": 0,
-  },
-);
+      (ref) => {
+        "clientselectfunction": "SelectTournamentClass1",
+        "clubid": 0,
+        "groupnumber": 0,
+        "locationnumber": 0,
+        "playerid": 0,
+        "tabnumber": 0,
+        "tournamentclassid": null,
+        "tournamenteventid": 0,
+      },
+    );
 
 StateProvider<Map<String, String>> rankFilterProvider = StateProvider(
   (ref) => {},
@@ -29,19 +29,19 @@ StateProvider<Map<String, String>> rankFilterProvider = StateProvider(
 
 FutureProvider<List<Participant>> tournamentParticipationProvider =
     FutureProvider<List<Participant>>((ref) async {
-  final filterProvider = ref.watch(tournamentParticipationFilterProvider);
-  final selectedTournamentState = ref.watch(selectedTournament);
+      final filterProvider = ref.watch(tournamentParticipationFilterProvider);
+      final selectedTournamentState = ref.watch(selectedTournament);
 
-  final result = await getParticipaters(
-    filterProvider,
-    contextKey,
-    filterProvider['tournamentclassid'] ?? selectedTournamentState,
-  );
+      final result = await getParticipaters(
+        filterProvider,
+        contextKey,
+        filterProvider['tournamentclassid'] ?? selectedTournamentState,
+      );
 
-  ref.read(rankFilterProvider.notifier).state = result['filters'];
+      ref.read(rankFilterProvider.notifier).state = result['filters'];
 
-  return result['data'];
-});
+      return result['data'];
+    });
 
 class TournamentParticipationList extends ConsumerWidget {
   final Tournament tournament;
@@ -51,8 +51,9 @@ class TournamentParticipationList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-    AsyncValue<List<Participant>> futureAsyncValue =
-        ref.watch(tournamentParticipationProvider);
+    AsyncValue<List<Participant>> futureAsyncValue = ref.watch(
+      tournamentParticipationProvider,
+    );
     Map<String, String> rankFilterProviderState = ref.watch(rankFilterProvider);
 
     return Scaffold(
@@ -63,9 +64,7 @@ class TournamentParticipationList extends ConsumerWidget {
           tournament.title != null && tournament.title!.isNotEmpty
               ? tournament.title!
               : tournament.clubName,
-          style: TextStyle(
-            color: colorThemeState.secondaryFontColor,
-          ),
+          style: TextStyle(color: colorThemeState.secondaryFontColor),
         ),
         leading: IconButton(
           icon: Icon(
@@ -80,26 +79,22 @@ class TournamentParticipationList extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomContainer(
-              margin: const EdgeInsets.fromLTRB(
-                16,
-                24,
-                16,
-                12,
-              ),
+              margin: const EdgeInsets.fromLTRB(16, 24, 16, 12),
               child: Row(
                 children: [
                   Expanded(
                     child: CustomDropDownSelector(
-                      data: rankFilterProviderState,
+                      itemAsString: (item) => item.values.first,
+                      items: (filter, props) => rankFilterProviderState.entries
+                          .map((entry) => {entry.key: entry.value})
+                          .toList(),
                       onChanged: (value) {
                         ref
                             .read(
-                                tournamentParticipationFilterProvider.notifier)
+                              tournamentParticipationFilterProvider.notifier,
+                            )
                             .update(
-                              (state) => {
-                                ...state,
-                                "tournamentclassid": value,
-                              },
+                              (state) => {...state, "tournamentclassid": value},
                             );
                       },
                       initalValue: "Vælg række",
@@ -123,9 +118,7 @@ class TournamentParticipationList extends ConsumerWidget {
                     children: [
                       for (String category in categoryList)
                         Padding(
-                          padding: const EdgeInsets.only(
-                            top: 16.0,
-                          ),
+                          padding: const EdgeInsets.only(top: 16.0),
                           child: CustomExpander(
                             isExpanded: true,
                             body: Column(
@@ -135,15 +128,13 @@ class TournamentParticipationList extends ConsumerWidget {
                                   if (participant.category == category)
                                     Container(
                                       margin: const EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 16),
-                                      padding: const EdgeInsets.all(
-                                        8.0,
+                                        vertical: 4,
+                                        horizontal: 16,
                                       ),
+                                      padding: const EdgeInsets.all(8.0),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(
-                                          8,
-                                        ),
+                                        borderRadius: BorderRadius.circular(8),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.black.withValues(
@@ -161,10 +152,15 @@ class TournamentParticipationList extends ConsumerWidget {
                                         children: [
                                           Text(
                                             participant.players
-                                                .where((customClass) =>
-                                                    customClass.name.isNotEmpty)
-                                                .map((customClass) =>
-                                                    customClass.name)
+                                                .where(
+                                                  (customClass) => customClass
+                                                      .name
+                                                      .isNotEmpty,
+                                                )
+                                                .map(
+                                                  (customClass) =>
+                                                      customClass.name,
+                                                )
                                                 .join(' & '),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
@@ -174,9 +170,7 @@ class TournamentParticipationList extends ConsumerWidget {
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 4,
-                                          ),
+                                          const SizedBox(height: 4),
                                           Text(
                                             "Fra: ${participant.players.where((customClass) => customClass.club.isNotEmpty).map((customClass) => customClass.club).join(' & ')}",
                                             maxLines: 2,
@@ -221,13 +215,10 @@ class TournamentParticipationList extends ConsumerWidget {
                   ),
                 );
               },
-              error: (error, stackTrace) => Center(
-                child: Text(error.toString()),
-              ),
+              error: (error, stackTrace) =>
+                  Center(child: Text(error.toString())),
               loading: () => const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                child: Center(child: CircularProgressIndicator()),
               ),
             ),
           ],

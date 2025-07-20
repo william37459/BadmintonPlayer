@@ -12,21 +12,15 @@ import 'package:http/http.dart' as http;
 Future<void> getSetupValues() async {
   NavigatorState? navigatorState = navKey.currentState;
 
-  await Future.wait(
-    [
-      getTournamentSearchFilters(),
-      getRankSearchFilters(),
-      getProfileSearchFilters(),
-    ],
-  );
+  await Future.wait([
+    getTournamentSearchFilters(),
+    getRankSearchFilters(),
+    getProfileSearchFilters(),
+  ]);
 
   http.Response response = await http.get(
-    Uri.parse(
-      'https://badmintonplayer.dk/',
-    ),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
+    Uri.parse('https://badmintonplayer.dk/'),
+    headers: {"Content-Type": "application/json; charset=utf-8"},
   );
 
   List<dynamic> splittedValues = response.body.split("'");
@@ -38,15 +32,15 @@ Future<void> getSetupValues() async {
   }
 
   response = await http.get(
-    Uri.parse(
-      "https://badmintonplayer.dk/api/Club/all/sportresults",
-    ),
+    Uri.parse("https://badmintonplayer.dk/api/Club/all/sportresults"),
   );
 
   List allClubs = json.decode(response.body);
 
-  for (Map<String, dynamic> club in allClubs) {
-    clubs.add(Club.fromJson(club));
+  if (clubs.isEmpty) {
+    for (Map<String, dynamic> club in allClubs) {
+      clubs.add(Club.fromJson(club));
+    }
   }
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -59,17 +53,15 @@ Future<void> getSetupValues() async {
   //     DarwinInitializationSettings();
   flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+        AndroidFlutterLocalNotificationsPlugin
+      >()
       ?.requestNotificationsPermission();
 
   await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          ) ??
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true) ??
       false;
 
   navigatorState?.pushNamedAndRemoveUntil("/MainBuilder", (route) => false);

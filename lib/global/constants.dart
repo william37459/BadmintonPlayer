@@ -8,7 +8,6 @@ String contextKey = "";
 String cookies = "";
 GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 List<Club> clubs = [];
-List<String> listOfclubs = [];
 
 Map<String, List<dynamic>> seasonPlanSearchFilters = {};
 Map<String, dynamic> rankSearchFilters = {};
@@ -18,24 +17,22 @@ List<TeamTournamentFilter> teamTournamentSearchFilterStack = [];
 
 StateProvider<CustomColorTheme> colorThemeProvider =
     StateProvider<CustomColorTheme>((ref) {
-  return CustomColorTheme(
-    primaryColor: const Color(0xffDF2026),
-    secondaryColor: const Color(0xff960E13),
-    fontColor: Colors.black,
-    secondaryFontColor: Colors.white,
-    backgroundColor: Colors.white,
-    shadowColor: Colors.black.withValues(alpha: 0.3),
-  );
-});
+      return CustomColorTheme(
+        primaryColor: const Color(0xffDF2026),
+        secondaryColor: const Color(0xff960E13),
+        fontColor: Colors.black,
+        secondaryFontColor: Colors.white,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.black.withValues(alpha: 0.3),
+      );
+    });
 
 StateProvider<Map<String, bool>> isExpandedProvider =
     StateProvider<Map<String, bool>>((ref) => {});
 
 StateProvider<String> selectedTournament = StateProvider<String>((ref) => "");
 
-StateProvider<String> selectedPlayer = StateProvider<String>(
-  (ref) => "",
-);
+StateProvider<String> selectedPlayer = StateProvider<String>((ref) => "");
 
 StateProvider<List<String>?> favouritePlayers = StateProvider<List<String>?>(
   (ref) => null,
@@ -56,16 +53,16 @@ String? findKeyByValue(String? value, Map<String, dynamic> map) {
 
 StateProvider<TeamTournamentFilter> teamTournamentSearchFilterProvider =
     StateProvider<TeamTournamentFilter>((ref) {
-  return TeamTournamentFilter(
-    text: "",
-    clubID: "",
-    leagueGroupID: "",
-    leagueGroupTeamID: "",
-    leagueMatchID: "",
-    ageGroupID: "",
-    playerID: "",
-    regionID: "",
-    seasonID: "",
-    subPage: "",
-  );
-});
+      return TeamTournamentFilter(
+        text: "",
+        clubID: "",
+        leagueGroupID: "",
+        leagueGroupTeamID: "",
+        leagueMatchID: "",
+        ageGroupID: "",
+        playerID: "",
+        regionID: "",
+        seasonID: "",
+        subPage: "",
+      );
+    });

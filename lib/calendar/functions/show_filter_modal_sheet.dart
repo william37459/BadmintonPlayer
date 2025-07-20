@@ -16,8 +16,9 @@ void showFilterModalSheet(
   CustomColorTheme colorThemeState,
   WidgetRef ref,
 ) {
-  final StateProvider<Profile?> selectedPlayer =
-      StateProvider<Profile?>((ref) => null);
+  final StateProvider<Profile?> selectedPlayer = StateProvider<Profile?>(
+    (ref) => null,
+  );
   showModalBottomSheet(
     backgroundColor: Colors.transparent,
     context: context,
@@ -34,27 +35,25 @@ void showFilterModalSheet(
             ),
           ),
         ),
-        CustomContainer(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          margin: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: CustomDropDownSelector(
-            data: {
-              for (var element in seasonPlanSearchFilters['seasons'] ?? [])
-                element.seasonId.toString(): element.name
-            },
-            onChanged: (value) {
-              ref.read(tournamentFilterProvider.notifier).state = {
-                ...ref.read(tournamentFilterProvider.notifier).state,
-                "seasonid": value,
-              };
-            },
-            initalValue: "Vælg sæson",
-            hint: "Vælg sæson",
-          ),
-        ),
-        const SizedBox(
-          height: 24,
-        ),
+        // CustomContainer(
+        //   padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        //   margin: const EdgeInsets.symmetric(horizontal: 12.0),
+        //   child: CustomDropDownSelector(
+        //     data: {
+        //       for (var element in seasonPlanSearchFilters['seasons'] ?? [])
+        //         element.seasonId.toString(): element.name
+        //     },
+        //     onChanged: (value) {
+        //       ref.read(tournamentFilterProvider.notifier).state = {
+        //         ...ref.read(tournamentFilterProvider.notifier).state,
+        //         "seasonid": value,
+        //       };
+        //     },
+        //     initalValue: "Vælg sæson",
+        //     hint: "Vælg sæson",
+        //   ),
+        // ),
+        const SizedBox(height: 24),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -66,27 +65,25 @@ void showFilterModalSheet(
             ),
           ),
         ),
-        CustomContainer(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          margin: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: CustomDropDownSelector(
-            data: {
-              for (var element in seasonPlanSearchFilters['ageGroups'] ?? [])
-                element.ageGroupId.toString(): element.ageGroupName
-            },
-            onChanged: (value) {
-              ref.read(tournamentFilterProvider.notifier).state = {
-                ...ref.read(tournamentFilterProvider.notifier).state,
-                "agegroupid": value,
-              };
-            },
-            initalValue: "Vælg årgang",
-            hint: "Årgang",
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
+        // CustomContainer(
+        //   padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        //   margin: const EdgeInsets.symmetric(horizontal: 12.0),
+        //   child: CustomDropDownSelector(
+        //     data: {
+        //       for (var element in seasonPlanSearchFilters['ageGroups'] ?? [])
+        //         element.ageGroupId.toString(): element.ageGroupName
+        //     },
+        //     onChanged: (value) {
+        //       ref.read(tournamentFilterProvider.notifier).state = {
+        //         ...ref.read(tournamentFilterProvider.notifier).state,
+        //         "agegroupid": value,
+        //       };
+        //     },
+        //     initalValue: "Vælg årgang",
+        //     hint: "Årgang",
+        //   ),
+        // ),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -98,27 +95,25 @@ void showFilterModalSheet(
             ),
           ),
         ),
-        CustomContainer(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          margin: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: CustomDropDownSelector(
-            data: {
-              for (var element in seasonPlanSearchFilters['class'] ?? [])
-                element.classID.toString(): element.className
-            },
-            onChanged: (value) {
-              ref.read(tournamentFilterProvider.notifier).state = {
-                ...ref.read(tournamentFilterProvider.notifier).state,
-                "classid": value,
-              };
-            },
-            initalValue: "Vælg række",
-            hint: "Række",
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
+        // CustomContainer(
+        //   padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        //   margin: const EdgeInsets.symmetric(horizontal: 12.0),
+        //   child: CustomDropDownSelector(
+        //     data: {
+        //       for (var element in seasonPlanSearchFilters['class'] ?? [])
+        //         element.classID.toString(): element.className,
+        //     },
+        //     onChanged: (value) {
+        //       ref.read(tournamentFilterProvider.notifier).state = {
+        //         ...ref.read(tournamentFilterProvider.notifier).state,
+        //         "classid": value,
+        //       };
+        //     },
+        //     initalValue: "Vælg række",
+        //     hint: "Række",
+        //   ),
+        // ),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -142,9 +137,7 @@ void showFilterModalSheet(
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: Icon(
                   Icons.more_horiz,
                   color: colorThemeState.primaryColor,
@@ -160,9 +153,7 @@ void showFilterModalSheet(
             ],
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -176,9 +167,7 @@ void showFilterModalSheet(
         ),
         Row(
           children: [
-            const SizedBox(
-              width: 16.0,
-            ),
+            const SizedBox(width: 16.0),
             Expanded(
               child: CustomInput(
                 hint: "Start uge",
@@ -190,9 +179,7 @@ void showFilterModalSheet(
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 6.0),
               child: Icon(
                 Icons.more_horiz,
                 color: colorThemeState.primaryColor,
@@ -208,14 +195,10 @@ void showFilterModalSheet(
                 inputType: TextInputType.number,
               ),
             ),
-            const SizedBox(
-              width: 16.0,
-            ),
+            const SizedBox(width: 16.0),
           ],
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -227,29 +210,25 @@ void showFilterModalSheet(
             ),
           ),
         ),
-        CustomContainer(
-          margin: const EdgeInsets.symmetric(horizontal: 16.0),
-          padding: const EdgeInsets.all(
-            8.0,
-          ),
-          child: CustomDropDownSelector(
-            data: {
-              for (var element in seasonPlanSearchFilters['geoRegions'] ?? [])
-                element.geoRegionID.toString(): element.name
-            },
-            onChanged: (value) {
-              ref.read(tournamentFilterProvider.notifier).state = {
-                ...ref.read(tournamentFilterProvider.notifier).state,
-                "georegionid": value,
-              };
-            },
-            initalValue: "Vælg område",
-            hint: "Område",
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
+        // CustomContainer(
+        //   margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: CustomDropDownSelector(
+        //     data: {
+        //       for (var element in seasonPlanSearchFilters['geoRegions'] ?? [])
+        //         element.geoRegionID.toString(): element.name,
+        //     },
+        //     onChanged: (value) {
+        //       ref.read(tournamentFilterProvider.notifier).state = {
+        //         ...ref.read(tournamentFilterProvider.notifier).state,
+        //         "georegionid": value,
+        //       };
+        //     },
+        //     initalValue: "Vælg område",
+        //     hint: "Område",
+        //   ),
+        // ),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -261,54 +240,43 @@ void showFilterModalSheet(
             ),
           ),
         ),
-        CustomContainer(
-          margin: const EdgeInsets.symmetric(horizontal: 16.0),
-          padding: const EdgeInsets.all(
-            8.0,
-          ),
-          child: CustomDropDownSelector(
-            data: {
-              for (var element in seasonPlanSearchFilters['regions'] ?? [])
-                element.regionId.toString(): element.name
-            },
-            onChanged: (value) {
-              ref.read(tournamentFilterProvider.notifier).state = {
-                ...ref.read(tournamentFilterProvider.notifier).state,
-                "regionids": value,
-              };
-            },
-            initalValue: "Vælg område",
-            hint: "Turneringer i din egn",
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
+        // CustomContainer(
+        //   margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: CustomDropDownSelector(
+        //     data: {
+        //       for (var element in seasonPlanSearchFilters['regions'] ?? [])
+        //         element.regionId.toString(): element.name,
+        //     },
+        //     onChanged: (value) {
+        //       ref.read(tournamentFilterProvider.notifier).state = {
+        //         ...ref.read(tournamentFilterProvider.notifier).state,
+        //         "regionids": value,
+        //       };
+        //     },
+        //     initalValue: "Vælg område",
+        //     hint: "Turneringer i din egn",
+        //   ),
+        // ),
+        const SizedBox(height: 16),
         Consumer(
           builder: (context, ref, child) {
             final birthdate = ref.watch(
-              tournamentFilterProvider.select(
-                (value) => value['birthdate'],
-              ),
+              tournamentFilterProvider.select((value) => value['birthdate']),
             );
             final age = ref.watch(
-              tournamentFilterProvider.select(
-                (value) => value['age'],
-              ),
+              tournamentFilterProvider.select((value) => value['age']),
             );
             final gender = ref.watch(
-              tournamentFilterProvider.select(
-                (value) => value['gender'],
-              ),
+              tournamentFilterProvider.select((value) => value['gender']),
             );
             final points = ref.watch(
-              tournamentFilterProvider.select(
-                (value) => value['points'],
-              ),
+              tournamentFilterProvider.select((value) => value['points']),
             );
 
             return AnimatedOpacity(
-              opacity: (birthdate != null && birthdate.isNotEmpty) ||
+              opacity:
+                  (birthdate != null && birthdate.isNotEmpty) ||
                       (age != null && age.isNotEmpty) ||
                       (gender != null && gender.isNotEmpty) ||
                       (points != null && points.isNotEmpty)
@@ -316,7 +284,8 @@ void showFilterModalSheet(
                   : 1,
               duration: const Duration(milliseconds: 250),
               child: AbsorbPointer(
-                absorbing: (birthdate != null && birthdate.isNotEmpty) ||
+                absorbing:
+                    (birthdate != null && birthdate.isNotEmpty) ||
                     (age != null && age.isNotEmpty) ||
                     (gender != null && gender.isNotEmpty) ||
                     (points != null && points.isNotEmpty),
@@ -357,11 +326,10 @@ void showFilterModalSheet(
                         children: [
                           Consumer(
                             builder: (context, ref, child) {
-                              Profile? selectedProfileState =
-                                  ref.watch(selectedPlayer);
-                              return Text(
-                                selectedProfileState?.name ?? "",
+                              Profile? selectedProfileState = ref.watch(
+                                selectedPlayer,
                               );
+                              return Text(selectedProfileState?.name ?? "");
                             },
                           ),
                           InkWell(
@@ -376,10 +344,7 @@ void showFilterModalSheet(
                                 "playerid": "",
                               };
                             },
-                            child: const Icon(
-                              Icons.clear,
-                              color: Colors.red,
-                            ),
+                            child: const Icon(Icons.clear, color: Colors.red),
                           ),
                         ],
                       ),
@@ -390,103 +355,93 @@ void showFilterModalSheet(
             );
           },
         ),
-        const SizedBox(
-          height: 16,
-        ),
-        Consumer(builder: (context, ref, child) {
-          final playerid = ref.watch(
-            tournamentFilterProvider.select(
-              (value) => value['playerid'],
-            ),
-          );
-          return AnimatedOpacity(
-            opacity: playerid != null && playerid.isNotEmpty ? 0.5 : 1,
-            duration: const Duration(milliseconds: 250),
-            child: AbsorbPointer(
-              absorbing: playerid != null && playerid.isNotEmpty,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      "Fødselsdato",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: colorThemeState.secondaryColor,
+        const SizedBox(height: 16),
+        Consumer(
+          builder: (context, ref, child) {
+            final playerid = ref.watch(
+              tournamentFilterProvider.select((value) => value['playerid']),
+            );
+            return AnimatedOpacity(
+              opacity: playerid != null && playerid.isNotEmpty ? 0.5 : 1,
+              duration: const Duration(milliseconds: 250),
+              child: AbsorbPointer(
+                absorbing: playerid != null && playerid.isNotEmpty,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Fødselsdato",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: colorThemeState.secondaryColor,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: CustomDatePicker(
-                      providerKey: "birthdate",
-                      provider: tournamentFilterProvider,
-                      hintText: "Fødselsdag",
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      "Alder",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: colorThemeState.secondaryColor,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: CustomDatePicker(
+                        providerKey: "birthdate",
+                        provider: tournamentFilterProvider,
+                        hintText: "Fødselsdag",
                       ),
                     ),
-                  ),
-                  CustomContainer(
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: CustomInput(
-                      providerKey: "age",
-                      provider: tournamentFilterProvider,
-                      hint: "Alder",
-                      inputType: TextInputType.number,
-                      min: 0,
-                      max: 150,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      "Point",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: colorThemeState.secondaryColor,
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Alder",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: colorThemeState.secondaryColor,
+                        ),
                       ),
                     ),
-                  ),
-                  CustomContainer(
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: CustomInput(
-                      providerKey: "points",
-                      provider: tournamentFilterProvider,
-                      hint: "Point",
-                      inputType: TextInputType.number,
-                      min: 0,
-                      max: 10000,
+                    CustomContainer(
+                      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: CustomInput(
+                        providerKey: "age",
+                        provider: tournamentFilterProvider,
+                        hint: "Alder",
+                        inputType: TextInputType.number,
+                        min: 0,
+                        max: 150,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Point",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: colorThemeState.secondaryColor,
+                        ),
+                      ),
+                    ),
+                    CustomContainer(
+                      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: CustomInput(
+                        providerKey: "points",
+                        provider: tournamentFilterProvider,
+                        hint: "Point",
+                        inputType: TextInputType.number,
+                        min: 0,
+                        max: 10000,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ],
     ),
   );

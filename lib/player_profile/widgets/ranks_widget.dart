@@ -7,10 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class RanksWidget extends ConsumerWidget {
   final List<ScoreData> scores;
 
-  const RanksWidget({
-    super.key,
-    required this.scores,
-  });
+  const RanksWidget({super.key, required this.scores});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,14 +21,8 @@ class RanksWidget extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 4,
           children: [
-            RankTextWidget(
-              score: scores[0],
-              colorThemeState: colorThemeState,
-            ),
-            RankTextWidget(
-              score: scores[1],
-              colorThemeState: colorThemeState,
-            ),
+            RankTextWidget(score: scores[0], colorThemeState: colorThemeState),
+            RankTextWidget(score: scores[1], colorThemeState: colorThemeState),
           ],
         ),
         if (scores.length > 2)
@@ -45,7 +36,7 @@ class RanksWidget extends ConsumerWidget {
                 colorThemeState: colorThemeState,
               ),
               RankTextWidget(
-                score: scores[3],
+                score: scores.length > 3 ? scores[3] : ScoreData.empty(),
                 colorThemeState: colorThemeState,
               ),
             ],
@@ -84,16 +75,16 @@ class RankTextWidget extends StatelessWidget {
             Text(
               "${score.rank}${score.type.isNotEmpty && score.rank.isNotEmpty ? ', ' : ''}${score.type.replaceAll("Rangliste ", "").replaceAll("Tilmeldingsniveau", "Samlet")}",
               overflow: TextOverflow.ellipsis,
-              style: headerStyle ??
+              style:
+                  headerStyle ??
                   TextStyle(
-                    color: colorThemeState.secondaryFontColor
-                        .withValues(alpha: 0.8),
+                    color: colorThemeState.secondaryFontColor.withValues(
+                      alpha: 0.8,
+                    ),
                     fontSize: 10,
                   ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -123,8 +114,9 @@ class RankTextWidget extends StatelessWidget {
                   height: 48,
                   width: 1,
                   decoration: BoxDecoration(
-                    color: colorThemeState.secondaryFontColor
-                        .withValues(alpha: 0.5),
+                    color: colorThemeState.secondaryFontColor.withValues(
+                      alpha: 0.5,
+                    ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),

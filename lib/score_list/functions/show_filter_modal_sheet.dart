@@ -18,39 +18,38 @@ void showFilterModalSheet(
   StateProvider<Map<String, dynamic>> rankFilterProvider,
   WidgetRef ref,
 ) {
-  final StateProvider<Profile?> selectedPlayer =
-      StateProvider<Profile?>((ref) => null);
+  final StateProvider<Profile?> selectedPlayer = StateProvider<Profile?>(
+    (ref) => null,
+  );
 
   showModalBottomSheet(
     backgroundColor: Colors.transparent,
     context: context,
     builder: (context) => FilterBottomSheet(
       children: [
-        CustomExpander(
-          isExpandedKey: "seasonid",
-          header: Text(
-            "Sæson",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-          body: CustomDropDownSelector(
-            data: rankSearchFilters['season'] ?? {},
-            onChanged: (value) {
-              ref.read(rankFilterProvider.notifier).state = {
-                ...ref.read(rankFilterProvider.notifier).state,
-                "seasonid": value,
-              };
-            },
-            initalValue: "Vælg sæson",
-            hint: "Vælg sæson",
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
+        // CustomExpander(
+        //   isExpandedKey: "seasonid",
+        //   header: Text(
+        //     "Sæson",
+        //     style: TextStyle(
+        //       fontSize: 24,
+        //       fontWeight: FontWeight.w600,
+        //       color: colorThemeState.secondaryColor,
+        //     ),
+        //   ),
+        //   body: CustomDropDownSelector(
+        //     data: rankSearchFilters['season'] ?? {},
+        //     onChanged: (value) {
+        //       ref.read(rankFilterProvider.notifier).state = {
+        //         ...ref.read(rankFilterProvider.notifier).state,
+        //         "seasonid": value,
+        //       };
+        //     },
+        //     initalValue: "Vælg sæson",
+        //     hint: "Vælg sæson",
+        //   ),
+        // ),
+        const SizedBox(height: 16),
         CustomExpander(
           isExpandedKey: "agegroupid",
           header: Text(
@@ -68,9 +67,7 @@ void showFilterModalSheet(
             isMultiSelect: false,
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         CustomExpander(
           isExpandedKey: "classid",
           header: Text(
@@ -88,34 +85,30 @@ void showFilterModalSheet(
             isMultiSelect: false,
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
-        CustomExpander(
-          isExpandedKey: "regionid",
-          header: Text(
-            "Kreds/Landsdel",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-          body: CustomDropDownSelector(
-            data: rankSearchFilters['geoRegions'] ?? {},
-            onChanged: (value) {
-              ref.read(rankFilterProvider.notifier).state = {
-                ...ref.read(rankFilterProvider.notifier).state,
-                "regionid": value,
-              };
-            },
-            initalValue: "Vælg kreds eller landsdel",
-            hint: "Vælg kreds eller landsdel",
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
+        // CustomExpander(
+        //   isExpandedKey: "regionid",
+        //   header: Text(
+        //     "Kreds/Landsdel",
+        //     style: TextStyle(
+        //       fontSize: 24,
+        //       fontWeight: FontWeight.w600,
+        //       color: colorThemeState.secondaryColor,
+        //     ),
+        //   ),
+        //   body: CustomDropDownSelector(
+        //     data: rankSearchFilters['geoRegions'] ?? {},
+        //     onChanged: (value) {
+        //       ref.read(rankFilterProvider.notifier).state = {
+        //         ...ref.read(rankFilterProvider.notifier).state,
+        //         "regionid": value,
+        //       };
+        //     },
+        //     initalValue: "Vælg kreds eller landsdel",
+        //     hint: "Vælg kreds eller landsdel",
+        //   ),
+        // ),
+        const SizedBox(height: 16),
         CustomExpander(
           isExpandedKey: "playerid",
           header: Text(
@@ -127,16 +120,11 @@ void showFilterModalSheet(
             ),
           ),
           body: CustomContainer(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 2,
-              vertical: 2,
-            ),
+            margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
             onTap: () async {
               Profile? value = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => PlayerSearch(
-                    shouldReturnPlayer: true,
-                  ),
+                  builder: (context) => PlayerSearch(shouldReturnPlayer: true),
                 ),
               );
 
@@ -153,9 +141,7 @@ void showFilterModalSheet(
                 Consumer(
                   builder: (context, ref, child) {
                     Profile? selectedProfileState = ref.watch(selectedPlayer);
-                    return Text(
-                      selectedProfileState?.name ?? "",
-                    );
+                    return Text(selectedProfileState?.name ?? "");
                   },
                 ),
                 InkWell(
@@ -166,18 +152,13 @@ void showFilterModalSheet(
                       "playerid": "",
                     };
                   },
-                  child: const Icon(
-                    Icons.clear,
-                    color: Colors.red,
-                  ),
+                  child: const Icon(Icons.clear, color: Colors.red),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         CustomExpander(
           isExpandedKey: "pointsfrom",
           header: Text(
@@ -201,9 +182,7 @@ void showFilterModalSheet(
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: Icon(
                   Icons.more_horiz,
                   color: colorThemeState.primaryColor,
@@ -222,9 +201,7 @@ void showFilterModalSheet(
             ],
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         CustomExpander(
           isExpandedKey: "rankingfrom",
           header: Text(
@@ -248,9 +225,7 @@ void showFilterModalSheet(
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: Icon(
                   Icons.more_horiz,
                   color: colorThemeState.primaryColor,
@@ -269,9 +244,7 @@ void showFilterModalSheet(
             ],
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         CustomExpander(
           isExpandedKey: "birthdatefromstring",
           header: Text(
@@ -292,9 +265,7 @@ void showFilterModalSheet(
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: Icon(
                   Icons.more_horiz,
                   color: colorThemeState.primaryColor,

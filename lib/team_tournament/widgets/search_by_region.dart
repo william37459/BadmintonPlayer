@@ -7,15 +7,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 FutureProvider<List<TeamTournamentRegion>> regionProvider =
     FutureProvider<List<TeamTournamentRegion>>((ref) async {
-  final filterProviderState = ref.watch(teamTournamentSearchFilterProvider);
-  final result = await getByRegion(
-    contextKey,
-    filterProviderState.ageGroupID,
-    filterProviderState.regionID,
-  );
+      final filterProviderState = ref.watch(teamTournamentSearchFilterProvider);
+      final result = await getByRegion(
+        contextKey,
+        filterProviderState.ageGroupID,
+        filterProviderState.regionID,
+      );
 
-  return result;
-});
+      return result;
+    });
 
 class SearchByRegion extends ConsumerWidget {
   final List<Map<String, String>> data;
@@ -32,9 +32,7 @@ class SearchByRegion extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
           Row(
             children: [
               Flexible(
@@ -43,15 +41,25 @@ class SearchByRegion extends ConsumerWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: CustomDropDownSelector(
                     hint: "Badminton kreds",
-                    data: data[0],
-                    initalValue: filterProviderState.regionID.isNotEmpty
-                        ? filterProviderState.regionID
-                        : null,
+                    itemAsString: (item) => item.values.first,
+                    items: (filter, props) => data[0].entries
+                        .map((entry) => {entry.key: entry.value})
+                        .toList(),
+                    initalValue: null,
+                    compareFn: (item1, item2) =>
+                        item1.values.first == item2.values.first,
+                    itemBuilder: (context, item, isDisabled, isSelected) =>
+                        ListTile(
+                          title: Text(
+                            (item as Map).values.first,
+                            style: TextStyle(color: colorThemeState.fontColor),
+                          ),
+                        ),
                     onChanged: (value) {
                       ref
                           .read(teamTournamentSearchFilterProvider.notifier)
                           .state = filterProviderState.copyWith(
-                        regionID: value,
+                        regionID: value.keys.first,
                       );
                     },
                   ),
@@ -67,13 +75,22 @@ class SearchByRegion extends ConsumerWidget {
                       ref
                           .read(teamTournamentSearchFilterProvider.notifier)
                           .state = filterProviderState.copyWith(
-                        ageGroupID: value,
+                        ageGroupID: value.keys.first,
                       );
                     },
-                    data: data[1],
-                    initalValue: filterProviderState.ageGroupID.isNotEmpty
-                        ? filterProviderState.ageGroupID
-                        : null,
+                    itemAsString: (item) => item.values.first,
+                    compareFn: (item1, item2) =>
+                        item1.values.first == item2.values.first,
+                    itemBuilder: (context, item, isDisabled, isSelected) =>
+                        ListTile(
+                          title: Text(
+                            (item as Map).values.first,
+                            style: TextStyle(color: colorThemeState.fontColor),
+                          ),
+                        ),
+                    items: (filter, props) => data[1].entries
+                        .map((entry) => {entry.key: entry.value})
+                        .toList(),
                   ),
                 ),
               ),
@@ -91,12 +108,11 @@ class SearchByRegion extends ConsumerWidget {
                     data: (data) => ListView.separated(
                       itemCount: data.length,
                       separatorBuilder: (context, index) => Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          color:
-                              colorThemeState.fontColor.withValues(alpha: 0.5),
+                          color: colorThemeState.fontColor.withValues(
+                            alpha: 0.5,
+                          ),
                           borderRadius: BorderRadiusDirectional.circular(2),
                         ),
                         height: 0.25,
@@ -147,9 +163,8 @@ class SearchByRegion extends ConsumerWidget {
                         );
                       },
                     ),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (error, stack) => Center(
                       child: Text("Fejl ved hentning af data: $error"),
                     ),

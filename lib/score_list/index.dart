@@ -1,7 +1,9 @@
+import 'package:app/global/classes/club.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/player_score.dart';
 import 'package:app/global/classes/profile.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/global/widgets/tab_bar_label.dart';
 import 'package:app/score_list/functions/get_score_list.dart';
 import 'package:app/score_list/functions/show_filter_modal_sheet.dart';
@@ -12,33 +14,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 StateProvider<Map<String, dynamic>> rankFilterProvider =
     StateProvider<Map<String, dynamic>>(
-  (ref) => {
-    "agefrom": null,
-    "agegroupid": "",
-    "ageto": null,
-    "birthdatefromstring": "",
-    "birthdatetostring": "",
-    "classid": "",
-    "clubid": "",
-    "gender": "",
-    "getplayer": true,
-    "getversions": true,
-    "pageindex": 0,
-    "param": "",
-    "playerid": "",
-    "pointsfrom": "",
-    "pointsto": "",
-    "rankingfrom": "",
-    "rankinglistagegroupid": "15",
-    "rankinglistid": "287",
-    "rankinglistversiondate": "",
-    "rankingto": "",
-    "regionid": "",
-    "searchall": false,
-    "seasonid": "2023",
-    "sortfield": 0,
-  },
-);
+      (ref) => {
+        "agefrom": null,
+        "agegroupid": "",
+        "ageto": null,
+        "birthdatefromstring": "",
+        "birthdatetostring": "",
+        "classid": "",
+        "clubid": "",
+        "gender": "",
+        "getplayer": true,
+        "getversions": true,
+        "pageindex": 0,
+        "param": "",
+        "playerid": "",
+        "pointsfrom": "",
+        "pointsto": "",
+        "rankingfrom": "",
+        "rankinglistagegroupid": "15",
+        "rankinglistid": "287",
+        "rankinglistversiondate": "",
+        "rankingto": "",
+        "regionid": "",
+        "searchall": false,
+        "seasonid": "2023",
+        "sortfield": 0,
+      },
+    );
 
 StateProvider<List<String>> likedIds = StateProvider((ref) => []);
 StateProvider<int> currentIndex = StateProvider((ref) => 0);
@@ -46,15 +48,13 @@ StateProvider<bool> showingSearch = StateProvider((ref) => false);
 
 FutureProvider<Map<String, List<PlayerScore>>> allScoreListProvider =
     FutureProvider<Map<String, List<PlayerScore>>>((ref) async {
-  final rankFilterProviderState = ref.watch(rankFilterProvider);
-  final result = await getAllScoreLists(rankFilterProviderState);
-  return result;
-});
+      final rankFilterProviderState = ref.watch(rankFilterProvider);
+      final result = await getAllScoreLists(rankFilterProviderState);
+      return result;
+    });
 
 class ScoreList extends ConsumerStatefulWidget {
-  const ScoreList({
-    super.key,
-  });
+  const ScoreList({super.key});
 
   @override
   ScoreListState createState() => ScoreListState();
@@ -69,8 +69,9 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
       GlobalKey<AutoCompleteTextFieldState<String>>();
 
   final FocusNode textFieldFocusNode = FocusNode();
-  final StateProvider<Profile?> selectedPlayer =
-      StateProvider<Profile?>((ref) => null);
+  final StateProvider<Profile?> selectedPlayer = StateProvider<Profile?>(
+    (ref) => null,
+  );
 
   @override
   void initState() {
@@ -91,8 +92,9 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-    AsyncValue<Map<String, List<PlayerScore>>> futureAsyncValue =
-        ref.watch(allScoreListProvider);
+    AsyncValue<Map<String, List<PlayerScore>>> futureAsyncValue = ref.watch(
+      allScoreListProvider,
+    );
 
     bool showingSearchState = ref.watch(showingSearch);
     final int currentIndexState = ref.watch(currentIndex);
@@ -104,10 +106,7 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12,
-                horizontal: 16,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -136,7 +135,7 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
                         color: colorThemeState.fontColor.withValues(alpha: 0.8),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -146,100 +145,28 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
               secondChild: Container(),
-              firstChild: Container(
-                margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xffEBEBEB),
-                  borderRadius: BorderRadius.circular(48),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: AutoCompleteTextField<String>(
-                        autofocus: true,
-                        focusNode: textFieldFocusNode,
-                        key: textFieldKey,
-                        controller: textFieldController,
-                        clearOnSubmit: false,
-                        suggestions: listOfclubs,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(4),
-                          isDense: true,
-                          isCollapsed: true,
-                          hintText: "Søg efter klub",
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                        itemFilter: (item, query) {
-                          return item
-                              .toLowerCase()
-                              .contains(query.toLowerCase());
-                        },
-                        itemSorter: (a, b) {
-                          return b.compareTo(a);
-                        },
-                        unFocusOnItemSubmitted: true,
-                        itemSubmitted: (item) {
-                          ref.read(rankFilterProvider.notifier).state = {
-                            ...ref.read(rankFilterProvider.notifier).state,
-                            "clubid": "clubs[item]" //TODO FIKS?!,
-                          };
-                        },
-                        textSubmitted: (data) {
-                          if (data.isEmpty) {
-                            ref.read(rankFilterProvider.notifier).state = {
-                              ...ref.read(rankFilterProvider.notifier).state,
-                              "clubid": "",
-                            };
-                          }
-                        },
-                        itemBuilder: (context, item) {
-                          return ListTile(
-                            title: Text(item),
-                          );
-                        },
-                      ),
-                    ),
-                    Material(
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: InkWell(
-                          onTap: () {
-                            FocusScope.of(context).unfocus();
-                            ref.read(isExpandedProvider.notifier).state = {};
-
-                            for (String key
-                                in ref.read(rankFilterProvider).keys) {
-                              ref.read(isExpandedProvider.notifier).state = {
-                                ...ref.read(isExpandedProvider.notifier).state,
-                                key: false,
-                              };
-                            }
-                            showFilterModalSheet(
-                              context,
-                              rankSearchFilters,
-                              colorThemeState,
-                              rankFilterProvider,
-                              ref,
-                            );
-                          },
-                          child: Icon(
-                            Icons.tune,
-                            size: 18,
-                            color: colorThemeState.primaryColor,
-                          ),
+              firstChild: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomDropDownSelector(
+                  itemAsString: (item) => (item as Club).clubName,
+                  items: (filter, props) => clubs,
+                  compareFn: (item1, item2) =>
+                      (item1 as Club).clubName == (item2 as Club).clubName,
+                  itemBuilder: (context, item, isDisabled, isSelected) =>
+                      ListTile(
+                        title: Text(
+                          item.clubName,
+                          style: TextStyle(color: colorThemeState.fontColor),
                         ),
                       ),
-                    ),
-                  ],
+                  hint: "Søg efter klub",
+                  initalValue: null,
+                  onChanged: (item) {
+                    ref.read(rankFilterProvider.notifier).state = {
+                      ...ref.read(rankFilterProvider.notifier).state,
+                      "clubid": (item as Club).clubId,
+                    };
+                  },
                 ),
               ),
             ),
@@ -248,9 +175,7 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  const SizedBox(
-                    width: 16,
-                  ),
+                  const SizedBox(width: 16),
                   TabBarLabel(
                     label: "Alle",
                     index: 0,
@@ -298,15 +223,10 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
             ),
             const SizedBox(height: 12),
             futureAsyncValue.when(
-              error: (error, stackTrace) => Center(
-                child: Text(
-                  error.toString(),
-                ),
-              ),
+              error: (error, stackTrace) =>
+                  Center(child: Text(error.toString())),
               loading: () => const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                child: Center(child: CircularProgressIndicator()),
               ),
               data: (data) {
                 return data.values.any((value) => value.isNotEmpty)
@@ -334,9 +254,7 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                              const SizedBox(
-                                height: 16,
-                              ),
+                              const SizedBox(height: 16),
                               Material(
                                 color: colorThemeState.primaryColor,
                                 borderRadius: BorderRadius.circular(12),

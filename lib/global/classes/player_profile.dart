@@ -29,10 +29,7 @@ class AttachedProfile {
   final String name;
   final String id;
 
-  AttachedProfile({
-    required this.name,
-    required this.id,
-  });
+  AttachedProfile({required this.name, required this.id});
 }
 
 class ScoreData {
@@ -49,6 +46,16 @@ class ScoreData {
     required this.matches,
     required this.placement,
   });
+
+  factory ScoreData.empty() {
+    return ScoreData(
+      type: "",
+      rank: "",
+      points: "",
+      matches: "",
+      placement: "",
+    );
+  }
 }
 
 class TeamTournament {
