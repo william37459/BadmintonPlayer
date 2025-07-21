@@ -16,53 +16,71 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 StateProvider<Map<String, dynamic>> profileFilterProvider =
     StateProvider<Map<String, dynamic>>(
-  (ref) => {
-    "callbackcontextkey": contextKey,
-    "selectfunction": "SPSel1",
-    "name": "",
-    "clubid": "",
-    "playernumber": "",
-    "gender": "",
-    "agegroupid": "",
-    "searchteam": false,
-    "licenseonly": false,
-    "agegroupcontext": 0,
-    "tournamentdate": ""
-  },
-);
+      (ref) => {
+        "callbackcontextkey": contextKey,
+        "selectfunction": "SPSel1",
+        "name": "",
+        "clubid": "",
+        "playernumber": "",
+        "gender": "",
+        "agegroupid": "",
+        "searchteam": false,
+        "licenseonly": false,
+        "agegroupcontext": 0,
+        "tournamentdate": "",
+      },
+    );
 
 FutureProvider<List<Profile>> allScoreListProvider =
     FutureProvider<List<Profile>>((ref) async {
-  final filter = ref.watch(profileFilterProvider);
-  final result = await getProfiles(filter);
-  return result;
-});
+      final filter = ref.watch(profileFilterProvider);
+      final result = await getProfiles(filter);
+      return result;
+    });
 
-class PlayerSearch extends ConsumerWidget {
-  final TextEditingController textFieldController = TextEditingController();
-  final GlobalKey<AutoCompleteTextFieldState<String>> textFieldKey =
-      GlobalKey<AutoCompleteTextFieldState<String>>();
-
-  final FocusNode textFieldFocusNode = FocusNode();
-
+class PlayerSearch extends ConsumerStatefulWidget {
   final bool shouldReturnPlayer;
   final bool favouriteMode;
 
-  PlayerSearch(
-      {super.key, this.shouldReturnPlayer = false, this.favouriteMode = false});
+  const PlayerSearch({
+    super.key,
+    this.shouldReturnPlayer = false,
+    this.favouriteMode = false,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PlayerSearch> createState() => _PlayerSearchState();
+}
+
+class _PlayerSearchState extends ConsumerState<PlayerSearch> {
+  late TextEditingController textFieldController;
+  final GlobalKey<AutoCompleteTextFieldState<String>> textFieldKey =
+      GlobalKey<AutoCompleteTextFieldState<String>>();
+  late FocusNode textFieldFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    textFieldController = TextEditingController();
+    textFieldFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    textFieldController.dispose();
+    textFieldFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Scaffold(
       backgroundColor: colorThemeState.backgroundColor,
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: colorThemeState.primaryColor,
-        icon: Icon(
-          Icons.save,
-          color: colorThemeState.secondaryFontColor,
-        ),
+        icon: Icon(Icons.save, color: colorThemeState.secondaryFontColor),
         label: Text(
           "Færdig",
           style: TextStyle(
@@ -112,7 +130,6 @@ class PlayerSearch extends ConsumerWidget {
                   Expanded(
                     child: TextField(
                       autofocus: true,
-                      focusNode: textFieldFocusNode,
                       key: textFieldKey,
                       controller: textFieldController,
                       decoration: const InputDecoration(
@@ -124,9 +141,9 @@ class PlayerSearch extends ConsumerWidget {
                       ),
                       onChanged: (value) =>
                           ref.read(profileFilterProvider.notifier).state = {
-                        ...ref.read(profileFilterProvider.notifier).state,
-                        "name": value,
-                      },
+                            ...ref.read(profileFilterProvider.notifier).state,
+                            "name": value,
+                          },
                       onSubmitted: (data) {
                         if (data.isEmpty) {
                           ref.read(profileFilterProvider.notifier).state = {
@@ -178,9 +195,7 @@ class PlayerSearch extends ConsumerWidget {
                                         .toList(),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                const SizedBox(height: 16),
                                 CustomExpander(
                                   isExpandedKey: "playernumber",
                                   header: Text(
@@ -197,9 +212,7 @@ class PlayerSearch extends ConsumerWidget {
                                     providerKey: "playernumber",
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                const SizedBox(height: 16),
                                 CustomExpander(
                                   isExpandedKey: "agegroupid",
                                   header: Text(
@@ -211,16 +224,15 @@ class PlayerSearch extends ConsumerWidget {
                                     ),
                                   ),
                                   body: WrapperSelector(
-                                    data: profileSearchFilters['agegroupid'] ??
+                                    data:
+                                        profileSearchFilters['agegroupid'] ??
                                         {},
                                     providerKey: "agegroupid",
                                     provider: profileFilterProvider,
                                     isMultiSelect: false,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                const SizedBox(height: 16),
                                 CustomExpander(
                                   isExpandedKey: "gender",
                                   header: Text(
@@ -255,16 +267,13 @@ class PlayerSearch extends ConsumerWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                AsyncValue<List<Profile>> futureAsyncValue =
-                    ref.watch(allScoreListProvider);
+                AsyncValue<List<Profile>> futureAsyncValue = ref.watch(
+                  allScoreListProvider,
+                );
                 return futureAsyncValue.when(
-                  error: (error, stackTrace) => Text(
-                    error.toString(),
-                  ),
+                  error: (error, stackTrace) => Text(error.toString()),
                   loading: () => const Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: Center(child: CircularProgressIndicator()),
                   ),
                   data: (data) {
                     return data.isNotEmpty
@@ -275,8 +284,8 @@ class PlayerSearch extends ConsumerWidget {
                                   ScrollViewKeyboardDismissBehavior.onDrag,
                               itemBuilder: (context, index) => PlayerResult(
                                 profile: data[index],
-                                shouldReturnPlayer: shouldReturnPlayer,
-                                favouriteMode: favouriteMode,
+                                shouldReturnPlayer: widget.shouldReturnPlayer,
+                                favouriteMode: widget.favouriteMode,
                               ),
                             ),
                           )
@@ -295,9 +304,7 @@ class PlayerSearch extends ConsumerWidget {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
+                                  const SizedBox(height: 16),
                                   Material(
                                     color: colorThemeState.primaryColor,
                                     borderRadius: BorderRadius.circular(12),
@@ -305,7 +312,8 @@ class PlayerSearch extends ConsumerWidget {
                                       onTap: () {
                                         ref
                                             .read(
-                                                profileFilterProvider.notifier)
+                                              profileFilterProvider.notifier,
+                                            )
                                             .state = {
                                           "callbackcontextkey": contextKey,
                                           "selectfunction": "SPSel1",
@@ -317,7 +325,7 @@ class PlayerSearch extends ConsumerWidget {
                                           "searchteam": false,
                                           "licenseonly": false,
                                           "agegroupcontext": 0,
-                                          "tournamentdate": ""
+                                          "tournamentdate": "",
                                         };
                                       },
                                       borderRadius: BorderRadius.circular(12),

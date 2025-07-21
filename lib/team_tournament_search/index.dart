@@ -1,6 +1,8 @@
+import 'package:app/global/classes/club.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/team_tournament_results/club/index.dart';
 import 'package:app/team_tournament_search/widgets/team_tournament_team_widget.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
@@ -14,9 +16,7 @@ class TeamTournamentSearch extends ConsumerWidget {
 
   final FocusNode textFieldFocusNode = FocusNode();
 
-  TeamTournamentSearch({
-    super.key,
-  });
+  TeamTournamentSearch({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,10 +27,7 @@ class TeamTournamentSearch extends ConsumerWidget {
       backgroundColor: colorThemeState.backgroundColor,
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: colorThemeState.primaryColor,
-        icon: Icon(
-          Icons.save,
-          color: colorThemeState.secondaryFontColor,
-        ),
+        icon: Icon(Icons.save, color: colorThemeState.secondaryFontColor),
         label: Text(
           "Færdig",
           style: TextStyle(
@@ -40,8 +37,9 @@ class TeamTournamentSearch extends ConsumerWidget {
         ),
         onPressed: () {
           Navigator.of(context).pop();
-          ref.read(teamTournamentSearchFilterProvider.notifier).state =
-              TeamTournamentFilter.fromJson({
+          ref
+              .read(teamTournamentSearchFilterProvider.notifier)
+              .state = TeamTournamentFilter.fromJson({
             ...ref
                 .read(teamTournamentSearchFilterProvider.notifier)
                 .state
@@ -72,48 +70,32 @@ class TeamTournamentSearch extends ConsumerWidget {
                 ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color(0xffEBEBEB),
-                borderRadius: BorderRadius.circular(42),
-              ),
-              child: AutoCompleteTextField<String>(
-                autofocus: true,
-                focusNode: textFieldFocusNode,
-                key: textFieldKey,
-                controller: textFieldController,
-                suggestions: clubs.map((e) => e.fullClubName).toList(),
-                decoration: const InputDecoration.collapsed(
-                  hintText: "Søg efter klub",
-                  hintStyle: TextStyle(),
-                ),
-                itemFilter: (item, query) {
-                  return item.toLowerCase().contains(query.toLowerCase());
-                },
-                itemSorter: (a, b) {
-                  return b.compareTo(a);
-                },
-                unFocusOnItemSubmitted: true,
-                itemSubmitted: (item) {
-                  final club = clubs.firstWhere(
-                    (element) => element.fullClubName == item,
-                  );
-                  ref.read(teamTournamentSearchFilterProvider.notifier).state =
-                      TeamTournamentFilter.fromJson({
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: CustomDropDownSelector(
+                itemAsString: (item) => (item as Club).clubName,
+                items: (filter, props) => clubs,
+                compareFn: (item1, item2) =>
+                    (item1 as Club).clubName == (item2 as Club).clubName,
+                itemBuilder: (context, item, isDisabled, isSelected) =>
+                    ListTile(
+                      title: Text(
+                        item.clubName,
+                        style: TextStyle(color: colorThemeState.fontColor),
+                      ),
+                    ),
+                hint: "Søg efter klub",
+                initalValue: null,
+                onChanged: (item) {
+                  ref
+                      .read(teamTournamentSearchFilterProvider.notifier)
+                      .state = TeamTournamentFilter.fromJson({
                     ...ref
                         .read(teamTournamentSearchFilterProvider.notifier)
                         .state
                         .toJson(),
-                    "clubID": club.clubId.toString(),
+                    "clubID": item.clubId.toString(),
                   });
-                },
-                textSubmitted: (data) {},
-                itemBuilder: (context, item) {
-                  return ListTile(
-                    title: Text(item),
-                  );
                 },
               ),
             ),
@@ -135,16 +117,12 @@ class TeamTournamentSearch extends ConsumerWidget {
                             for (String key in data.keys)
                               for (TeamTournamentFilterClub result
                                   in data[key] ?? [])
-                                TeamTournamentTeamWidget(
-                                  result: result,
-                                )
+                                TeamTournamentTeamWidget(result: result),
                           ],
                         ),
                       ),
                 error: (error, stackTrace) => const Text("error"),
-                loading: () => const Center(
-                  child: CircularProgressIndicator(),
-                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ),
           ],
