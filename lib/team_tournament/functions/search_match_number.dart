@@ -12,15 +12,17 @@ import 'package:html/parser.dart' as html_parser;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future searchMatchNumber(String matchNumber, WidgetRef ref,
-    BuildContext context, TextEditingController controller) async {
+Future searchMatchNumber(
+  String matchNumber,
+  WidgetRef ref,
+  BuildContext context,
+  TextEditingController controller,
+) async {
   http.Response response = await http.post(
     Uri.parse(
       "https://www.badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetLeagueStanding",
     ),
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
+    headers: {"Content-Type": "application/json; charset=UTF-8"},
     body: json.encode({
       "callbackcontextkey": contextKey,
       "subPage": "5",
@@ -31,7 +33,7 @@ Future searchMatchNumber(String matchNumber, WidgetRef ref,
       "leagueGroupTeamID": "",
       "leagueMatchID": matchNumber,
       "clubID": "",
-      "playerID": ""
+      "playerID": "",
     }),
   );
 
@@ -51,9 +53,7 @@ Future searchMatchNumber(String matchNumber, WidgetRef ref,
           child: const Center(
             child: Text(
               "Kamp ikke fundet",
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -64,8 +64,9 @@ Future searchMatchNumber(String matchNumber, WidgetRef ref,
   }
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final List<String>? searchesJson =
-      prefs.getStringList('latestMatchNumberSearches');
+  final List<String>? searchesJson = prefs.getStringList(
+    'latestMatchNumberSearches',
+  );
 
   String htmlContent = json.decode(response.body)['d']['html'];
 
@@ -77,8 +78,10 @@ Future searchMatchNumber(String matchNumber, WidgetRef ref,
   String encodedMatch = json.encode(preview.toJson());
 
   if (!(searchesJson?.contains(encodedMatch) ?? false)) {
-    await prefs.setStringList("latestMatchNumberSearches",
-        [json.encode(preview.toJson()), ...searchesJson ?? []]);
+    await prefs.setStringList("latestMatchNumberSearches", [
+      json.encode(preview.toJson()),
+      ...searchesJson ?? [],
+    ]);
   }
 
   ref.read(leagueMatchIDProvider.notifier).state = matchNumber;
@@ -88,7 +91,7 @@ Future searchMatchNumber(String matchNumber, WidgetRef ref,
     "year": null,
     "club": null,
     "matchNumber": null,
-    "season": "2023",
+    "season": season,
   };
 
   // Invalidate the latestSearchesProvider to trigger a refresh
@@ -97,8 +100,5 @@ Future searchMatchNumber(String matchNumber, WidgetRef ref,
   controller.clear();
 
   if (!context.mounted) return;
-  Navigator.pushNamed(
-    context,
-    "/TeamTournamentResultPage",
-  );
+  Navigator.pushNamed(context, "/TeamTournamentResultPage");
 }

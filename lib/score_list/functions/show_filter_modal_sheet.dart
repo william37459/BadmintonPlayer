@@ -124,7 +124,8 @@ void showFilterModalSheet(
             onTap: () async {
               Profile? value = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => PlayerSearch(shouldReturnPlayer: true),
+                  builder: (context) =>
+                      const PlayerSearch(shouldReturnPlayer: true),
                 ),
               );
 

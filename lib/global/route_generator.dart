@@ -37,9 +37,7 @@ class RouteGenerator {
             ),
           );
         }
-        return CupertinoPageRoute(
-          builder: (_) => PlayerSearch(),
-        );
+        return CupertinoPageRoute(builder: (_) => const PlayerSearch());
       case '/TeamTournamentRegionPage':
         if (args is Map) {
           return CupertinoPageRoute(
@@ -60,43 +58,35 @@ class RouteGenerator {
       case '/TournamentResultPage':
         if (args is Map) {
           return CupertinoPageRoute(
-            builder: (_) => TournamentResultPage(
-              tournamentTitle: args['tournament'],
-            ),
+            builder: (_) =>
+                TournamentResultPage(tournamentTitle: args['tournament']),
           );
         }
         return _errorRoute();
       case '/TournamentParticipationPage':
         if (args is Map) {
           return CupertinoPageRoute(
-            builder: (_) => TournamentParticipationList(
-              tournament: args['tournament'],
-            ),
+            builder: (_) =>
+                TournamentParticipationList(tournament: args['tournament']),
           );
         }
         return _errorRoute();
       case '/TeamTournamentClubPage':
         if (args is Map) {
           return CupertinoPageRoute(
-            builder: (_) => TeamTournamentClubPage(
-              club: args['club'],
-            ),
+            builder: (_) => TeamTournamentClubPage(club: args['club']),
           );
         }
         return _errorRoute();
       case '/TeamTournamentPositionPage':
         if (args is Map) {
           return CupertinoPageRoute(
-            builder: (_) => TeamTournamentPositionWidget(
-              title: args['title'],
-            ),
+            builder: (_) => TeamTournamentPositionWidget(title: args['title']),
           );
         }
         return _errorRoute();
       case '/TournamentOverviewPage':
-        return CupertinoPageRoute(
-          builder: (_) => TorunamentPlan(),
-        );
+        return CupertinoPageRoute(builder: (_) => TorunamentPlan());
       case '/TeamTournamentResultPage':
         return CupertinoPageRoute(
           builder: (_) => const TeamTournamentClubResultsWidget(),
@@ -113,15 +103,13 @@ class RouteGenerator {
   }
 
   static Route<dynamic> _errorRoute() {
-    return CupertinoPageRoute(builder: (_) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("Fejl!"),
-        ),
-        body: const Center(
-          child: Text("FEJL"),
-        ),
-      );
-    });
+    return CupertinoPageRoute(
+      builder: (_) {
+        return Scaffold(
+          appBar: AppBar(title: const Text("Fejl!")),
+          body: const Center(child: Text("FEJL")),
+        );
+      },
+    );
   }
 }

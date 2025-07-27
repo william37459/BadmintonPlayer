@@ -9,17 +9,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 FutureProvider<Map<String, List<TeamTournamentFilterClub>>> teamTournaments =
     FutureProvider<Map<String, List<TeamTournamentFilterClub>>>((ref) async {
-  final filters = ref.watch(teamTournamentSearchFilterProvider);
-  final result = await getTeamTournamentClub(contextKey, filters.toJson());
-  return result;
-});
+      final filters = ref.watch(teamTournamentSearchFilterProvider);
+      final result = await getTeamTournamentClub(contextKey, filters.toJson());
+      return result;
+    });
 
 class TeamTournamentClubPage extends ConsumerWidget {
   final String club;
-  const TeamTournamentClubPage({
-    super.key,
-    required this.club,
-  });
+  const TeamTournamentClubPage({super.key, required this.club});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +52,9 @@ class TeamTournamentClubPage extends ConsumerWidget {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 12),
+                          horizontal: 8.0,
+                          vertical: 12,
+                        ),
                         child: Text(
                           club,
                           style: TextStyle(
@@ -80,8 +79,9 @@ class TeamTournamentClubPage extends ConsumerWidget {
                           child: CustomExpander(
                             header: Expanded(
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                ),
                                 child: Text(
                                   header,
                                   style: TextStyle(
@@ -109,8 +109,9 @@ class TeamTournamentClubPage extends ConsumerWidget {
                                         onTap: () {
                                           ref
                                               .read(
-                                                  teamTournamentSearchFilterProvider
-                                                      .notifier)
+                                                teamTournamentSearchFilterProvider
+                                                    .notifier,
+                                              )
                                               .state = TeamTournamentFilter(
                                             text: "",
                                             clubID: filter.clubID,
@@ -120,7 +121,7 @@ class TeamTournamentClubPage extends ConsumerWidget {
                                             ageGroupID: filter.ageGroupID,
                                             playerID: "",
                                             regionID: "",
-                                            seasonID: "2023",
+                                            seasonID: season,
                                             subPage: "2",
                                           );
                                           teamTournamentSearchFilterStack.add(
@@ -140,9 +141,7 @@ class TeamTournamentClubPage extends ConsumerWidget {
                                           );
                                           Navigator.of(context).pushNamed(
                                             "/TeamTournamentPositionPage",
-                                            arguments: {
-                                              "title": filter.text,
-                                            },
+                                            arguments: {"title": filter.text},
                                           );
                                         },
                                         child: Padding(
@@ -199,9 +198,7 @@ class TeamTournamentClubPage extends ConsumerWidget {
             ],
           ),
           error: (error, stackTrace) => const Text("error"),
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ),
     );

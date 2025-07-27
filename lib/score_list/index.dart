@@ -6,7 +6,6 @@ import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/global/widgets/tab_bar_label.dart';
 import 'package:app/score_list/functions/get_score_list.dart';
-import 'package:app/score_list/functions/show_filter_modal_sheet.dart';
 import 'package:app/score_list/widgets/ranking_list.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +36,7 @@ StateProvider<Map<String, dynamic>> rankFilterProvider =
         "rankingto": "",
         "regionid": "",
         "searchall": false,
-        "seasonid": "2023",
+        "seasonid": season,
         "sortfield": 0,
       },
     );
@@ -285,7 +284,7 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
                                       "rankingto": "",
                                       "regionid": "",
                                       "searchall": false,
-                                      "seasonid": "2023",
+                                      "seasonid": season,
                                       "sortfield": 0,
                                     };
                                   },

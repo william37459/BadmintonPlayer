@@ -9,10 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 FutureProvider<Map<String, List<TeamTournamentFilter>>> teamTournaments =
     FutureProvider<Map<String, List<TeamTournamentFilter>>>((ref) async {
-  final filters = ref.watch(teamTournamentSearchFilterProvider);
-  final result = await getTeamTournamentRegion(contextKey, filters.toJson());
-  return result;
-});
+      final filters = ref.watch(teamTournamentSearchFilterProvider);
+      final result = await getTeamTournamentRegion(
+        contextKey,
+        filters.toJson(),
+      );
+      return result;
+    });
 
 class TeamTournamentRegionPage extends ConsumerWidget {
   final String region;
@@ -44,7 +47,8 @@ class TeamTournamentRegionPage extends ConsumerWidget {
                           teamTournamentSearchFilterStack.removeLast();
                           ref
                               .read(teamTournamentSearchFilterProvider.notifier)
-                              .state = teamTournamentSearchFilterStack.last;
+                              .state = teamTournamentSearchFilterStack
+                              .last;
                         }
                         Navigator.pop(context);
                       },
@@ -65,7 +69,9 @@ class TeamTournamentRegionPage extends ConsumerWidget {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 12),
+                          horizontal: 8.0,
+                          vertical: 12,
+                        ),
                         child: Text(
                           "$region${rank.isEmpty ? "" : ", "}$rank",
                           style: TextStyle(
@@ -90,8 +96,9 @@ class TeamTournamentRegionPage extends ConsumerWidget {
                           child: CustomExpander(
                             header: Expanded(
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                ),
                                 child: Text(
                                   header,
                                   style: TextStyle(
@@ -119,8 +126,9 @@ class TeamTournamentRegionPage extends ConsumerWidget {
                                         onTap: () {
                                           ref
                                               .read(
-                                                  teamTournamentSearchFilterProvider
-                                                      .notifier)
+                                                teamTournamentSearchFilterProvider
+                                                    .notifier,
+                                              )
                                               .state = TeamTournamentFilter(
                                             text: "",
                                             clubID: filter.clubID,
@@ -130,7 +138,7 @@ class TeamTournamentRegionPage extends ConsumerWidget {
                                             ageGroupID: filter.ageGroupID,
                                             playerID: "",
                                             regionID: "",
-                                            seasonID: "2023",
+                                            seasonID: season,
                                             subPage: "2",
                                           );
                                           teamTournamentSearchFilterStack.add(
@@ -144,15 +152,14 @@ class TeamTournamentRegionPage extends ConsumerWidget {
                                               ageGroupID: filter.ageGroupID,
                                               playerID: "",
                                               regionID: "",
-                                              seasonID: "2023",
+                                              seasonID: season,
                                               subPage: "2",
                                             ),
                                           );
                                           Navigator.of(context).pushNamed(
-                                              "/TeamTournamentPositionPage",
-                                              arguments: {
-                                                "title": filter.text,
-                                              });
+                                            "/TeamTournamentPositionPage",
+                                            arguments: {"title": filter.text},
+                                          );
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -191,9 +198,7 @@ class TeamTournamentRegionPage extends ConsumerWidget {
             ],
           ),
           error: (error, stackTrace) => const Text("error"),
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ),
     );

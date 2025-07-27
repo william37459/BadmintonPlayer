@@ -312,7 +312,7 @@ void showFilterModalSheet(
                       onTap: () async {
                         Profile? value = await Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => PlayerSearch(),
+                            builder: (context) => const PlayerSearch(),
                           ),
                         );
                         ref.read(selectedPlayer.notifier).state = value;

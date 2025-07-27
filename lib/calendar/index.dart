@@ -13,22 +13,22 @@ import 'package:intl/intl.dart';
 
 StateProvider<Map<String, dynamic>> tournamentFilterProvider =
     StateProvider<Map<String, dynamic>>(
-  (ref) => {
-    "ageGroupList": "",
-    "classIdList": "",
-    "clubIds": [],
-    "firstRow": 0,
-    "maxCount": 100,
-    "seasonId": 2024,
-  },
-);
+      (ref) => {
+        "ageGroupList": "",
+        "classIdList": "",
+        "clubIds": [],
+        "firstRow": 0,
+        "maxCount": 100,
+        "seasonId": 2024,
+      },
+    );
 
 FutureProvider<List<Tournament>> seasonPlanFutureProvider =
     FutureProvider<List<Tournament>>((ref) async {
-  final filterValues = ref.watch(tournamentFilterProvider);
-  final result = await getSeasonPlan(filterValues, contextKey);
-  return result;
-});
+      final filterValues = ref.watch(tournamentFilterProvider);
+      final result = await getSeasonPlan(filterValues, contextKey);
+      return result;
+    });
 
 class TorunamentPlan extends ConsumerWidget {
   final TextEditingController textFieldController = TextEditingController();
@@ -75,14 +75,12 @@ class TorunamentPlan extends ConsumerWidget {
                   Expanded(
                     child: Consumer(
                       builder: (context, ref, child) {
-                        final futureAsyncValue =
-                            ref.watch(seasonPlanFutureProvider);
+                        final futureAsyncValue = ref.watch(
+                          seasonPlanFutureProvider,
+                        );
                         return futureAsyncValue.when(
-                          error: (error, stackTrace) => Center(
-                            child: Text(
-                              error.toString(),
-                            ),
-                          ),
+                          error: (error, stackTrace) =>
+                              Center(child: Text(error.toString())),
                           loading: () => CustomAutoFill(
                             provider: tournamentFilterProvider,
                             providerKey: "clubIds",
@@ -98,15 +96,15 @@ class TorunamentPlan extends ConsumerWidget {
                               suggestions: data.isEmpty
                                   ? []
                                   : data
-                                      .map((element) => element.clubName)
-                                      .toSet()
-                                      .toList(),
+                                        .map((element) => element.clubName)
+                                        .toSet()
+                                        .toList(),
                               converter: data.isEmpty
                                   ? {}
                                   : {
                                       for (var element in data)
                                         element.clubName.toString():
-                                            element.clubID
+                                            element.clubID,
                                     },
                             );
                           },
@@ -145,14 +143,10 @@ class TorunamentPlan extends ConsumerWidget {
                 builder: (context, ref, child) {
                   final futureAsyncValue = ref.watch(seasonPlanFutureProvider);
                   return futureAsyncValue.when(
-                    error: (error, stackTrace) => Center(
-                      child: Text(
-                        error.toString(),
-                      ),
-                    ),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    error: (error, stackTrace) =>
+                        Center(child: Text(error.toString())),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     data: (data) {
                       return data.isNotEmpty
                           ? ListView.builder(
@@ -172,8 +166,9 @@ class TorunamentPlan extends ConsumerWidget {
                                         top: 16.0,
                                       ),
                                       child: Text(
-                                        DateFormat.MMMM()
-                                            .format(data[index].dateFrom),
+                                        DateFormat.MMMM().format(
+                                          data[index].dateFrom,
+                                        ),
                                         style: TextStyle(
                                           color: colorThemeState.secondaryColor,
                                           fontSize: 24,
@@ -181,9 +176,7 @@ class TorunamentPlan extends ConsumerWidget {
                                         ),
                                       ),
                                     ),
-                                  TournamentWidget(
-                                    tournament: data[index],
-                                  ),
+                                  TournamentWidget(tournament: data[index]),
                                 ],
                               ),
                             )
@@ -201,17 +194,16 @@ class TorunamentPlan extends ConsumerWidget {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
+                                  const SizedBox(height: 16),
                                   Material(
                                     color: colorThemeState.primaryColor,
                                     borderRadius: BorderRadius.circular(12),
                                     child: InkWell(
                                       onTap: () {
                                         ref
-                                            .read(tournamentFilterProvider
-                                                .notifier)
+                                            .read(
+                                              tournamentFilterProvider.notifier,
+                                            )
                                             .state = {
                                           "age": null,
                                           "agegroupids": ["0"],
@@ -226,7 +218,7 @@ class TorunamentPlan extends ConsumerWidget {
                                           "points": null,
                                           "publicseasonplan": true,
                                           "regionids": null,
-                                          "seasonid": "2023",
+                                          "seasonid": season,
                                           "selectclientfunction": null,
                                           "showleague": true,
                                           "strfrom": "",

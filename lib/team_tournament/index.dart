@@ -13,29 +13,27 @@ StateProvider<int> currentIndex = StateProvider((ref) => 0);
 
 StateProvider<Map<String, dynamic>> teamTournamentFilterProvider =
     StateProvider<Map<String, dynamic>>((ref) {
-  return {
-    "region": null,
-    "year": null,
-    "club": null,
-    "matchNumber": null,
-    "season": "2023",
-  };
-});
+      return {
+        "region": null,
+        "year": null,
+        "club": null,
+        "matchNumber": null,
+        "season": season,
+      };
+    });
 
 StateProvider<bool> showingSearch = StateProvider((ref) => false);
 
 FutureProvider<List<Map<String, String>>> seasonPlanFutureProvider =
     FutureProvider<List<Map<String, String>>>((ref) async {
-  final result = await getSetupTeamTournaments();
-  return result;
-});
+      final result = await getSetupTeamTournaments();
+      return result;
+    });
 
 late TabController tabController;
 
 class TeamTournamentPage extends ConsumerStatefulWidget {
-  const TeamTournamentPage({
-    super.key,
-  });
+  const TeamTournamentPage({super.key});
 
   @override
   TeamTournamentPageState createState() => TeamTournamentPageState();
@@ -76,10 +74,7 @@ class TeamTournamentPageState extends ConsumerState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 16,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -99,9 +94,7 @@ class TeamTournamentPageState extends ConsumerState
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                const SizedBox(
-                  width: 16,
-                ),
+                const SizedBox(width: 16),
                 TabBarLabel(
                   label: "Badminton Kreds",
                   index: 0,
@@ -133,15 +126,11 @@ class TeamTournamentPageState extends ConsumerState
                   const SearchByNumber(),
                 ],
               ),
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) => Center(
                 child: Text(
                   "Der skete en fejl",
-                  style: TextStyle(
-                    color: colorThemeState.secondaryColor,
-                  ),
+                  style: TextStyle(color: colorThemeState.secondaryColor),
                 ),
               ),
             ),

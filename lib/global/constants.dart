@@ -66,3 +66,7 @@ StateProvider<TeamTournamentFilter> teamTournamentSearchFilterProvider =
         subPage: "",
       );
     });
+
+String season = DateTime.now().month >= 7
+    ? "${DateTime.now().year + 1}"
+    : "${DateTime.now().year}";
