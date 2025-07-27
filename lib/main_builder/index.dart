@@ -26,7 +26,7 @@ class MainBuilder extends ConsumerWidget {
 
     return Scaffold(
       body: pages[indexState],
-      backgroundColor: Colors.white, //TODO REMOVE!
+      backgroundColor: colorThemeState.backgroundColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indexState,
@@ -36,22 +36,13 @@ class MainBuilder extends ConsumerWidget {
         backgroundColor: colorThemeState.backgroundColor,
         onTap: (value) => ref.read(index.notifier).state = value,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Hjem',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Hjem'),
           BottomNavigationBarItem(
             icon: Icon(Icons.format_list_numbered_outlined),
             label: 'Rangliste',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Holdkamp',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profil',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Holdkamp'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),
     );
