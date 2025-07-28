@@ -10,15 +10,14 @@ Future<int> getPlayerPlacement(String id) async {
 
   response = await http.post(
     Uri.parse(
-        "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetRankingListPlayers"),
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
+      "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetRankingListPlayers",
+    ),
+    headers: {"Content-Type": "application/json; charset=UTF-8"},
     body: json.encode({
       "callbackcontextkey": contextKey,
       "rankinglistagegroupid": "",
       "rankinglistid": "287",
-      "seasonid": "2024",
+      "seasonid": season,
       "rankinglistversiondate": "",
       "agegroupid": "",
       "classid": "",
@@ -39,7 +38,7 @@ Future<int> getPlayerPlacement(String id) async {
       "pageindex": 0,
       "sortfield": 0,
       "getversions": true,
-      "getplayer": true
+      "getplayer": true,
     }),
   );
 

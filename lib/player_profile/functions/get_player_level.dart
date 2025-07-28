@@ -17,7 +17,7 @@ Future<List<int>> getPlayerLevel(String id, String name) async {
 
   while (stepLength > 1) {
     List<int> intervals = [
-      for (int i = minimum; i <= maximum; i += stepLength) i
+      for (int i = minimum; i <= maximum; i += stepLength) i,
     ];
 
     List<Future<Result>> futures = intervals.map((start) async {
@@ -55,15 +55,14 @@ Future<List<int>> getPlayerLevel(String id, String name) async {
 Future<Result> containsName(String id, String name, int start, int end) async {
   http.Response response = await http.post(
     Uri.parse(
-        "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetRankingListPlayers"),
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
+      "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetRankingListPlayers",
+    ),
+    headers: {"Content-Type": "application/json; charset=UTF-8"},
     body: json.encode({
       "callbackcontextkey": contextKey,
       "rankinglistagegroupid": "",
       "rankinglistid": "287",
-      "seasonid": "2024",
+      "seasonid": season,
       "rankinglistversiondate": "",
       "agegroupid": "",
       "classid": "",
@@ -84,7 +83,7 @@ Future<Result> containsName(String id, String name, int start, int end) async {
       "pageindex": 0,
       "sortfield": 0,
       "getversions": true,
-      "getplayer": true
+      "getplayer": true,
     }),
   );
 
@@ -94,10 +93,7 @@ Future<Result> containsName(String id, String name, int start, int end) async {
       Document row = html_parser.parse(rawHTML);
       for (Element element in row.querySelectorAll('tr')) {
         if (element.text.toLowerCase().contains(name.toLowerCase())) {
-          return Result(
-            true,
-            int.parse(element.querySelector('.rank')!.text),
-          );
+          return Result(true, int.parse(element.querySelector('.rank')!.text));
         }
       }
     }

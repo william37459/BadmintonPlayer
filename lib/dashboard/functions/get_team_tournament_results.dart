@@ -10,22 +10,22 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
   String contextKey,
   List<String>? matchIds,
 ) async {
-  List<Future<List<TeamTournamentResultPreview>>> futures =
-      leagues.map((league) async {
+  List<Future<List<TeamTournamentResultPreview>>> futures = leagues.map((
+    league,
+  ) async {
     List<TeamTournamentResultPreview> results = [];
     List<String> leagueAttributes = league.split(",");
     http.Response response = await http.post(
       Uri.parse(
         "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetLeagueStanding",
       ),
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
+      headers: {"Content-Type": "application/json; charset=UTF-8"},
       body: json.encode({
         "ageGroupID": leagueAttributes[3],
         "clubID": matchIds != null ? "" : leagueAttributes[8],
-        "leagueGroupID":
-            matchIds != null ? leagueAttributes[2] : leagueAttributes[5],
+        "leagueGroupID": matchIds != null
+            ? leagueAttributes[2]
+            : leagueAttributes[5],
         "seasonID": leagueAttributes[1],
         "leagueGroupTeamID": "",
         "leagueMatchID": matchIds != null ? leagueAttributes[6] : "",
@@ -66,9 +66,10 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
 
   // Wait for all requests to complete
   List<TeamTournamentResultPreview> results = [
-    for (List<TeamTournamentResultPreview> result
-        in (await Future.wait(futures)))
-      ...result
+    for (List<TeamTournamentResultPreview> result in (await Future.wait(
+      futures,
+    )))
+      ...result,
   ];
 
   Set<String> seenMatchNumbers = {};

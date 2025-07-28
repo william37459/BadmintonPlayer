@@ -20,67 +20,60 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 FutureProvider<List<PlayerProfile>> playerProfilePreviewProvider =
     FutureProvider<List<PlayerProfile>>((ref) async {
-  List<String>? ids = ref.watch(favouritePlayers);
+      List<String>? ids = ref.watch(favouritePlayers);
 
-  final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+      final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
-  if (ids == null) {
-    ref.read(favouritePlayers.notifier).state =
-        await asyncPrefs.getStringList("favouritePlayers") ?? [];
-  }
+      if (ids == null) {
+        ref.read(favouritePlayers.notifier).state =
+            await asyncPrefs.getStringList("favouritePlayers") ?? [];
+      }
 
-  List<Future<PlayerProfile?>> futures = ids!.map((id) async {
-    return await getPlayerProfilePreview(
-      id,
-      contextKey,
-      ref,
-    );
-  }).toList();
+      List<Future<PlayerProfile?>> futures = ids!.map((id) async {
+        return await getPlayerProfilePreview(id, contextKey, ref);
+      }).toList();
 
-  // Wait for all requests to complete
-  List<PlayerProfile?> result = await Future.wait(futures);
+      // Wait for all requests to complete
+      List<PlayerProfile?> result = await Future.wait(futures);
 
-  result.removeWhere((element) => element == null);
+      result.removeWhere((element) => element == null);
 
-  await asyncPrefs.setStringList(
-    'playerScores',
-    result.map((e) => "${e!.id}:${e.startLevel}:${e.name}").toList(),
-  );
+      await asyncPrefs.setStringList(
+        'playerScores',
+        result.map((e) => "${e!.id}:${e.startLevel}:${e.name}").toList(),
+      );
 
-  return result.cast<PlayerProfile>();
-});
+      return result.cast<PlayerProfile>();
+    });
 
 FutureProvider<List<dynamic>> tournamentResultPreviewProvider =
     FutureProvider<List<dynamic>>((ref) async {
-  List<String>? ids = ref.watch(favouritePlayers);
-  if (ids == null) {
-    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-    ref.read(favouritePlayers.notifier).state =
-        await asyncPrefs.getStringList("favouritePlayers") ?? [];
-  }
-  final result = await getTournamentResultsPreview(
-    ids ?? [],
-    contextKey,
-  );
-  return result;
-});
+      List<String>? ids = ref.watch(favouritePlayers);
+      if (ids == null) {
+        final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+        ref.read(favouritePlayers.notifier).state =
+            await asyncPrefs.getStringList("favouritePlayers") ?? [];
+      }
+      final result = await getTournamentResultsPreview(ids ?? [], contextKey);
+      return result;
+    });
 
 FutureProvider<List<TeamTournamentResultPreview>> teamTournamentResultProvider =
     FutureProvider<List<TeamTournamentResultPreview>>((ref) async {
-  List<String>? teamIds = ref.watch(favouriteTeams);
-  if (teamIds == null) {
-    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-    ref.read(favouriteTeams.notifier).state =
-        await asyncPrefs.getStringList("favouriteTeams") ?? [];
-  }
+      List<String>? teamIds = ref.watch(favouriteTeams);
+      if (teamIds == null) {
+        final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+        ref.read(favouriteTeams.notifier).state =
+            await asyncPrefs.getStringList("favouriteTeams") ?? [];
+      }
 
-  final result = await getTeamTournamentResults(
-    teamIds ?? [],
-    contextKey,
-    null,
-  );
-  return result;
-});
+      final result = await getTeamTournamentResults(
+        teamIds ?? [],
+        contextKey,
+        null,
+      );
+      return result;
+    });
 
 class Dashboard extends ConsumerWidget {
   final ScrollController scrollController = ScrollController();
@@ -101,9 +94,7 @@ class Dashboard extends ConsumerWidget {
               bottom: Radius.circular(16),
             ),
           ),
-          padding: const EdgeInsets.only(
-            bottom: 32.0,
-          ),
+          padding: const EdgeInsets.only(bottom: 32.0),
           child: SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,8 +106,9 @@ class Dashboard extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: colorThemeState.secondaryFontColor
-                          .withValues(alpha: 0.8),
+                      color: colorThemeState.secondaryFontColor.withValues(
+                        alpha: 0.8,
+                      ),
                     ),
                   ),
                 ),
@@ -132,10 +124,8 @@ class Dashboard extends ConsumerWidget {
                   ),
                 ),
                 ConsumerPreviewWidget(
-                  child: (dynamic result) => TournamentPreviewWidget(
-                    tournament: result,
-                    width: 200,
-                  ),
+                  child: (dynamic result) =>
+                      TournamentPreviewWidget(tournament: result, width: 200),
                   provider: seasonPlanFutureProvider,
                   errorText: 'Ingen kommende turneringer',
                 ),
@@ -144,8 +134,9 @@ class Dashboard extends ConsumerWidget {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: AddInfoPreview(
-                      onTap: () => Navigator.of(context)
-                          .pushNamed('/TournamentOverviewPage'),
+                      onTap: () => Navigator.of(
+                        context,
+                      ).pushNamed('/TournamentOverviewPage'),
                       text: 'Se alle turneringer',
                       icon: Icons.info,
                       color: colorThemeState.secondaryFontColor,
@@ -161,9 +152,7 @@ class Dashboard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16.0,
@@ -180,9 +169,7 @@ class Dashboard extends ConsumerWidget {
                       AddInfoPreview(
                         onTap: () => Navigator.of(context).pushNamed(
                           '/PlayerSearchPage',
-                          arguments: {
-                            'favouriteMode': true,
-                          },
+                          arguments: {'favouriteMode': true},
                         ),
                         text: "Tilføj spillere",
                         icon: Icons.add,
@@ -191,15 +178,12 @@ class Dashboard extends ConsumerWidget {
                   ),
                 ),
                 ConsumerPreviewWidget(
-                  child: (dynamic result) => PlayerPreviewWidget(
-                    profile: result,
-                  ),
+                  child: (dynamic result) =>
+                      PlayerPreviewWidget(profile: result),
                   provider: playerProfilePreviewProvider,
                   errorText: 'Ingen favorit spillere',
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
@@ -223,12 +207,12 @@ class Dashboard extends ConsumerWidget {
                             "leagueMatchID": "",
                             "playerID": "",
                             "regionID": "",
-                            "seasonID": "2024",
-                            "subPage": "6"
+                            "seasonID": season,
+                            "subPage": "6",
                           });
-                          Navigator.of(context).pushNamed(
-                            '/TeamTournamentSearchPage',
-                          );
+                          Navigator.of(
+                            context,
+                          ).pushNamed('/TeamTournamentSearchPage');
                         },
                         text: "Tilføj hold",
                         icon: Icons.add,
@@ -244,9 +228,7 @@ class Dashboard extends ConsumerWidget {
                   provider: teamTournamentResultProvider,
                   errorText: 'Ingen holdkamp resultater',
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: PreviewHeader(
@@ -255,18 +237,17 @@ class Dashboard extends ConsumerWidget {
                   ),
                 ),
                 ConsumerPreviewWidget(
-                  child: (dynamic result) => TournamentResultPreviewWidget(
-                    result: result,
-                  ),
+                  child: (dynamic result) =>
+                      TournamentResultPreviewWidget(result: result),
                   provider: tournamentResultPreviewProvider,
                   errorText:
                       'Der er ingen resultater for turneringer i den her sæson',
                   axis: Axis.vertical,
-                )
+                ),
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

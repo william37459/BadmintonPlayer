@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/dashboard/classes/tournament_result_preview.dart';
+import 'package:app/global/constants.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
@@ -16,16 +17,14 @@ Future<List<TournamentResultPreview>> getTournamentResultsPreview(
       Uri.parse(
         "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetPlayerProfile",
       ),
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
+      headers: {"Content-Type": "application/json; charset=UTF-8"},
       body: json.encode({
         "callbackcontextkey": contextKey,
         "getplayerdata": true,
         "playerid": id,
-        "seasonid": "2024",
+        "seasonid": season,
         "showUserProfile": true,
-        "showheader": false
+        "showheader": false,
       }),
     );
 
@@ -53,9 +52,7 @@ Future<List<TournamentResultPreview>> getTournamentResultsPreview(
           .sublist(1);
 
       for (var row in allRows) {
-        results.add(
-          TournamentResultPreview.fromElement(row),
-        );
+        results.add(TournamentResultPreview.fromElement(row));
       }
     }
   }

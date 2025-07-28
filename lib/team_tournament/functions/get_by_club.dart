@@ -2,33 +2,32 @@ import 'dart:convert';
 
 import 'package:app/global/classes/team_tournament_club.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
+import 'package:app/global/constants.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 
 Future<List<TeamTournamentClub>> getByClub(
-    String contextKey, String clubId) async {
+  String contextKey,
+  String clubId,
+) async {
   http.Response response = await http.post(
     Uri.parse(
       "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetLeagueStanding",
     ),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: json.encode(
-      {
-        "callbackcontextkey": contextKey,
-        "subPage": 6,
-        "seasonID": "2024",
-        "leagueGroupID": null,
-        "ageGroupID": null,
-        "regionID": null,
-        "leagueGroupTeamID": null,
-        "leagueMatchID": null,
-        "clubID": clubId,
-        "playerID": null
-      },
-    ),
+    headers: {"Content-Type": "application/json; charset=utf-8"},
+    body: json.encode({
+      "callbackcontextkey": contextKey,
+      "subPage": 6,
+      "seasonID": season,
+      "leagueGroupID": null,
+      "ageGroupID": null,
+      "regionID": null,
+      "leagueGroupTeamID": null,
+      "leagueMatchID": null,
+      "clubID": clubId,
+      "playerID": null,
+    }),
   );
 
   List<TeamTournamentClub> results = [];

@@ -1,13 +1,11 @@
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/profile.dart';
-import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/modal_bottom_sheet.dart';
 import 'package:app/player_profile_search/index.dart';
 import 'package:app/calendar/index.dart';
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/custom_date_picker.dart';
 import 'package:app/calendar/widgets/custom_input.dart';
-import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

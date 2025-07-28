@@ -18,17 +18,18 @@ Map<String, String> monthToNumber = {
 };
 
 Future<List<Tournament>> getSeasonPlan(
-    Map filterValues, String contextKey) async {
-  Map localFilterValues = {
-    ...filterValues,
-  };
+  Map filterValues,
+  String contextKey,
+) async {
+  Map localFilterValues = {...filterValues};
 
   localFilterValues["ageGroupList"] = filterValues["ageGroupList"].isEmpty
       ? []
       : [filterValues["ageGroupList"]];
 
-  localFilterValues["classIdList"] =
-      filterValues["classIdList"].isEmpty ? [] : [filterValues["classIdList"]];
+  localFilterValues["classIdList"] = filterValues["classIdList"].isEmpty
+      ? []
+      : [filterValues["classIdList"]];
 
   if (filterValues.containsKey("clubIds")) {
     if (filterValues["clubIds"] is List) {
@@ -49,34 +50,10 @@ Future<List<Tournament>> getSeasonPlan(
     filterValues.remove("dateTo");
   }
 
-  if (filterValues.containsKey("dateFrom")) {
-    List<String> dateValues = filterValues['dateFrom'].split("-");
-    dateValues[0] = dateValues[0].padLeft(2, "0");
-    dateValues[1] = dateValues[1].padLeft(2, "0");
-
-    localFilterValues["dateFrom"] =
-        "${dateValues.reversed.join("-")}T00:00:00.000Z";
-  }
-
-  if (filterValues.containsKey("dateTo")) {
-    List<String> dateValues = filterValues['dateTo'].split("-");
-    dateValues[0] = dateValues[0].padLeft(2, "0");
-    dateValues[1] = dateValues[1].padLeft(2, "0");
-
-    localFilterValues["dateTo"] =
-        "${dateValues.reversed.join("-")}T00:00:00.000Z";
-  }
-
   http.Response response = await http.patch(
-    Uri.parse(
-      "https://badmintonplayer.dk/api/Tournament",
-    ),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: json.encode({
-      ...localFilterValues,
-    }),
+    Uri.parse("https://badmintonplayer.dk/api/Tournament"),
+    headers: {"Content-Type": "application/json; charset=utf-8"},
+    body: json.encode({...localFilterValues}),
   );
 
   List<Tournament> tournamentList = [];

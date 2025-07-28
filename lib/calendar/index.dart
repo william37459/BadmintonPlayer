@@ -19,7 +19,8 @@ StateProvider<Map<String, dynamic>> tournamentFilterProvider =
         "clubIds": [],
         "firstRow": 0,
         "maxCount": 100,
-        "seasonId": 2024,
+        "seasonId": season,
+        "dateFrom": DateTime.now().toIso8601String(),
       },
     );
 
@@ -44,99 +45,94 @@ class TorunamentPlan extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
 
     return Scaffold(
+      backgroundColor: colorThemeState.backgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                "Kalender",
+                "Sæsonplan",
                 style: TextStyle(
-                  color: colorThemeState.secondaryColor,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w600,
+                  color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
+
             // const ToggleSwitchButton(
             //   label1: "Sæsonplan",
             //   label2: "Turneringer",
             //   enabled: true,
             // ),
-            CustomContainer(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 8.0,
-              ),
-              margin: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        final futureAsyncValue = ref.watch(
-                          seasonPlanFutureProvider,
-                        );
-                        return futureAsyncValue.when(
-                          error: (error, stackTrace) =>
-                              Center(child: Text(error.toString())),
-                          loading: () => CustomAutoFill(
+            Row(
+              children: [
+                Expanded(
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final futureAsyncValue = ref.watch(
+                        seasonPlanFutureProvider,
+                      );
+                      return futureAsyncValue.when(
+                        error: (error, stackTrace) =>
+                            Center(child: Text(error.toString())),
+                        loading: () => CustomAutoFill(
+                          provider: tournamentFilterProvider,
+                          providerKey: "clubIds",
+                          hint: "Henter arrangører",
+                          suggestions: const [],
+                          converter: const {},
+                        ),
+                        data: (data) {
+                          return CustomAutoFill(
                             provider: tournamentFilterProvider,
                             providerKey: "clubIds",
-                            hint: "Henter arrangører",
-                            suggestions: const [],
-                            converter: const {},
-                          ),
-                          data: (data) {
-                            return CustomAutoFill(
-                              provider: tournamentFilterProvider,
-                              providerKey: "clubIds",
-                              hint: "Søg efter arrangør",
-                              suggestions: data.isEmpty
-                                  ? []
-                                  : data
-                                        .map((element) => element.clubName)
-                                        .toSet()
-                                        .toList(),
-                              converter: data.isEmpty
-                                  ? {}
-                                  : {
-                                      for (var element in data)
-                                        element.clubName.toString():
-                                            element.clubID,
-                                    },
-                            );
-                          },
-                        );
-                      },
+                            hint: "Søg efter arrangør",
+                            suggestions: data.isEmpty
+                                ? []
+                                : data
+                                      .map((element) => element.clubName)
+                                      .toSet()
+                                      .toList(),
+                            converter: data.isEmpty
+                                ? {}
+                                : {
+                                    for (var element in data)
+                                      element.clubName.toString():
+                                          element.clubID,
+                                  },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      ref.read(isExpandedProvider.notifier).state = {};
+
+                      for (String key
+                          in ref.read(tournamentFilterProvider).keys) {
+                        ref.read(isExpandedProvider.notifier).state = {
+                          ...ref.read(isExpandedProvider.notifier).state,
+                          key: false,
+                        };
+                      }
+
+                      showFilterModalSheet(context, colorThemeState, ref);
+                    },
+                    child: Icon(
+                      Icons.tune,
+                      size: 18,
+                      color: colorThemeState.secondaryColor,
                     ),
                   ),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        ref.read(isExpandedProvider.notifier).state = {};
-
-                        for (String key
-                            in ref.read(tournamentFilterProvider).keys) {
-                          ref.read(isExpandedProvider.notifier).state = {
-                            ...ref.read(isExpandedProvider.notifier).state,
-                            key: false,
-                          };
-                        }
-
-                        showFilterModalSheet(context, colorThemeState, ref);
-                      },
-                      child: Icon(
-                        Icons.tune,
-                        size: 18,
-                        color: colorThemeState.secondaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             Expanded(
               child: Consumer(
