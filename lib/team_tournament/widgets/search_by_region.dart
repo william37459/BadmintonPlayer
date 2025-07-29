@@ -36,7 +36,7 @@ class SearchByRegion extends ConsumerWidget {
           Row(
             children: [
               Flexible(
-                flex: 2,
+                flex: 5,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: CustomDropDownSelector<Map<String, dynamic>>(
@@ -66,7 +66,7 @@ class SearchByRegion extends ConsumerWidget {
                 ),
               ),
               Flexible(
-                flex: 1,
+                flex: 4,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: CustomDropDownSelector(
