@@ -53,7 +53,6 @@ class TournamentParticipationList extends ConsumerWidget {
     AsyncValue<List<Participant>> futureAsyncValue = ref.watch(
       tournamentParticipationProvider,
     );
-    Map<String, String> rankFilterProviderState = ref.watch(rankFilterProvider);
 
     return Scaffold(
       backgroundColor: colorThemeState.backgroundColor,
