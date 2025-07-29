@@ -1,446 +1,230 @@
+import 'package:app/global/classes/club.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/profile.dart';
-import 'package:app/global/widgets/modal_bottom_sheet.dart';
-import 'package:app/player_profile_search/index.dart';
-import 'package:app/calendar/index.dart';
-import 'package:app/global/widgets/custom_container.dart';
-import 'package:app/calendar/widgets/custom_date_picker.dart';
-import 'package:app/calendar/widgets/custom_input.dart';
+import 'package:app/global/classes/search_filters/age_group.dart';
+import 'package:app/global/classes/search_filters/class_group.dart';
+import 'package:app/global/classes/search_filters/region.dart';
+import 'package:app/global/classes/search_filters/seasons.dart';
+import 'package:app/global/constants.dart';
+import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void showFilterModalSheet(
+Future<Map<String, dynamic>> showFilterModalSheet(
   BuildContext context,
   CustomColorTheme colorThemeState,
   WidgetRef ref,
-) {
-  final StateProvider<Profile?> selectedPlayer = StateProvider<Profile?>(
-    (ref) => null,
-  );
-  showModalBottomSheet(
-    backgroundColor: Colors.transparent,
-    context: context,
-    builder: (context) => FilterBottomSheet(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Sæson",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-        ),
-        // CustomContainer(
-        //   padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        //   margin: const EdgeInsets.symmetric(horizontal: 12.0),
-        //   child: CustomDropDownSelector(
-        //     data: {
-        //       for (var element in seasonPlanSearchFilters['seasons'] ?? [])
-        //         element.seasonId.toString(): element.name
-        //     },
-        //     onChanged: (value) {
-        //       ref.read(tournamentFilterProvider.notifier).state = {
-        //         ...ref.read(tournamentFilterProvider.notifier).state,
-        //         "seasonid": value,
-        //       };
-        //     },
-        //     initalValue: "Vælg sæson",
-        //     hint: "Vælg sæson",
-        //   ),
-        // ),
-        const SizedBox(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Årgang",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-        ),
-        // CustomContainer(
-        //   padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        //   margin: const EdgeInsets.symmetric(horizontal: 12.0),
-        //   child: CustomDropDownSelector(
-        //     data: {
-        //       for (var element in seasonPlanSearchFilters['ageGroups'] ?? [])
-        //         element.ageGroupId.toString(): element.ageGroupName
-        //     },
-        //     onChanged: (value) {
-        //       ref.read(tournamentFilterProvider.notifier).state = {
-        //         ...ref.read(tournamentFilterProvider.notifier).state,
-        //         "agegroupid": value,
-        //       };
-        //     },
-        //     initalValue: "Vælg årgang",
-        //     hint: "Årgang",
-        //   ),
-        // ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Række",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-        ),
-        // CustomContainer(
-        //   padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        //   margin: const EdgeInsets.symmetric(horizontal: 12.0),
-        //   child: CustomDropDownSelector(
-        //     data: {
-        //       for (var element in seasonPlanSearchFilters['class'] ?? [])
-        //         element.classID.toString(): element.className,
-        //     },
-        //     onChanged: (value) {
-        //       ref.read(tournamentFilterProvider.notifier).state = {
-        //         ...ref.read(tournamentFilterProvider.notifier).state,
-        //         "classid": value,
-        //       };
-        //     },
-        //     initalValue: "Vælg række",
-        //     hint: "Række",
-        //   ),
-        // ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Dato",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: CustomDatePicker(
-                  providerKey: "dateFrom",
-                  provider: tournamentFilterProvider,
-                  hintText: "Start dato",
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: Icon(
-                  Icons.more_horiz,
-                  color: colorThemeState.primaryColor,
-                ),
-              ),
-              Expanded(
-                child: CustomDatePicker(
-                  providerKey: "dateTo",
-                  provider: tournamentFilterProvider,
-                  hintText: "Slut dato",
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Uge",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: CustomInput(
-                hint: "Start uge",
-                providerKey: "strweekno",
-                provider: tournamentFilterProvider,
-                inputType: TextInputType.number,
-                min: 1,
-                max: 53,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              child: Icon(
-                Icons.more_horiz,
-                color: colorThemeState.primaryColor,
-              ),
-            ),
-            Expanded(
-              child: CustomInput(
-                min: 1,
-                max: 53,
-                hint: "Slut uge",
-                providerKey: "strweekno2",
-                provider: tournamentFilterProvider,
-                inputType: TextInputType.number,
-              ),
-            ),
-            const SizedBox(width: 16.0),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Område",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-        ),
-        // CustomContainer(
-        //   margin: const EdgeInsets.symmetric(horizontal: 16.0),
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: CustomDropDownSelector(
-        //     data: {
-        //       for (var element in seasonPlanSearchFilters['geoRegions'] ?? [])
-        //         element.geoRegionID.toString(): element.name,
-        //     },
-        //     onChanged: (value) {
-        //       ref.read(tournamentFilterProvider.notifier).state = {
-        //         ...ref.read(tournamentFilterProvider.notifier).state,
-        //         "georegionid": value,
-        //       };
-        //     },
-        //     initalValue: "Vælg område",
-        //     hint: "Område",
-        //   ),
-        // ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Turneringer i din egn",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: colorThemeState.secondaryColor,
-            ),
-          ),
-        ),
-        // CustomContainer(
-        //   margin: const EdgeInsets.symmetric(horizontal: 16.0),
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: CustomDropDownSelector(
-        //     data: {
-        //       for (var element in seasonPlanSearchFilters['regions'] ?? [])
-        //         element.regionId.toString(): element.name,
-        //     },
-        //     onChanged: (value) {
-        //       ref.read(tournamentFilterProvider.notifier).state = {
-        //         ...ref.read(tournamentFilterProvider.notifier).state,
-        //         "regionids": value,
-        //       };
-        //     },
-        //     initalValue: "Vælg område",
-        //     hint: "Turneringer i din egn",
-        //   ),
-        // ),
-        const SizedBox(height: 16),
-        Consumer(
-          builder: (context, ref, child) {
-            final birthdate = ref.watch(
-              tournamentFilterProvider.select((value) => value['birthdate']),
-            );
-            final age = ref.watch(
-              tournamentFilterProvider.select((value) => value['age']),
-            );
-            final gender = ref.watch(
-              tournamentFilterProvider.select((value) => value['gender']),
-            );
-            final points = ref.watch(
-              tournamentFilterProvider.select((value) => value['points']),
-            );
+) async {
+  final StateProvider<Profile?> selectedPlayerProvider =
+      StateProvider<Profile?>((ref) => null);
 
-            return AnimatedOpacity(
-              opacity:
-                  (birthdate != null && birthdate.isNotEmpty) ||
-                      (age != null && age.isNotEmpty) ||
-                      (gender != null && gender.isNotEmpty) ||
-                      (points != null && points.isNotEmpty)
-                  ? 0.5
-                  : 1,
-              duration: const Duration(milliseconds: 250),
-              child: AbsorbPointer(
-                absorbing:
-                    (birthdate != null && birthdate.isNotEmpty) ||
-                    (age != null && age.isNotEmpty) ||
-                    (gender != null && gender.isNotEmpty) ||
-                    (points != null && points.isNotEmpty),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+  Map<String, dynamic> filter = {
+    "seasonId": null,
+    "ageGroupList": [],
+    "classIdList": [],
+    "clubIds": null,
+    "geoRegionIdList": null,
+    "playerId": null,
+  };
+
+  await showDialog(
+    context: context,
+    builder: (context) => Center(
+      child: Material(
+        borderRadius: BorderRadius.circular(8),
+        color: colorThemeState.backgroundColor,
+        child: FractionallySizedBox(
+          widthFactor: 0.9,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        "Spiller",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: colorThemeState.secondaryColor,
+                    const Icon(Icons.close, color: Colors.transparent),
+                    const Text("Filtrer", style: TextStyle(fontSize: 20)),
+                    InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+                const Text("Sæson"),
+                CustomDropDownSelector<Season>(
+                  itemAsString: (season) => season.name,
+                  items: (filter, props) =>
+                      seasonPlanSearchFilter.seasons.reversed.toList(),
+                  hint: "Vælg sæson",
+                  onChanged: (season) =>
+                      filter["seasonId"] = season.seasonId.toString(),
+                  compareFn: (season1, season2) => season1.name == season2.name,
+                ),
+                const SizedBox(height: 12),
+                const Text("Årgang"),
+                CustomDropDownSelector<AgeGroup>(
+                  isMultiSelect: true,
+                  itemAsString: (item) => item.ageGroupName,
+                  items: (filter, props) => seasonPlanSearchFilter.ageGroups,
+                  hint: "Vælg årgange",
+                  onChanged: (item) => print(item),
+                  compareFn: (item1, item2) =>
+                      item1.ageGroupName == item2.ageGroupName,
+                ),
+                const SizedBox(height: 12),
+                const Text("Række"),
+                CustomDropDownSelector(
+                  itemAsString: (item) => (item).className,
+                  items: (filter, props) => seasonPlanSearchFilter.classGroups,
+                  hint: "Vælg rækker",
+                  onChanged: (item) => print(item),
+                  isMultiSelect: true,
+                  compareFn: (item1, item2) =>
+                      (item1).className == (item2).className,
+                  itemBuilder: (context, item, isDisabled, isSelected) =>
+                      ListTile(
+                        title: Text(
+                          (item).className,
+                          style: TextStyle(color: colorThemeState.fontColor),
                         ),
                       ),
-                    ),
-                    CustomContainer(
-                      padding: const EdgeInsets.all(8.0),
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 2,
+                ),
+                const SizedBox(height: 12),
+                const Text("Arrangør"),
+                CustomDropDownSelector(
+                  itemAsString: (item) => (item).clubName,
+                  items: (filter, props) => clubs,
+                  hint: "Vælg sæson",
+                  onChanged: (item) =>
+                      filter["clubIds"] = (item as Club).clubId.toString(),
+                  compareFn: (item1, item2) =>
+                      (item1).clubName == (item2).clubName,
+                  itemBuilder: (context, item, isDisabled, isSelected) =>
+                      ListTile(
+                        title: Text(
+                          (item).clubName,
+                          style: TextStyle(color: colorThemeState.fontColor),
+                        ),
                       ),
+                ),
+
+                const SizedBox(height: 12),
+                const Text("Område"),
+                CustomDropDownSelector(
+                  itemAsString: (item) => (item).name,
+                  items: (filter, props) => seasonPlanSearchFilter.geoRegions,
+                  hint: "Vælg område",
+                  onChanged: (item) => filter["geoRegionIdList"] =
+                      (item as GeoRegion).geoRegionID.toString(),
+                  compareFn: (item1, item2) => (item1).name == (item2).name,
+                  itemBuilder: (context, item, isDisabled, isSelected) =>
+                      ListTile(
+                        title: Text(
+                          (item).name,
+                          style: TextStyle(color: colorThemeState.fontColor),
+                        ),
+                      ),
+                ),
+
+                const SizedBox(height: 12),
+                const Text("Spiller"),
+                Container(
+                  height: 41,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: colorThemeState.inputFieldColor,
+                    borderRadius: BorderRadius.circular(48),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(48),
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
                       onTap: () async {
-                        Profile? value = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const PlayerSearch(),
-                          ),
-                        );
-                        ref.read(selectedPlayer.notifier).state = value;
-                        ref.read(tournamentFilterProvider.notifier).state = {
-                          ...ref.read(tournamentFilterProvider.notifier).state,
-                          "playerid": value?.id ?? "",
-                        };
+                        Profile? selectedPlayer =
+                            await Navigator.of(context).pushNamed(
+                                  "/PlayerSearchPage",
+                                  arguments: {"shouldReturnPlayer": true},
+                                )
+                                as Profile?;
+                        ref.read(selectedPlayerProvider.notifier).state =
+                            selectedPlayer;
+                        filter["geoRegionIdList"] = selectedPlayer?.id;
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Consumer(
-                            builder: (context, ref, child) {
-                              Profile? selectedProfileState = ref.watch(
-                                selectedPlayer,
-                              );
-                              return Text(selectedProfileState?.name ?? "");
-                            },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Consumer(
+                                  builder: (context, ref, child) {
+                                    Profile? selectedPlayer = ref.watch(
+                                      selectedPlayerProvider,
+                                    );
+                                    return Text(
+                                      selectedPlayer?.name ?? "Vælg spiller",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: colorThemeState.fontColor
+                                            .withValues(
+                                              alpha: selectedPlayer == null
+                                                  ? 0.5
+                                                  : 1,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right_sharp,
+
+                                color: colorThemeState.fontColor.withValues(
+                                  alpha: 0.5,
+                                ),
+                              ),
+                            ],
                           ),
-                          InkWell(
-                            onTap: () {
-                              ref.read(selectedPlayer.notifier).state = null;
-                              ref
-                                  .read(tournamentFilterProvider.notifier)
-                                  .state = {
-                                ...ref
-                                    .read(tournamentFilterProvider.notifier)
-                                    .state,
-                                "playerid": "",
-                              };
-                            },
-                            child: const Icon(Icons.clear, color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Material(
+                    color: colorThemeState.primaryColor,
+                    borderRadius: BorderRadius.circular(32),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(filter);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          "Søg",
+                          style: TextStyle(
+                            color: colorThemeState.secondaryFontColor,
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            );
-          },
+              ],
+            ),
+          ),
         ),
-        const SizedBox(height: 16),
-        Consumer(
-          builder: (context, ref, child) {
-            final playerid = ref.watch(
-              tournamentFilterProvider.select((value) => value['playerid']),
-            );
-            return AnimatedOpacity(
-              opacity: playerid != null && playerid.isNotEmpty ? 0.5 : 1,
-              duration: const Duration(milliseconds: 250),
-              child: AbsorbPointer(
-                absorbing: playerid != null && playerid.isNotEmpty,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        "Fødselsdato",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: colorThemeState.secondaryColor,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: CustomDatePicker(
-                        providerKey: "birthdate",
-                        provider: tournamentFilterProvider,
-                        hintText: "Fødselsdag",
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        "Alder",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: colorThemeState.secondaryColor,
-                        ),
-                      ),
-                    ),
-                    CustomContainer(
-                      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: CustomInput(
-                        providerKey: "age",
-                        provider: tournamentFilterProvider,
-                        hint: "Alder",
-                        inputType: TextInputType.number,
-                        min: 0,
-                        max: 150,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        "Point",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: colorThemeState.secondaryColor,
-                        ),
-                      ),
-                    ),
-                    CustomContainer(
-                      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: CustomInput(
-                        providerKey: "points",
-                        provider: tournamentFilterProvider,
-                        hint: "Point",
-                        inputType: TextInputType.number,
-                        min: 0,
-                        max: 10000,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ],
+      ),
     ),
   );
+  return filter;
 }

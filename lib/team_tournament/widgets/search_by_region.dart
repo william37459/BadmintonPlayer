@@ -39,7 +39,7 @@ class SearchByRegion extends ConsumerWidget {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: CustomDropDownSelector(
+                  child: CustomDropDownSelector<Map<String, dynamic>>(
                     hint: "Badminton kreds",
                     itemAsString: (item) => item.values.first,
                     items: (filter, props) => data[0].entries

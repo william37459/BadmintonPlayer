@@ -7,6 +7,7 @@ class CustomColorTheme {
   Color secondaryFontColor;
   Color backgroundColor;
   Color shadowColor;
+  Color inputFieldColor;
 
   CustomColorTheme({
     required this.primaryColor,
@@ -15,5 +16,6 @@ class CustomColorTheme {
     required this.secondaryFontColor,
     required this.backgroundColor,
     required this.shadowColor,
+    required this.inputFieldColor,
   });
 }

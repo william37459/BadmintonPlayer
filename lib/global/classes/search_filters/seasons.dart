@@ -1,22 +1,36 @@
 class Season {
-  DateTime dateFrom;
-  String name;
-  int seasonId;
-  bool seasonPlan;
+  final int seasonId;
+  final String name;
+  final DateTime dateFrom;
+  final bool seasonPlan;
 
   Season({
-    required this.dateFrom,
-    required this.name,
     required this.seasonId,
+    required this.name,
+    required this.dateFrom,
     required this.seasonPlan,
   });
 
   factory Season.fromJson(Map<String, dynamic> json) {
     return Season(
-      dateFrom: DateTime.parse(json['dateFrom']),
-      name: json['name'],
       seasonId: json['seasonId'],
+      name: json['name'],
+      dateFrom: DateTime.parse(json['dateFrom']),
       seasonPlan: json['seasonPlan'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'seasonId': seasonId,
+      'name': name,
+      'dateFrom': dateFrom.toIso8601String(),
+      'seasonPlan': seasonPlan,
+    };
+  }
+
+  @override
+  String toString() {
+    return name;
   }
 }

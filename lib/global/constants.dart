@@ -1,5 +1,6 @@
 import 'package:app/global/classes/club.dart';
 import 'package:app/global/classes/color_theme.dart';
+import 'package:app/global/classes/season_plan_search_filter_data.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +10,6 @@ String cookies = "";
 GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 List<Club> clubs = [];
 
-Map<String, List<dynamic>> seasonPlanSearchFilters = {};
 Map<String, dynamic> rankSearchFilters = {};
 Map<String, dynamic> profileSearchFilters = {};
 
@@ -24,6 +24,7 @@ StateProvider<CustomColorTheme> colorThemeProvider =
         secondaryFontColor: Colors.white,
         backgroundColor: Colors.white,
         shadowColor: Colors.black.withValues(alpha: 0.3),
+        inputFieldColor: const Color(0xffEBEBEB),
       );
     });
 
@@ -70,3 +71,5 @@ StateProvider<TeamTournamentFilter> teamTournamentSearchFilterProvider =
 String season = DateTime.now().month >= 8
     ? "${DateTime.now().year + 1}"
     : "${DateTime.now().year}";
+
+late SeasonPlanSearchFilterData seasonPlanSearchFilter;

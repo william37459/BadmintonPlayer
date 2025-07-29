@@ -25,4 +25,9 @@ class AgeGroup {
       yearsToTournament: json['yearsToTournament'],
     );
   }
+
+  @override
+  String toString() {
+    return ageGroupName;
+  }
 }

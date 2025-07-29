@@ -146,18 +146,11 @@ class ScoreListState extends ConsumerState with SingleTickerProviderStateMixin {
               secondChild: Container(),
               firstChild: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: CustomDropDownSelector(
-                  itemAsString: (item) => (item as Club).clubName,
+                child: CustomDropDownSelector<Club>(
+                  itemAsString: (item) => (item).clubName,
                   items: (filter, props) => clubs,
                   compareFn: (item1, item2) =>
-                      (item1 as Club).clubName == (item2 as Club).clubName,
-                  itemBuilder: (context, item, isDisabled, isSelected) =>
-                      ListTile(
-                        title: Text(
-                          item.clubName,
-                          style: TextStyle(color: colorThemeState.fontColor),
-                        ),
-                      ),
+                      (item1).clubName == (item2).clubName,
                   hint: "Søg efter klub",
                   initalValue: null,
                   onChanged: (item) {

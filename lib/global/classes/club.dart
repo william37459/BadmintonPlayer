@@ -16,4 +16,9 @@ class Club {
       fullClubName: json["fullClubName"],
     );
   }
+
+  @override
+  String toString() {
+    return clubName;
+  }
 }

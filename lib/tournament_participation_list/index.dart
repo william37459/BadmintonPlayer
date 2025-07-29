@@ -78,29 +78,29 @@ class TournamentParticipationList extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomContainer(
-              margin: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+            const CustomContainer(
+              margin: EdgeInsets.fromLTRB(16, 24, 16, 12),
               child: Row(
                 children: [
-                  Expanded(
-                    child: CustomDropDownSelector(
-                      itemAsString: (item) => item.values.first,
-                      items: (filter, props) => rankFilterProviderState.entries
-                          .map((entry) => {entry.key: entry.value})
-                          .toList(),
-                      onChanged: (value) {
-                        ref
-                            .read(
-                              tournamentParticipationFilterProvider.notifier,
-                            )
-                            .update(
-                              (state) => {...state, "tournamentclassid": value},
-                            );
-                      },
-                      initalValue: "Vælg række",
-                      hint: "Vælg række",
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: CustomDropDownSelector<String>(
+                  //     itemAsString: (item) => item.values.first,
+                  //     items: (filter, props) => rankFilterProviderState.entries
+                  //         .map((entry) => {entry.key: entry.value})
+                  //         .toList(),
+                  //     onChanged: (value) {
+                  //       ref
+                  //           .read(
+                  //             tournamentParticipationFilterProvider.notifier,
+                  //           )
+                  //           .update(
+                  //             (state) => {...state, "tournamentclassid": value},
+                  //           );
+                  //     },
+                  //     initalValue: "Vælg række",
+                  //     hint: "Vælg række",
+                  //   ),
+                  // ),
                 ],
               ),
             ),

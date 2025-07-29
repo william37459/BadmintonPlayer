@@ -15,15 +15,12 @@ class TournamentWidget extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(4),
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.5),
-            blurRadius: 2,
-          ),
+          BoxShadow(color: Colors.grey.withValues(alpha: 0.5), blurRadius: 2),
         ],
       ),
       child: Column(
@@ -41,49 +38,39 @@ class TournamentWidget extends ConsumerWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(
-            height: 4,
-          ),
+          const SizedBox(height: 4),
           Row(
             children: [
               Text(
                 tournament.lastRegistration != null
                     ? "Tilmeldingsfrist: ${DateFormat('EEE, M/d/y').format(tournament.lastRegistration!)}"
                     : "Ingen tilmeldingsfrist",
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
+                style: const TextStyle(fontSize: 14, color: Colors.black),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
-          const SizedBox(
-            height: 4,
-          ),
+          const SizedBox(height: 4),
           Wrap(
             children: [
-              for (int index = 0;
-                  index < tournament.getClassAndAgeGroupCodes().length;
-                  index++)
+              for (
+                int index = 0;
+                index < tournament.getClassAndAgeGroupCodes().length;
+                index++
+              )
                 Text(
                   tournament.getClassAndAgeGroupCodes()[index] +
                       (index == tournament.getClassAndAgeGroupCodes().length - 1
                           ? ""
                           : ", "),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.black),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
             ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Row(
             children: [
               Icon(
@@ -123,9 +110,7 @@ class TournamentWidget extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: 12,
-          ),
+          const SizedBox(height: 12),
           Row(
             children: [
               if (tournament.participatersReady())
@@ -135,8 +120,9 @@ class TournamentWidget extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       onTap: () {
-                        ref.read(selectedTournament.notifier).state =
-                            tournament.tournamentClassID.toString();
+                        ref.read(selectedTournament.notifier).state = tournament
+                            .tournamentClassID
+                            .toString();
                         Navigator.of(context).pushNamed(
                           "/TournamentParticipationPage",
                           arguments: {"tournament": tournament},
@@ -161,9 +147,7 @@ class TournamentWidget extends ConsumerWidget {
                   ),
                 ),
               if (tournament.resultsReady() & tournament.participatersReady())
-                const SizedBox(
-                  width: 12,
-                ),
+                const SizedBox(width: 12),
               if (tournament.resultsReady())
                 Expanded(
                   child: Material(
@@ -172,15 +156,17 @@ class TournamentWidget extends ConsumerWidget {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        ref.read(selectedTournament.notifier).state =
-                            tournament.tournamentClassID.toString();
+                        ref.read(selectedTournament.notifier).state = tournament
+                            .tournamentClassID
+                            .toString();
                         Navigator.of(context).pushNamed(
                           "/TournamentResultPage",
                           arguments: {
-                            "tournament": tournament.title != null &&
+                            "tournament":
+                                tournament.title != null &&
                                     tournament.title!.isNotEmpty
                                 ? tournament.title
-                                : tournament.clubName
+                                : tournament.clubName,
                           },
                         );
                       },
@@ -202,7 +188,7 @@ class TournamentWidget extends ConsumerWidget {
                   ),
                 ),
             ],
-          )
+          ),
         ],
       ),
     );

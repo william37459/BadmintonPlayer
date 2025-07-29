@@ -16,4 +16,9 @@ class Class {
       sortIndex: json['sortIndex'],
     );
   }
+
+  @override
+  String toString() {
+    return className;
+  }
 }

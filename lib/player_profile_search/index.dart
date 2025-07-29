@@ -78,24 +78,26 @@ class _PlayerSearchState extends ConsumerState<PlayerSearch> {
 
     return Scaffold(
       backgroundColor: colorThemeState.backgroundColor,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: colorThemeState.primaryColor,
-        icon: Icon(Icons.save, color: colorThemeState.secondaryFontColor),
-        label: Text(
-          "Færdig",
-          style: TextStyle(
-            color: colorThemeState.secondaryFontColor,
-            fontSize: 16,
-          ),
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-          ref.read(profileFilterProvider.notifier).state = {
-            ...ref.read(profileFilterProvider.notifier).state,
-            "name": "",
-          };
-        },
-      ),
+      floatingActionButton: widget.shouldReturnPlayer
+          ? null
+          : FloatingActionButton.extended(
+              backgroundColor: colorThemeState.primaryColor,
+              icon: Icon(Icons.save, color: colorThemeState.secondaryFontColor),
+              label: Text(
+                "Færdig",
+                style: TextStyle(
+                  color: colorThemeState.secondaryFontColor,
+                  fontSize: 16,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                ref.read(profileFilterProvider.notifier).state = {
+                  ...ref.read(profileFilterProvider.notifier).state,
+                  "name": "",
+                };
+              },
+            ),
       body: SafeArea(
         child: Column(
           children: [

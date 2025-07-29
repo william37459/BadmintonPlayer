@@ -3,23 +3,26 @@ import 'package:app/global/classes/search_filters/age_group.dart';
 import 'package:app/global/classes/search_filters/class_group.dart';
 import 'package:app/global/classes/search_filters/region.dart';
 import 'package:app/global/classes/search_filters/seasons.dart';
+import 'package:app/global/classes/season_plan_search_filter_data.dart';
 import 'package:app/global/constants.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> getTournamentSearchFilters() async {
+  Map<String, List<dynamic>> seasonPlanSearchFiltersRaw = {};
+
   http.Response response = await http.get(
     Uri.parse('https://badmintonplayer.dk/api/Seasons'),
   );
 
   if (response.statusCode == 200) {
-    List allSeasons = [];
+    List<Season> allSeasons = [];
     List formattedJson = jsonDecode(response.body);
 
     for (dynamic element in formattedJson) {
       allSeasons.add(Season.fromJson(element));
     }
 
-    seasonPlanSearchFilters.update(
+    seasonPlanSearchFiltersRaw.update(
       "seasons",
       (value) => allSeasons,
       ifAbsent: () => allSeasons,
@@ -33,13 +36,13 @@ Future<void> getTournamentSearchFilters() async {
   );
 
   if (response.statusCode == 200) {
-    List allAgeGroups = [];
+    List<AgeGroup> allAgeGroups = [];
     List formattedJson = jsonDecode(response.body);
     for (dynamic element in formattedJson) {
       allAgeGroups.add(AgeGroup.fromJson(element));
     }
 
-    seasonPlanSearchFilters.update(
+    seasonPlanSearchFiltersRaw.update(
       "ageGroups",
       (value) => allAgeGroups,
       ifAbsent: () => allAgeGroups,
@@ -53,13 +56,13 @@ Future<void> getTournamentSearchFilters() async {
   );
 
   if (response.statusCode == 200) {
-    List allClassGroup = [];
+    List<Class> allClassGroup = [];
     List formattedJson = jsonDecode(response.body);
     for (dynamic element in formattedJson) {
       allClassGroup.add(Class.fromJson(element));
     }
 
-    seasonPlanSearchFilters.update(
+    seasonPlanSearchFiltersRaw.update(
       "class",
       (value) => allClassGroup,
       ifAbsent: () => allClassGroup,
@@ -73,13 +76,13 @@ Future<void> getTournamentSearchFilters() async {
   );
 
   if (response.statusCode == 200) {
-    List allGeoRegion = [];
+    List<GeoRegion> allGeoRegion = [];
     List formattedJson = jsonDecode(response.body);
     for (dynamic element in formattedJson) {
       allGeoRegion.add(GeoRegion.fromJson(element));
     }
 
-    seasonPlanSearchFilters.update(
+    seasonPlanSearchFiltersRaw.update(
       "geoRegions",
       (value) => allGeoRegion,
       ifAbsent: () => allGeoRegion,
@@ -88,19 +91,17 @@ Future<void> getTournamentSearchFilters() async {
     throw Exception('Failed to load geo regions');
   }
 
-  response = await http.get(
-    Uri.parse('https://badmintonplayer.dk/api/Region'),
-  );
+  response = await http.get(Uri.parse('https://badmintonplayer.dk/api/Region'));
 
   if (response.statusCode == 200) {
-    List allRegions = [];
+    List<Region> allRegions = [];
     List formattedJson = jsonDecode(response.body);
 
     for (dynamic element in formattedJson) {
       allRegions.add(Region.fromJson(element));
     }
 
-    seasonPlanSearchFilters.update(
+    seasonPlanSearchFiltersRaw.update(
       "regions",
       (value) => allRegions,
       ifAbsent: () => allRegions,
@@ -108,5 +109,8 @@ Future<void> getTournamentSearchFilters() async {
   } else {
     throw Exception('Failed to load regions');
   }
+  seasonPlanSearchFilter = SeasonPlanSearchFilterData.fromJson(
+    seasonPlanSearchFiltersRaw,
+  );
   return;
 }
