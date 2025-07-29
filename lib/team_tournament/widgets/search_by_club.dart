@@ -42,13 +42,12 @@ class SearchByClub extends ConsumerWidget {
                 clubID: (item as Club).clubId.toString(),
               );
             },
-            itemAsString: (item) => (item as Club).clubName,
+            itemAsString: (item) => (item).clubName,
             items: (filter, props) => clubs,
-            compareFn: (item1, item2) =>
-                (item1 as Club).clubId == (item2 as Club).clubId,
+            compareFn: (item1, item2) => (item1).clubId == (item2).clubId,
             itemBuilder: (context, item, isDisabled, isSelected) => ListTile(
               title: Text(
-                (item as Club).clubName,
+                (item).clubName,
                 style: TextStyle(color: colorThemeState.fontColor),
               ),
             ),

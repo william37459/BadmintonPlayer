@@ -4,7 +4,6 @@ import 'package:app/global/classes/tournament.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
-import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/tournament_participation_list/functions/get_participaters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

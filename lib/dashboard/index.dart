@@ -1,4 +1,3 @@
-import 'package:app/calendar/classes/season_plan_search_filter.dart';
 import 'package:app/calendar/index.dart';
 
 import 'package:app/dashboard/functions/get_tournament_results_preview.dart';
