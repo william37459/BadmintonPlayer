@@ -1,7 +1,7 @@
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
-import 'package:app/team_tournament_results/region/functions/get_torunament_region.dart';
+import 'package:app/team_tournament_results/region/functions/get_tournament_region.dart';
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:flutter/material.dart';

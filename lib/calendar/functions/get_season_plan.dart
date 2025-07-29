@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app/calendar/classes/season_plan_search_filter.dart';
 import 'package:app/global/classes/tournament.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,42 +19,13 @@ Map<String, String> monthToNumber = {
 };
 
 Future<List<Tournament>> getSeasonPlan(
-  Map filterValues,
+  SeasonPlanSearchFilter filterValues,
   String contextKey,
 ) async {
-  Map localFilterValues = {...filterValues};
-
-  localFilterValues["ageGroupList"] = filterValues["ageGroupList"].isEmpty
-      ? []
-      : [filterValues["ageGroupList"]];
-
-  localFilterValues["classIdList"] = filterValues["classIdList"].isEmpty
-      ? []
-      : [filterValues["classIdList"]];
-
-  if (filterValues.containsKey("clubIds")) {
-    if (filterValues["clubIds"] is List) {
-    } else if (int.tryParse(filterValues["clubIds"].toString()) == null) {
-      filterValues.remove("clubIds");
-    } else {
-      localFilterValues["clubIds"] = [filterValues["clubIds"]];
-    }
-  }
-
-  if (filterValues.containsKey("dateFrom") &&
-      (filterValues["dateFrom"] == null || filterValues["dateFrom"].isEmpty)) {
-    filterValues.remove("dateFrom");
-  }
-
-  if (filterValues.containsKey("dateTo") &&
-      (filterValues["dateTo"] == null || filterValues["dateTo"].isEmpty)) {
-    filterValues.remove("dateTo");
-  }
-
   http.Response response = await http.patch(
     Uri.parse("https://badmintonplayer.dk/api/Tournament"),
     headers: {"Content-Type": "application/json; charset=utf-8"},
-    body: json.encode({...localFilterValues}),
+    body: json.encode(filterValues.toJson()),
   );
 
   List<Tournament> tournamentList = [];

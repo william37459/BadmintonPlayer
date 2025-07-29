@@ -6,20 +6,15 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 
 Future<Map<String, List<TeamTournamentFilter>>> getTeamTournamentRegion(
-    String contextKey, Map<String, String> filter) async {
+  String contextKey,
+  Map<String, String> filter,
+) async {
   http.Response response = await http.post(
     Uri.parse(
       "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetLeagueStanding",
     ),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: json.encode(
-      {
-        "callbackcontextkey": contextKey,
-        ...filter,
-      },
-    ),
+    headers: {"Content-Type": "application/json; charset=utf-8"},
+    body: json.encode({"callbackcontextkey": contextKey, ...filter}),
   );
 
   Map<String, List<TeamTournamentFilter>> result = {};

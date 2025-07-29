@@ -19,6 +19,11 @@ class Region {
       shortName: json['shortName'],
     );
   }
+
+  @override
+  String toString() {
+    return shortName ?? name;
+  }
 }
 
 class GeoRegion {
@@ -38,5 +43,9 @@ class GeoRegion {
       name: json['name'],
       unionID: json['unionID'],
     );
+  }
+  @override
+  String toString() {
+    return name;
   }
 }

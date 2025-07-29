@@ -86,7 +86,7 @@ class RouteGenerator {
         }
         return _errorRoute();
       case '/TournamentOverviewPage':
-        return CupertinoPageRoute(builder: (_) => TorunamentPlan());
+        return CupertinoPageRoute(builder: (_) => TournamentPlan());
       case '/TeamTournamentResultPage':
         return CupertinoPageRoute(
           builder: (_) => const TeamTournamentClubResultsWidget(),

@@ -5,21 +5,24 @@ import 'package:app/global/classes/tournament_result.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/player_profile/widgets/ranks_widget.dart';
 import 'package:app/team_tournament_results/match_result/functions/get_match_result.dart';
-import 'package:app/team_tournament_results/match_result/widgets/torunament_info_bottom_sheet.dart';
+import 'package:app/team_tournament_results/match_result/widgets/tournament_info_bottom_sheet.dart';
 import 'package:app/tournament_result_page/widgets/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-StateProvider<String> leagueMatchIDProvider =
-    StateProvider<String>((ref) => "");
+StateProvider<String> leagueMatchIDProvider = StateProvider<String>(
+  (ref) => "",
+);
 
 FutureProvider<TeamTournamentResult> teamTournaments =
     FutureProvider<TeamTournamentResult>((ref) async {
-  String leagueMatchID = ref.watch(leagueMatchIDProvider);
-  TeamTournamentResult result =
-      await getTeamTournamentMatchResult(contextKey, leagueMatchID);
-  return result;
-});
+      String leagueMatchID = ref.watch(leagueMatchIDProvider);
+      TeamTournamentResult result = await getTeamTournamentMatchResult(
+        contextKey,
+        leagueMatchID,
+      );
+      return result;
+    });
 
 class TeamTournamentClubResultsWidget extends ConsumerWidget {
   const TeamTournamentClubResultsWidget({super.key});
@@ -45,10 +48,7 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
           centerTitle: true,
           leading: InkWell(
             onTap: () => Navigator.pop(context),
-            child: const Icon(
-              Icons.chevron_left,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.chevron_left, color: Colors.white),
           ),
           actions: [
             Padding(
@@ -59,12 +59,12 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                   context: context,
                   isScrollControlled: true,
                   shape: const RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(16)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
                   ),
-                  builder: (BuildContext context) => TorunamentInfoBottomSheet(
-                    entries: data.info.entries,
-                  ),
+                  builder: (BuildContext context) =>
+                      TournamentInfoBottomSheet(entries: data.info.entries),
                 ),
                 child: Icon(
                   Icons.info_outline,
@@ -92,10 +92,7 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                         fontSize: 16,
                         color: colorThemeState.secondaryFontColor,
                       ),
-                      footers: const [
-                        "Point",
-                        "Vundne",
-                      ],
+                      footers: const ["Point", "Vundne"],
                       score: ScoreData(
                         type: data.homeTeam,
                         rank: "",
@@ -118,10 +115,7 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                         fontSize: 16,
                         color: colorThemeState.secondaryFontColor,
                       ),
-                      footers: const [
-                        "Point",
-                        "Vundne",
-                      ],
+                      footers: const ["Point", "Vundne"],
                       score: ScoreData(
                         type: data.awayTeam,
                         rank: "",
@@ -152,9 +146,7 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
           ),
         ),
       ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Text(error.toString()),
     );
   }

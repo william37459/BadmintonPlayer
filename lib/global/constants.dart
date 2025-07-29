@@ -1,6 +1,6 @@
 import 'package:app/global/classes/club.dart';
 import 'package:app/global/classes/color_theme.dart';
-import 'package:app/global/classes/season_plan_search_filter_data.dart';
+import 'package:app/calendar/classes/season_plan_search_filter_data.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

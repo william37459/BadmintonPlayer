@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TorunamentInfoBottomSheet extends StatelessWidget {
+class TournamentInfoBottomSheet extends StatelessWidget {
   final Iterable entries;
-  const TorunamentInfoBottomSheet({super.key, required this.entries});
+  const TournamentInfoBottomSheet({super.key, required this.entries});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(
-        16,
-      ),
+      padding: const EdgeInsets.all(16),
       child: SafeArea(
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -25,10 +23,7 @@ class TorunamentInfoBottomSheet extends StatelessWidget {
                 children: [
                   const Text(
                     'Kampdetaljer',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close, size: 24),
@@ -47,9 +42,11 @@ class TorunamentInfoBottomSheet extends StatelessWidget {
                         spacing: 12,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          for (int i = 0;
-                              i < 2 && index + i < entries.length;
-                              i++)
+                          for (
+                            int i = 0;
+                            i < 2 && index + i < entries.length;
+                            i++
+                          )
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,12 +67,12 @@ class TorunamentInfoBottomSheet extends StatelessWidget {
                                       fontSize: 12,
                                       color: Colors.grey[700],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
                         ],
-                      )
+                      ),
                   ],
                 ),
               ),

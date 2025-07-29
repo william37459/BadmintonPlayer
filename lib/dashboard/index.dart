@@ -1,3 +1,4 @@
+import 'package:app/calendar/classes/season_plan_search_filter.dart';
 import 'package:app/calendar/index.dart';
 
 import 'package:app/dashboard/functions/get_tournament_results_preview.dart';
@@ -134,9 +135,11 @@ class Dashboard extends ConsumerWidget {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: AddInfoPreview(
-                      onTap: () => Navigator.of(
-                        context,
-                      ).pushNamed('/TournamentOverviewPage'),
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                        ).pushNamed('/TournamentOverviewPage');
+                      },
                       text: 'Se alle turneringer',
                       icon: Icons.info,
                       color: colorThemeState.secondaryFontColor,

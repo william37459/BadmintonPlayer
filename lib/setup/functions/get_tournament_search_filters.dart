@@ -3,7 +3,7 @@ import 'package:app/global/classes/search_filters/age_group.dart';
 import 'package:app/global/classes/search_filters/class_group.dart';
 import 'package:app/global/classes/search_filters/region.dart';
 import 'package:app/global/classes/search_filters/seasons.dart';
-import 'package:app/global/classes/season_plan_search_filter_data.dart';
+import 'package:app/calendar/classes/season_plan_search_filter_data.dart';
 import 'package:app/global/constants.dart';
 import 'package:http/http.dart' as http;
 
