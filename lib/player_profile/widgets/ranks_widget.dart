@@ -21,8 +21,15 @@ class RanksWidget extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 4,
           children: [
-            RankTextWidget(score: scores[0], colorThemeState: colorThemeState),
-            RankTextWidget(score: scores[1], colorThemeState: colorThemeState),
+            RankTextWidget(
+              score: scores.isNotEmpty ? scores[0] : ScoreData.empty(),
+              colorThemeState: colorThemeState,
+            ),
+            if (scores.length > 1)
+              RankTextWidget(
+                score: scores[1],
+                colorThemeState: colorThemeState,
+              ),
           ],
         ),
         if (scores.length > 2)

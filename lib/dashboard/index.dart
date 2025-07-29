@@ -72,6 +72,7 @@ FutureProvider<List<TeamTournamentResultPreview>> teamTournamentResultProvider =
         contextKey,
         null,
       );
+      // return result;
       return result;
     });
 

@@ -70,6 +70,6 @@ StateProvider<TeamTournamentFilter> teamTournamentSearchFilterProvider =
 
 String season = DateTime.now().month >= 8
     ? "${DateTime.now().year + 1}"
-    : "${DateTime.now().year}";
+    : "${DateTime.now().year - 1}";
 
 late SeasonPlanSearchFilterData seasonPlanSearchFilter;

@@ -29,9 +29,7 @@ class ConsumerPreviewWidget extends ConsumerWidget {
       builder: (context, ref, _) {
         final futureAsyncValue = ref.watch(provider);
         return futureAsyncValue.when(
-          error: (error, stackTrace) => Text(
-            error.toString(),
-          ),
+          error: (error, stackTrace) => Text(error.toString()),
           loading: () => SingleChildScrollView(
             scrollDirection: axis,
             child: axis == Axis.horizontal
@@ -85,27 +83,21 @@ class ConsumerPreviewWidget extends ConsumerWidget {
           data: (data) {
             return data.isNotEmpty
                 ? axis == Axis.horizontal
-                    ? SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          spacing: 16,
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            spacing: 16,
+                            children: [
+                              const SizedBox(width: 0),
+                              for (dynamic result in data) child(result),
+                            ],
+                          ),
+                        )
+                      : Column(
                           children: [
-                            const SizedBox(width: 0),
-                            for (dynamic result in data)
-                              child(
-                                result,
-                              ),
+                            for (dynamic result in data) child(result),
                           ],
-                        ),
-                      )
-                    : Column(
-                        children: [
-                          for (dynamic result in data)
-                            child(
-                              result,
-                            ),
-                        ],
-                      )
+                        )
                 : Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -114,8 +106,9 @@ class ConsumerPreviewWidget extends ConsumerWidget {
                         Text(
                           errorText,
                           style: TextStyle(
-                            color: colorThemeState.fontColor
-                                .withValues(alpha: 0.5),
+                            color: colorThemeState.fontColor.withValues(
+                              alpha: 0.5,
+                            ),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),

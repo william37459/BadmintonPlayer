@@ -195,7 +195,7 @@ class CustomDropDownSelector<T> extends ConsumerWidget {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     hintText: hint,
                     hintStyle: TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
                       color: colorThemeState.fontColor.withValues(alpha: 0.5),
                     ),
                     border: InputBorder.none,

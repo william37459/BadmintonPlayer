@@ -58,6 +58,7 @@ class TeamTournamentClubResultsWidget extends ConsumerWidget {
                 onTap: () => showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
+                  backgroundColor: colorThemeState.backgroundColor,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(16),

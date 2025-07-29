@@ -21,13 +21,10 @@ class TeamTournamentResultPreview {
   });
 
   factory TeamTournamentResultPreview.fromElement(
-      Element element, String league) {
-    String date = element.querySelector(".time")?.text ?? "";
-
-    DateTime dateTime = DateTime.parse(
-      "${date.split(" ")[1].split("‑").reversed.join("-")} ${date.split(" ")[2]}:00",
-    );
-
+    Element element,
+    String league,
+    DateTime dateTime,
+  ) {
     String matchNumber = element.querySelector(".matchno")?.text ?? "";
     String homeTeam = element.querySelectorAll("td.team")[0].text;
     String awayTeam = element.querySelectorAll("td.team")[1].text;
@@ -56,13 +53,15 @@ class TeamTournamentResultPreview {
   }
 
   factory TeamTournamentResultPreview.fromDocument(Document document) {
-    List<html.Element> matchElement =
-        document.querySelectorAll('table.matchinfo tr');
+    List<html.Element> matchElement = document.querySelectorAll(
+      'table.matchinfo tr',
+    );
     String matchNumber =
         matchElement.elementAtOrNull(0)?.querySelector('td.val')?.text ?? "";
     String timeText =
         matchElement.elementAtOrNull(2)?.querySelector('td.val')?.text ?? "";
-    String location = matchElement
+    String location =
+        matchElement
             .elementAtOrNull(3)
             ?.querySelector('td.val')
             ?.innerHtml
@@ -176,10 +175,6 @@ class TeamTournamentTeamPreview {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'result': result,
-      'point': point,
-    };
+    return {'name': name, 'result': result, 'point': point};
   }
 }

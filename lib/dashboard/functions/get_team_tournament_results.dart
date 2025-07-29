@@ -51,12 +51,32 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
     for (Element row in allRows) {
       if (!row.attributes.values.contains("headerrow") &&
           !row.attributes.values.contains("roundheader")) {
+        String date = row.querySelector(".time")?.text ?? "";
+        late DateTime dateTime;
+        if (date.split(" ").length < 3) {
+          dateTime = DateTime.parse(
+            date
+                .replaceAll("(", "")
+                .replaceAll(")", "")
+                .split("‑")
+                .reversed
+                .join("-"),
+          );
+        } else {
+          dateTime = DateTime.parse(
+            "${date.split(" ")[1].split("‑").reversed.join("-")} ${date.split(" ")[2]}:00",
+          );
+        }
+        if (dateTime.isAfter(DateTime.now())) {
+          continue; // Skip matches older than a year
+        }
         results.add(
           TeamTournamentResultPreview.fromElement(
             row,
             document.querySelector("h3")?.text ??
                 document.querySelector("h2")?.text ??
                 "Kamp",
+            dateTime,
           ),
         );
       }

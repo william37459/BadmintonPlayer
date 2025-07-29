@@ -58,67 +58,77 @@ class SearchByClub extends ConsumerWidget {
                 )
               : Expanded(
                   child: futureAsyncValue.when(
-                    data: (data) => ListView.separated(
-                      itemCount: data.length,
-                      separatorBuilder: (context, index) => Container(
-                        decoration: BoxDecoration(
-                          color: colorThemeState.fontColor.withValues(
-                            alpha: 0.5,
-                          ),
-                          borderRadius: BorderRadiusDirectional.circular(2),
-                        ),
-                        height: 0.25,
-                      ),
-                      itemBuilder: (context, index) {
-                        final club = data[index];
-                        return Material(
-                          color: colorThemeState.backgroundColor,
-                          borderRadius: BorderRadius.circular(8),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12.0,
+                    data: (data) => data.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "Klubben holder ingen hold der spiller",
+                            ),
+                          )
+                        : ListView.separated(
+                            itemCount: data.length,
+                            separatorBuilder: (context, index) => Container(
+                              decoration: BoxDecoration(
+                                color: colorThemeState.fontColor.withValues(
+                                  alpha: 0.5,
+                                ),
+                                borderRadius: BorderRadiusDirectional.circular(
+                                  2,
+                                ),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                              height: 0.25,
+                            ),
+                            itemBuilder: (context, index) {
+                              final club = data[index];
+                              return Material(
+                                color: colorThemeState.backgroundColor,
+                                borderRadius: BorderRadius.circular(8),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  onTap: () {},
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12.0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          "${club.ageGroup} - ${club.teamName}",
-                                          style: TextStyle(
-                                            color: colorThemeState.fontColor,
-                                            fontSize: 16,
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${club.ageGroup} - ${club.teamName}",
+                                                style: TextStyle(
+                                                  color:
+                                                      colorThemeState.fontColor,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Text(
+                                                club.poolName,
+                                                style: TextStyle(
+                                                  color: colorThemeState
+                                                      .fontColor
+                                                      .withAlpha(128),
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Text(
-                                          club.poolName,
-                                          style: TextStyle(
-                                            color: colorThemeState.fontColor
-                                                .withAlpha(128),
-                                            fontSize: 14,
-                                          ),
+                                        Icon(
+                                          Icons.chevron_right,
+                                          color: colorThemeState.primaryColor,
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.chevron_right,
-                                    color: colorThemeState.primaryColor,
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                     error: (error, stack) => Center(

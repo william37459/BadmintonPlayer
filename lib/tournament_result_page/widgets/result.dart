@@ -61,22 +61,16 @@ class ResultWidget extends ConsumerWidget {
                             fontSize: 16,
                           ),
                         ),
-                        if (showInfo)
-                          const Icon(
-                            Icons.info_outlined,
-                          ),
+                        if (showInfo) const Icon(Icons.info_outlined),
                       ],
                     ),
                   ),
-                if (!showHeader)
-                  const SizedBox(
-                    height: 0,
-                  ),
+                if (!showHeader) const SizedBox(height: 0),
                 for (List<Profile> profiles in [result.winner, result.loser])
                   Opacity(
                     opacity: [
                       1.0,
-                      0.6
+                      0.6,
                     ][[result.winner, result.loser].indexOf(profiles)],
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -92,15 +86,14 @@ class ResultWidget extends ConsumerWidget {
                                       .map((player) => player.name)
                                       .join(", "),
                                   softWrap: true,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                                 Text(
                                   profiles
                                       .map((player) => player.club)
                                       .toSet()
                                       .join(", "),
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                               ],
                             ),
@@ -109,29 +102,32 @@ class ResultWidget extends ConsumerWidget {
                             Text(
                               score.split("/").length == 1
                                   ? (score.isEmpty
-                                              ? ["W.O", "-"]
-                                              : score.split("-"))
-                                          .elementAtOrNull([
-                                        result.winner,
-                                        result.loser
-                                      ].indexOf(profiles)) ??
-                                      "W.O"
+                                                ? ["W.O", "-"]
+                                                : score.split("-"))
+                                            .elementAtOrNull(
+                                              [
+                                                result.winner,
+                                                result.loser,
+                                              ].indexOf(profiles),
+                                            ) ??
+                                        "W.O"
                                   : (score.isEmpty
-                                              ? ["W.O", "-"]
-                                              : score.split("/"))
-                                          .elementAtOrNull([
-                                        result.winner,
-                                        result.loser
-                                      ].indexOf(profiles)) ??
-                                      "W.O",
+                                                ? ["W.O", "-"]
+                                                : score.split("/"))
+                                            .elementAtOrNull(
+                                              [
+                                                result.winner,
+                                                result.loser,
+                                              ].indexOf(profiles),
+                                            ) ??
+                                        "W.O",
+                              style: const TextStyle(fontSize: 14),
                             ),
                         ],
                       ),
                     ),
                   ),
-                const SizedBox(
-                  height: 0,
-                ),
+                const SizedBox(height: 0),
               ],
             ),
           ),

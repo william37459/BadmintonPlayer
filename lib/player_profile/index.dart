@@ -13,10 +13,7 @@ late TabController tabController;
 
 class PlayerProfilePage extends ConsumerStatefulWidget {
   final PlayerProfile player;
-  const PlayerProfilePage({
-    required this.player,
-    super.key,
-  });
+  const PlayerProfilePage({required this.player, super.key});
 
   @override
   PlayerProfilePageState createState() => PlayerProfilePageState();
@@ -29,11 +26,9 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
     super.initState();
     tabController = TabController(vsync: this, length: 2);
 
-    tabController.addListener(
-      () {
-        ref.read(choiceIndex.notifier).state = tabController.index;
-      },
-    );
+    tabController.addListener(() {
+      ref.read(choiceIndex.notifier).state = tabController.index;
+    });
   }
 
   @override
@@ -54,9 +49,7 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -75,10 +68,7 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                       fontSize: 16,
                     ),
                   ),
-                  const Icon(
-                    Icons.chevron_left,
-                    color: Colors.transparent,
-                  ),
+                  const Icon(Icons.chevron_left, color: Colors.transparent),
                 ],
               ),
             ),
@@ -109,9 +99,7 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
@@ -135,16 +123,12 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 12,
-                  ),
+                  const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: RanksWidget(scores: widget.player.scoreData),
                   ),
-                  const SizedBox(
-                    height: 32,
-                  ),
+                  const SizedBox(height: 32),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: ToggleSwitchButton(
@@ -153,65 +137,83 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
                       enabled: true,
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 8),
                   Expanded(
                     child: TabBarView(
                       controller: tabController,
                       physics: const BouncingScrollPhysics(),
                       children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: 8,
-                            children: [
-                              const SizedBox(
-                                height: 0,
-                              ),
-                              for (TeamTournamentResultPreview teamTournament
-                                  in widget.player.teamTournaments.reversed)
-                                TeamTournamentResultPreviewWidget(
-                                  result: teamTournament,
-                                  width: null,
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
+                        if (widget.player.teamTournaments.isEmpty)
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: Text(
+                                "${widget.player.name.split(" ")[0]} har ikke spillet nogen holdkampe i den her sæson",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: colorThemeState.fontColor,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              const SizedBox(
-                                height: 0,
                               ),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: 8,
-                            children: [
-                              const SizedBox(
-                                height: 0,
-                              ),
-                              for (TournamentResultPreview tournament
-                                  in widget.player.tournaments)
-                                TournamentResultPreviewWidget(
-                                  result: tournament,
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 16,
+                            ),
+                          )
+                        else
+                          SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 8,
+                              children: [
+                                const SizedBox(height: 0),
+                                for (TeamTournamentResultPreview teamTournament
+                                    in widget.player.teamTournaments.reversed)
+                                  TeamTournamentResultPreviewWidget(
+                                    result: teamTournament,
+                                    width: null,
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
                                   ),
-                                ),
-                              const SizedBox(
-                                height: 0,
-                              ),
-                            ],
+                                const SizedBox(height: 0),
+                              ],
+                            ),
                           ),
-                        ),
+                        if (widget.player.tournaments.isEmpty)
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: Text(
+                                "${widget.player.name.split(" ")[0]} har ikke spillet nogen turnerninger i den her sæson",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: colorThemeState.fontColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 8,
+                              children: [
+                                const SizedBox(height: 0),
+                                for (TournamentResultPreview tournament
+                                    in widget.player.tournaments)
+                                  TournamentResultPreviewWidget(
+                                    result: tournament,
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                  ),
+                                const SizedBox(height: 0),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 32,
-                  ),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),

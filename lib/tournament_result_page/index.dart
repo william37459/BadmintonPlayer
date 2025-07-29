@@ -1,7 +1,6 @@
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/tournament_result.dart';
 import 'package:app/global/constants.dart';
-import 'package:app/calendar/widgets/custom_expander.dart';
 import 'package:app/tournament_result_page/functions/get_results.dart';
 import 'package:app/tournament_result_page/widgets/result.dart';
 import 'package:app/tournament_result_page/widgets/result_label.dart';
@@ -14,35 +13,38 @@ StateProvider<Map<String, Map<String, dynamic>>> resultFilterProvider =
 
 StateProvider<Map<String, dynamic>> tournamentResultFilterProvider =
     StateProvider<Map<String, dynamic>>((ref) {
-  return {
-    "clientselectfunction": "SelectTournamentClass1",
-    "clubid": 0,
-    "groupnumber": 0,
-    "locationnumber": 0,
-    "playerid": 0,
-    "tabnumber": 0,
-    "tournamenteventid": 0,
-  };
-});
+      return {
+        "clientselectfunction": "SelectTournamentClass1",
+        "clubid": 0,
+        "groupnumber": 0,
+        "locationnumber": 0,
+        "playerid": 0,
+        "tabnumber": 0,
+        "tournamenteventid": 0,
+      };
+    });
 
 StateProvider<TournamentInfo?> tournamentInfoProvider =
     StateProvider<TournamentInfo?>((ref) => null);
 
 FutureProvider<List<TournamentResult>> tournamentResultProvider =
     FutureProvider<List<TournamentResult>>((ref) async {
-  final filterProvider = ref.watch(tournamentResultFilterProvider);
-  final selectedTournamentState = ref.watch(selectedTournament);
-  final result =
-      await getResults(filterProvider, contextKey, selectedTournamentState);
+      final filterProvider = ref.watch(tournamentResultFilterProvider);
+      final selectedTournamentState = ref.watch(selectedTournament);
+      final result = await getResults(
+        filterProvider,
+        contextKey,
+        selectedTournamentState,
+      );
 
-  ref.read(tournamentInfoProvider.notifier).state = result['info'];
+      ref.read(tournamentInfoProvider.notifier).state = result['info'];
 
-  if (ref.read(resultFilterProvider.notifier).state.isEmpty) {
-    ref.read(resultFilterProvider.notifier).state = result['filters'];
-  }
+      if (ref.read(resultFilterProvider.notifier).state.isEmpty) {
+        ref.read(resultFilterProvider.notifier).state = result['filters'];
+      }
 
-  return result['results'];
-});
+      return result['results'];
+    });
 
 class TournamentResultPage extends ConsumerWidget {
   final String tournamentTitle;
@@ -52,11 +54,13 @@ class TournamentResultPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-    AsyncValue<List<TournamentResult>> futureAsyncValue =
-        ref.watch(tournamentResultProvider);
+    AsyncValue<List<TournamentResult>> futureAsyncValue = ref.watch(
+      tournamentResultProvider,
+    );
 
-    Map<String, Map<String, dynamic>> resultFilterProviderState =
-        ref.watch(resultFilterProvider);
+    Map<String, Map<String, dynamic>> resultFilterProviderState = ref.watch(
+      resultFilterProvider,
+    );
 
     TournamentInfo? tournamentInfo = ref.watch(tournamentInfoProvider);
 
@@ -92,11 +96,11 @@ class TournamentResultPage extends ConsumerWidget {
                     onTap: tournamentInfo == null
                         ? null
                         : () => showModalBottomSheet(
-                              context: context,
-                              builder: (context) => TournamentInfoBottomSheet(
-                                info: tournamentInfo,
-                              ),
-                            ),
+                            context: context,
+                            backgroundColor: colorThemeState.backgroundColor,
+                            builder: (context) =>
+                                TournamentInfoBottomSheet(info: tournamentInfo),
+                          ),
                     child: Icon(
                       Icons.info_outline_rounded,
                       color: colorThemeState.primaryColor,
@@ -114,8 +118,7 @@ class TournamentResultPage extends ConsumerWidget {
                 color: Colors.white,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    final filters = resultFilterProviderState['matchType']!
-                        .keys
+                    final filters = resultFilterProviderState['matchType']!.keys
                         .toList()
                         .sublist(0, 5);
                     double totalWidth = filters.length * 100;
@@ -126,8 +129,8 @@ class TournamentResultPage extends ConsumerWidget {
                           for (String filter in filters)
                             ResultLabel(
                               label: filter,
-                              index: resultFilterProviderState['matchType']
-                                      ?[filter] ??
+                              index:
+                                  resultFilterProviderState['matchType']?[filter] ??
                                   0,
                             ),
                         ],
@@ -142,8 +145,8 @@ class TournamentResultPage extends ConsumerWidget {
                             for (String filter in filters)
                               ResultLabel(
                                 label: filter,
-                                index: resultFilterProviderState['matchType']
-                                        ?[filter] ??
+                                index:
+                                    resultFilterProviderState['matchType']?[filter] ??
                                     0,
                               ),
                           ],
@@ -158,55 +161,50 @@ class TournamentResultPage extends ConsumerWidget {
                 return data.isNotEmpty
                     ? Expanded(
                         child: ListView.separated(
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 16,
-                          ),
-                          itemBuilder: (context, index) => CustomExpander(
-                            selfSpaced: true,
-                            body: Column(
-                              children: [
-                                for (MatchResult match in data[index].matches)
-                                  ResultWidget(
-                                    result: match,
-                                    pool: data[index].resultName,
-                                    showHeader: false,
-                                  )
-                              ],
-                            ),
-                            header: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text(
-                                data[index].resultName,
-                                style: TextStyle(
-                                  color: colorThemeState.fontColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 16),
+                          itemBuilder: (context, index) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                ),
+                                child: Text(
+                                  data[index].resultName,
+                                  style: TextStyle(
+                                    color: colorThemeState.fontColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            isExpandedKey: data[index].resultName,
-                            isExpanded: true,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  for (MatchResult match in data[index].matches)
+                                    ResultWidget(
+                                      result: match,
+                                      pool: data[index].resultName,
+                                      showHeader: false,
+                                      showInfo: false,
+                                    ),
+                                ],
+                              ),
+                            ],
                           ),
                           itemCount: data.length,
                         ),
                       )
                     : const Center(
-                        child: Text(
-                          "Der er ingen resultater tilgængelige",
-                        ),
+                        child: Text("Der er ingen resultater tilgængelige"),
                       );
               },
               loading: () => const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                child: Center(child: CircularProgressIndicator()),
               ),
-              error: (error, stackTrace) => Center(
-                child: Text(
-                  error.toString(),
-                ),
-              ),
+              error: (error, stackTrace) =>
+                  Center(child: Text(error.toString())),
             ),
           ],
         ),
