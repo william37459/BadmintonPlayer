@@ -10,7 +10,7 @@ import 'package:app/team_tournament_results/position/index.dart';
 import 'package:app/team_tournament_results/region/index.dart';
 import 'package:app/team_tournament_results/match_result/index.dart';
 import 'package:app/team_tournament_search/index.dart';
-import 'package:app/tournament_participation_list/index.dart';
+import 'package:app/tournament_participant_list/index.dart';
 import 'package:app/tournament_result_page/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
