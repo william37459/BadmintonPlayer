@@ -31,7 +31,7 @@ StateProvider<CustomColorTheme> colorThemeProvider =
 StateProvider<Map<String, bool>> isExpandedProvider =
     StateProvider<Map<String, bool>>((ref) => {});
 
-StateProvider<String> selectedTournament = StateProvider<String>((ref) => "");
+StateProvider<int> selectedTournament = StateProvider<int>((ref) => -1);
 
 StateProvider<String> selectedPlayer = StateProvider<String>((ref) => "");
 

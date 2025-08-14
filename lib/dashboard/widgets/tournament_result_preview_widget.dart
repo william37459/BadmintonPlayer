@@ -33,11 +33,13 @@ class TournamentResultPreviewWidget extends ConsumerWidget {
           "tournamenteventid": 451551,
         };
 
-        ref.read(selectedTournament.notifier).state = result.id;
+        ref.read(selectedTournament.notifier).state =
+            int.tryParse(result.id) ?? -1;
 
-        Navigator.of(context).pushNamed('/TournamentResultPage', arguments: {
-          'tournament': result.organiser,
-        });
+        Navigator.of(context).pushNamed(
+          '/TournamentResultPage',
+          arguments: {'tournament': result.organiser},
+        );
       },
       margin: margin,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -68,10 +70,7 @@ class TournamentResultPreviewWidget extends ConsumerWidget {
               ),
             ],
           ),
-          Icon(
-            Icons.chevron_right,
-            color: colorTheme.primaryColor,
-          )
+          Icon(Icons.chevron_right, color: colorTheme.primaryColor),
         ],
       ),
     );

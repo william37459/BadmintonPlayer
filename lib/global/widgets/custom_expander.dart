@@ -34,7 +34,7 @@ class CustomExpander extends ConsumerWidget {
                 ...isExpandedState,
                 isExpandedKey: !(isExpandedState.containsKey(isExpandedKey)
                     ? isExpandedState[isExpandedKey] ?? false
-                    : isExpanded ?? false)
+                    : isExpanded ?? false),
               };
             }
           },
@@ -44,7 +44,8 @@ class CustomExpander extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: AnimatedRotation(
-                  turns: (isExpandedState.containsKey(isExpandedKey)
+                  turns:
+                      (isExpandedState.containsKey(isExpandedKey)
                           ? isExpandedState[isExpandedKey] ?? false
                           : isExpanded ?? false)
                       ? 0.5
@@ -63,13 +64,14 @@ class CustomExpander extends ConsumerWidget {
         AnimatedCrossFade(
           firstChild: body,
           secondChild: Container(),
-          crossFadeState: (isExpandedState.containsKey(isExpandedKey)
+          crossFadeState:
+              (isExpandedState.containsKey(isExpandedKey)
                   ? isExpandedState[isExpandedKey] ?? false
                   : isExpanded ?? false)
               ? CrossFadeState.showFirst
               : CrossFadeState.showSecond,
           duration: const Duration(milliseconds: 250),
-        )
+        ),
       ],
     );
   }

@@ -56,8 +56,10 @@ class CustomInput extends ConsumerWidget {
           };
         } else if (inputType == TextInputType.number) {
           if (int.tryParse(value) == null) {
-            textFieldController.text =
-                textFieldController.text.replaceAll(RegExp(r"\D"), "");
+            textFieldController.text = textFieldController.text.replaceAll(
+              RegExp(r"\D"),
+              "",
+            );
           } else {
             if (max != null && int.parse(value) > max!) {
               textFieldController.text = "$max";

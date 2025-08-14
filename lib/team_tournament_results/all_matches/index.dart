@@ -6,17 +6,19 @@ import 'package:app/global/constants.dart';
 import 'package:app/team_tournament_results/all_matches/functions/get_all_team_tournament_matches.dart';
 import 'package:app/team_tournament_results/all_matches/widgets/match_result_widget.dart';
 import 'package:app/global/widgets/custom_container.dart';
-import 'package:app/calendar/widgets/custom_expander.dart';
+import 'package:app/global/widgets/custom_expander.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 FutureProvider<AllTeamTournamentMatches> teamTournaments =
     FutureProvider<AllTeamTournamentMatches>((ref) async {
-  final filters = ref.watch(teamTournamentSearchFilterProvider);
-  final result =
-      await getAllTeamTournamentMatches(contextKey, filters.toJson());
-  return result;
-});
+      final filters = ref.watch(teamTournamentSearchFilterProvider);
+      final result = await getAllTeamTournamentMatches(
+        contextKey,
+        filters.toJson(),
+      );
+      return result;
+    });
 
 class AllTeamTournamentMatchesWidget extends ConsumerWidget {
   const AllTeamTournamentMatchesWidget({super.key});
@@ -44,8 +46,10 @@ class AllTeamTournamentMatchesWidget extends ConsumerWidget {
                             Navigator.pop(context);
                             ref
                                 .read(
-                                    teamTournamentSearchFilterProvider.notifier)
-                                .state = teamTournamentSearchFilterStack.last;
+                                  teamTournamentSearchFilterProvider.notifier,
+                                )
+                                .state = teamTournamentSearchFilterStack
+                                .last;
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -64,7 +68,9 @@ class AllTeamTournamentMatchesWidget extends ConsumerWidget {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 12),
+                              horizontal: 8.0,
+                              vertical: 12,
+                            ),
                             child: Text(
                               "Alle kampe",
                               style: TextStyle(
@@ -82,8 +88,11 @@ class AllTeamTournamentMatchesWidget extends ConsumerWidget {
                     CustomContainer(
                       onTap: () {
                         ref
-                            .read(teamTournamentSearchFilterProvider.notifier)
-                            .state = button;
+                                .read(
+                                  teamTournamentSearchFilterProvider.notifier,
+                                )
+                                .state =
+                            button;
                         teamTournamentSearchFilterStack.add(button);
                         if (button.subPage == "4") {
                           Navigator.pushNamed(
@@ -97,25 +106,22 @@ class AllTeamTournamentMatchesWidget extends ConsumerWidget {
                           );
                         } else if (button.subPage == "1") {
                           Navigator.of(context).pushNamed(
-                              "/TeamTournamentRegionPage",
-                              arguments: {
-                                "region": "Holdturnering",
-                                "rank": "",
-                              });
+                            "/TeamTournamentRegionPage",
+                            arguments: {"region": "Holdturnering", "rank": ""},
+                          );
                         } else if (button.subPage == "2") {
                           Navigator.of(context).pushNamed(
                             "/TeamTournamentPositionPage",
-                            arguments: {
-                              "title": "Stilling",
-                            },
+                            arguments: {"title": "Stilling"},
                           );
                         }
                       },
                       child: Text(
                         button.text,
                         style: TextStyle(
-                          color:
-                              colorThemeState.fontColor.withValues(alpha: 0.5),
+                          color: colorThemeState.fontColor.withValues(
+                            alpha: 0.5,
+                          ),
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
                         ),
@@ -150,9 +156,7 @@ class AllTeamTournamentMatchesWidget extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Text(error.toString()),
     );
   }

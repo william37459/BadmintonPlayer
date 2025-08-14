@@ -120,9 +120,8 @@ class TournamentWidget extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       onTap: () {
-                        ref.read(selectedTournament.notifier).state = tournament
-                            .tournamentClassID
-                            .toString();
+                        ref.read(selectedTournament.notifier).state =
+                            tournament.tournamentClassID;
                         Navigator.of(context).pushNamed(
                           "/TournamentParticipationPage",
                           arguments: {"tournament": tournament},
@@ -156,9 +155,8 @@ class TournamentWidget extends ConsumerWidget {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        ref.read(selectedTournament.notifier).state = tournament
-                            .tournamentClassID
-                            .toString();
+                        ref.read(selectedTournament.notifier).state =
+                            tournament.tournamentClassID;
                         Navigator.of(context).pushNamed(
                           "/TournamentResultPage",
                           arguments: {

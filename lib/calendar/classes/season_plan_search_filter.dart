@@ -72,7 +72,7 @@ class SeasonPlanSearchFilter {
       classList: [],
       clubs: [],
       firstRow: 0,
-      maxCount: 1000,
+      maxCount: 20,
       tournamentDatesSearch: 0,
       geoRegionIdList: null,
       regionIdList: null,

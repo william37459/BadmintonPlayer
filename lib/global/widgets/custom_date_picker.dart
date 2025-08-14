@@ -65,7 +65,8 @@ class CustomDatePicker extends ConsumerWidget {
                       ? hintText
                       : filterState[providerKey],
                   style: TextStyle(
-                    color: filterState[providerKey] == null ||
+                    color:
+                        filterState[providerKey] == null ||
                             filterState[providerKey].isEmpty
                         ? colorThemeState.fontColor.withValues(alpha: 0.5)
                         : colorThemeState.fontColor,
@@ -73,7 +74,8 @@ class CustomDatePicker extends ConsumerWidget {
                 ),
               ),
               AnimatedOpacity(
-                opacity: filterState[providerKey] == null ||
+                opacity:
+                    filterState[providerKey] == null ||
                         filterState[providerKey].isEmpty
                     ? 0.3
                     : 1,
@@ -87,10 +89,7 @@ class CustomDatePicker extends ConsumerWidget {
                       };
                     }
                   },
-                  child: const Icon(
-                    Icons.clear,
-                    color: Colors.red,
-                  ),
+                  child: const Icon(Icons.clear, color: Colors.red),
                 ),
               ),
             ],
@@ -131,44 +130,46 @@ class CustomPickerWidget extends ConsumerWidget {
         child: Row(
           children: [
             Expanded(
-              child: Consumer(builder: (context, ref, child) {
-                Map<String, dynamic> filterState = ref.watch(provider);
-                return CupertinoPicker(
-                  scrollController: dayController,
-                  itemExtent: 32,
-                  onSelectedItemChanged: (value) {
-                    List<String> currentDate =
-                        ref.read(provider)[providerKey].split("-");
-                    ref.read(provider.notifier).state = {
-                      ...ref.read(provider),
-                      providerKey:
-                          "${value + 1}-${currentDate[1]}-${currentDate[2]}",
-                    };
-                  },
-                  children: [
-                    for (int i = 1;
+              child: Consumer(
+                builder: (context, ref, child) {
+                  Map<String, dynamic> filterState = ref.watch(provider);
+                  return CupertinoPicker(
+                    scrollController: dayController,
+                    itemExtent: 32,
+                    onSelectedItemChanged: (value) {
+                      List<String> currentDate = ref
+                          .read(provider)[providerKey]
+                          .split("-");
+                      ref.read(provider.notifier).state = {
+                        ...ref.read(provider),
+                        providerKey:
+                            "${value + 1}-${currentDate[1]}-${currentDate[2]}",
+                      };
+                    },
+                    children: [
+                      for (
+                        int i = 1;
                         i <=
                             DateUtils.getDaysInMonth(
                               int.parse(filterState[providerKey].split("-")[2]),
                               int.parse(filterState[providerKey].split("-")[1]),
                             );
-                        i++)
-                      Center(
-                        child: Text(
-                          i.toString(),
-                        ),
-                      ),
-                  ],
-                );
-              }),
+                        i++
+                      )
+                        Center(child: Text(i.toString())),
+                    ],
+                  );
+                },
+              ),
             ),
             Expanded(
               child: CupertinoPicker(
                 scrollController: monthController,
                 itemExtent: 32,
                 onSelectedItemChanged: (value) {
-                  List<String> currentDate =
-                      ref.read(provider)[providerKey].split("-");
+                  List<String> currentDate = ref
+                      .read(provider)[providerKey]
+                      .split("-");
 
                   if (DateUtils.getDaysInMonth(
                         int.parse(currentDate[2]),
@@ -177,16 +178,14 @@ class CustomPickerWidget extends ConsumerWidget {
                       int.parse(currentDate[0])) {
                     ref.read(provider.notifier).state = {
                       ...ref.read(provider),
-                      providerKey: "${DateUtils.getDaysInMonth(
-                        int.parse(currentDate[2]),
-                        value + 1,
-                      )}-${value + 1}-${currentDate[2]}"
+                      providerKey:
+                          "${DateUtils.getDaysInMonth(int.parse(currentDate[2]), value + 1)}-${value + 1}-${currentDate[2]}",
                     };
                   } else {
                     ref.read(provider.notifier).state = {
                       ...ref.read(provider),
                       providerKey:
-                          "${currentDate[0]}-${value + 1}-${currentDate[2]}"
+                          "${currentDate[0]}-${value + 1}-${currentDate[2]}",
                     };
                   }
                 },
@@ -194,9 +193,7 @@ class CustomPickerWidget extends ConsumerWidget {
                   for (int i = 0; i < 12; i++)
                     Center(
                       child: Text(
-                        DateFormat('MMMM', 'da_dk').format(
-                          DateTime(0, i + 1),
-                        ),
+                        DateFormat('MMMM', 'da_dk').format(DateTime(0, i + 1)),
                       ),
                     ),
                 ],
@@ -207,21 +204,18 @@ class CustomPickerWidget extends ConsumerWidget {
                 scrollController: yearController,
                 itemExtent: 32,
                 onSelectedItemChanged: (value) {
-                  List<String> currentDate =
-                      ref.read(provider)[providerKey].split("-");
+                  List<String> currentDate = ref
+                      .read(provider)[providerKey]
+                      .split("-");
                   ref.read(provider.notifier).state = {
                     ...ref.read(provider),
                     providerKey:
-                        "${currentDate[0]}-${currentDate[1]}-${1900 + value}"
+                        "${currentDate[0]}-${currentDate[1]}-${1900 + value}",
                   };
                 },
                 children: [
                   for (int i = 0; i <= 200; i++)
-                    Center(
-                      child: Text(
-                        (1900 + i).toString(),
-                      ),
-                    ),
+                    Center(child: Text((1900 + i).toString())),
                 ],
               ),
             ),

@@ -1,15 +1,16 @@
 import 'dart:math';
 
+import 'package:app/global/classes/club.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/profile.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/global/widgets/modal_bottom_sheet.dart';
 import 'package:app/player_profile_search/functions/get_profiles.dart';
 import 'package:app/player_profile_search/widgets/player_result.dart';
-import 'package:app/calendar/widgets/custom_autofill_input.dart';
-import 'package:app/calendar/widgets/custom_expander.dart';
-import 'package:app/calendar/widgets/custom_input.dart';
-import 'package:app/calendar/widgets/wrapper_selector.dart';
+import 'package:app/global/widgets/custom_expander.dart';
+import 'package:app/global/widgets/custom_input.dart';
+import 'package:app/global/widgets/wrapper_selector.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -188,13 +189,21 @@ class _PlayerSearchState extends ConsumerState<PlayerSearch> {
                                       color: colorThemeState.secondaryColor,
                                     ),
                                   ),
-                                  body: CustomAutoFill(
-                                    provider: profileFilterProvider,
+                                  body: CustomDropDownSelector<Club>(
+                                    itemAsString: (item) => (item).clubName,
+                                    items: (filter, props) => clubs,
+                                    compareFn: (item1, item2) =>
+                                        (item1).clubName == (item2).clubName,
                                     hint: "Søg efter klub",
-                                    providerKey: "clubid",
-                                    suggestions: clubs
-                                        .map((e) => e.fullClubName)
-                                        .toList(),
+                                    initalValue: null,
+                                    onChanged: (item) {
+                                      ref
+                                          .read(profileFilterProvider.notifier)
+                                          .state = {
+                                        ...ref.read(profileFilterProvider),
+                                        "clubID": item.clubId.toString(),
+                                      };
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 16),

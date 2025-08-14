@@ -1,4 +1,4 @@
-import 'package:app/calendar/widgets/custom_input.dart';
+import 'package:app/global/widgets/custom_input.dart';
 import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
 import 'package:app/dashboard/widgets/team_tournament_result_preview.dart';
 import 'package:app/global/classes/color_theme.dart';
@@ -13,8 +13,8 @@ TextEditingController searchController = TextEditingController();
 
 FutureProvider<List<TeamTournamentResultPreview>?> latestSearchesProvider =
     FutureProvider<List<TeamTournamentResultPreview>?>((ref) async {
-  return getLatestSearches();
-});
+      return getLatestSearches();
+    });
 
 class SearchByNumber extends ConsumerWidget {
   const SearchByNumber({super.key});
@@ -26,9 +26,7 @@ class SearchByNumber extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(
-          height: 12,
-        ),
+        const SizedBox(height: 12),
         Row(
           children: [
             Expanded(
@@ -65,8 +63,10 @@ class SearchByNumber extends ConsumerWidget {
                     searchController,
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     child: Row(
                       children: [
                         Icon(
@@ -94,16 +94,15 @@ class SearchByNumber extends ConsumerWidget {
         Consumer(
           builder: (context, ref, child) {
             final latestSearches = ref.watch(latestSearchesProvider);
-            final teamTournamentFilter =
-                ref.watch(teamTournamentFilterProvider);
+            final teamTournamentFilter = ref.watch(
+              teamTournamentFilterProvider,
+            );
             return latestSearches.when(
               data: (snapshot) {
                 if (snapshot == null || snapshot.isEmpty) {
                   return const Expanded(
                     child: Center(
-                      child: Text(
-                        "Her vil dine seneste søgninger blive vist",
-                      ),
+                      child: Text("Her vil dine seneste søgninger blive vist"),
                     ),
                   );
                 } else {
@@ -112,20 +111,22 @@ class SearchByNumber extends ConsumerWidget {
                       itemCount: snapshot.length,
                       separatorBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        child: Divider(
-                          height: 1,
-                          color: Colors.grey.shade300,
+                          horizontal: 16,
+                          vertical: 4,
                         ),
+                        child: Divider(height: 1, color: Colors.grey.shade300),
                       ),
                       itemBuilder: (context, index) {
                         TeamTournamentResultPreview preview = snapshot[index];
                         return preview.matchNumber.contains(
-                                teamTournamentFilter['matchNumber'] ?? "")
+                              teamTournamentFilter['matchNumber'] ?? "",
+                            )
                             ? TeamTournamentResultPreviewWidget(
                                 result: preview,
                                 margin: const EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 16),
+                                  vertical: 4,
+                                  horizontal: 16,
+                                ),
                               )
                             : Container();
                       },
@@ -139,9 +140,7 @@ class SearchByNumber extends ConsumerWidget {
               error: (error, stack) {
                 return const Expanded(
                   child: Center(
-                    child: Text(
-                      "Her vil dine seneste søgninger blive vist",
-                    ),
+                    child: Text("Her vil dine seneste søgninger blive vist"),
                   ),
                 );
               },

@@ -28,7 +28,7 @@ class TournamentPreviewWidget extends ConsumerWidget {
         child: InkWell(
           onTap: () {
             ref.read(selectedTournament.notifier).state =
-                tournament.tournamentClassID.toString();
+                tournament.tournamentClassID;
             Navigator.of(context).pushNamed(
               "/TournamentParticipationPage",
               arguments: {"tournament": tournament},
@@ -54,22 +54,24 @@ class TournamentPreviewWidget extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        tournament
-                            .getFormattedClassAndAgeGroupCodes()
-                            .join('\n'),
+                        tournament.getFormattedClassAndAgeGroupCodes().join(
+                          '\n',
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color:
-                              colorThemeState.fontColor.withValues(alpha: 0.8),
+                          color: colorThemeState.fontColor.withValues(
+                            alpha: 0.8,
+                          ),
                           fontSize: 12,
                         ),
                       ),
                       Text(
                         '${DateFormat('MM/dd').format(tournament.dateFrom)} - ${DateFormat('MM/dd').format(tournament.dateTo)}',
                         style: TextStyle(
-                          color:
-                              colorThemeState.fontColor.withValues(alpha: 0.8),
+                          color: colorThemeState.fontColor.withValues(
+                            alpha: 0.8,
+                          ),
                           fontSize: 12,
                         ),
                       ),

@@ -4,7 +4,7 @@ import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/user.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
-import 'package:app/calendar/widgets/custom_input.dart';
+import 'package:app/global/widgets/custom_input.dart';
 import 'package:app/profile/functions/get_user_info.dart';
 import 'package:app/profile/functions/login.dart';
 import 'package:flutter/material.dart';
@@ -40,12 +40,7 @@ List<String> menus = [
 ];
 
 StateProvider<Map<String, dynamic>> loginProvider =
-    StateProvider<Map<String, dynamic>>(
-  (ref) => {
-    "email": "",
-    "password": "",
-  },
-);
+    StateProvider<Map<String, dynamic>>((ref) => {"email": "", "password": ""});
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -84,9 +79,7 @@ class ProfilePage extends ConsumerWidget {
                       child: Column(
                         spacing: 8,
                         children: [
-                          const SizedBox(
-                            height: 16,
-                          ),
+                          const SizedBox(height: 16),
                           CustomContainer(
                             margin: const EdgeInsets.only(bottom: 8),
                             borderRadius: 0,
@@ -137,9 +130,7 @@ class ProfilePage extends ConsumerWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    menu,
-                                  ),
+                                  Text(menu),
                                   Icon(
                                     Icons.chevron_right,
                                     color: Colors.grey[400] ?? Colors.grey,
@@ -167,9 +158,7 @@ class ProfilePage extends ConsumerWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  "Foreslå en feature!",
-                                ),
+                                const Text("Foreslå en feature!"),
                                 Icon(
                                   Icons.chevron_right,
                                   color: Colors.grey[400] ?? Colors.grey,
@@ -201,14 +190,9 @@ class ProfilePage extends ConsumerWidget {
                               children: [
                                 Text(
                                   "Log ud",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
+                                  style: TextStyle(color: Colors.red),
                                 ),
-                                Icon(
-                                  Icons.logout,
-                                  color: Colors.red,
-                                ),
+                                Icon(Icons.logout, color: Colors.red),
                               ],
                             ),
                           ),
@@ -298,7 +282,8 @@ class ProfilePage extends ConsumerWidget {
                                 Text(
                                   "Du har indtastet forkert email eller adgangskode",
                                   style: TextStyle(
-                                      color: Colors.red.withValues(alpha: 0.8)),
+                                    color: Colors.red.withValues(alpha: 0.8),
+                                  ),
                                 ),
                               ],
                             ),
@@ -319,13 +304,18 @@ class ProfilePage extends ConsumerWidget {
                                       ref.read(loginProvider)['password'],
                                     ).then((value) {
                                       ref
-                                          .read(isLoggedInProvider.notifier)
-                                          .state = value;
+                                              .read(isLoggedInProvider.notifier)
+                                              .state =
+                                          value;
                                       if (value) {
                                         getUserInfo().then(
-                                          (User user) => ref
-                                              .read(userProvider.notifier)
-                                              .state = user,
+                                          (User user) =>
+                                              ref
+                                                      .read(
+                                                        userProvider.notifier,
+                                                      )
+                                                      .state =
+                                                  user,
                                         );
                                       }
                                     });
@@ -352,9 +342,7 @@ class ProfilePage extends ConsumerWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 16,
-                        ),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),

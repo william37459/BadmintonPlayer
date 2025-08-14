@@ -9,8 +9,9 @@ class WrapperSelector extends ConsumerWidget {
   final StateProvider<Map<String, dynamic>> provider;
   final bool isMultiSelect;
 
-  final StateProvider<List<String>> selectedData =
-      StateProvider<List<String>>((ref) => []);
+  final StateProvider<List<String>> selectedData = StateProvider<List<String>>(
+    (ref) => [],
+  );
 
   WrapperSelector({
     super.key,
@@ -36,12 +37,13 @@ class WrapperSelector extends ConsumerWidget {
               onTap: () {
                 Map<String, dynamic> filterMap = ref.read(provider);
                 if (isMultiSelect) {
-                  ref.read(selectedData.notifier).state =
-                      selectedDataState.contains(value)
-                          ? selectedDataState
-                              .where((element) => element != value)
-                              .toList()
-                          : [...selectedDataState, value];
+                  ref
+                      .read(selectedData.notifier)
+                      .state = selectedDataState.contains(value)
+                      ? selectedDataState
+                            .where((element) => element != value)
+                            .toList()
+                      : [...selectedDataState, value];
                   if (filterMap[providerKey] != null) {
                     if (!selectedDataState.contains("0") &&
                         filterMap[providerKey]?.contains("0")) {
@@ -82,27 +84,23 @@ class WrapperSelector extends ConsumerWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: colorThemeState.primaryColor,
-                  ),
+                  border: Border.all(color: colorThemeState.primaryColor),
                   color: colorThemeState.primaryColor.withValues(
-                      alpha:
-                          (providerState[providerKey]?.contains(value) ?? false)
-                              ? 1
-                              : 0.2),
+                    alpha:
+                        (providerState[providerKey]?.contains(value) ?? false)
+                        ? 1
+                        : 0.2,
+                  ),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Text(
                   data[value],
                   style: TextStyle(
                     color:
                         (providerState[providerKey]?.contains(value) ?? false)
-                            ? colorThemeState.secondaryFontColor
-                            : colorThemeState.primaryColor,
+                        ? colorThemeState.secondaryFontColor
+                        : colorThemeState.primaryColor,
                     fontSize: 12,
                   ),
                 ),
