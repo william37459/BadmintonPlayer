@@ -7,17 +7,15 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 
 Future<Map<String, List<PlayerScore>>> getAllScoreLists(Map body) async {
-  List allScoreList = await Future.wait(
-    [
-      getScoreList("", 287, body),
-      getScoreList("M", 288, body),
-      getScoreList("K", 288, body),
-      getScoreList("M", 289, body),
-      getScoreList("K", 289, body),
-      getScoreList("M", 292, body),
-      getScoreList("K", 292, body),
-    ],
-  );
+  List allScoreList = await Future.wait([
+    getScoreList("", 287, body),
+    getScoreList("M", 288, body),
+    getScoreList("K", 288, body),
+    getScoreList("M", 289, body),
+    getScoreList("K", 289, body),
+    getScoreList("M", 292, body),
+    getScoreList("K", 292, body),
+  ]);
   return {
     "287": allScoreList[0],
     "288M": allScoreList[1],
@@ -30,14 +28,15 @@ Future<Map<String, List<PlayerScore>>> getAllScoreLists(Map body) async {
 }
 
 Future<List<PlayerScore>> getScoreList(
-    String param, int rankinglistid, Map body) async {
+  String param,
+  int rankinglistid,
+  Map body,
+) async {
   http.Response response = await http.post(
     Uri.parse(
-      'https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetRankingListPlayers',
+      'https://www.badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetRankingListPlayers',
     ),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
+    headers: {"Content-Type": "application/json; charset=utf-8"},
     body: json.encode({
       ...body,
       "callbackcontextkey": contextKey,
@@ -62,7 +61,8 @@ Future<List<PlayerScore>> getScoreList(
       String badmintonId = person.querySelector(".playerid")!.text.trim();
       String rankClass = person.querySelector(".clas")!.text.trim();
       String name = person.querySelector(".name")!.text.trim().split(", ")[0];
-      String id = person
+      String id =
+          person
               .querySelector(".name")!
               .querySelector('a')
               ?.attributes['href']
@@ -70,8 +70,8 @@ Future<List<PlayerScore>> getScoreList(
           "";
       String? club =
           person.querySelector(".name")!.text.trim().split(", ").length > 1
-              ? person.querySelector(".name")!.text.trim().split(", ")[1]
-              : null;
+          ? person.querySelector(".name")!.text.trim().split(", ")[1]
+          : null;
       String? points = person.querySelector(".points.points")!.text.trim();
 
       peopleList.add(

@@ -21,12 +21,32 @@ StateProvider<SeasonPlanSearchFilter> seasonPlanSeachFilterProvider =
 
 FutureProvider<List<Tournament>> seasonPlanFutureProvider =
     FutureProvider<List<Tournament>>((ref) async {
-      SeasonPlanSearchFilter filterValues = ref.read(
+      SeasonPlanSearchFilter filterValues = ref.watch(
         seasonPlanSeachFilterProvider,
       );
+
       final result = await getSeasonPlan(filterValues, contextKey);
+      for (Tournament tournament in result) {
+        if (tournament.dateTo.isAfter(visitedRange.end)) {
+          visitedRange = DateTimeRange(
+            start: visitedRange.start,
+            end: tournament.dateTo,
+          );
+        }
+        if (tournament.dateFrom.isBefore(visitedRange.start)) {
+          visitedRange = DateTimeRange(
+            start: tournament.dateFrom,
+            end: visitedRange.end,
+          );
+        }
+      }
       return result;
     });
+
+DateTimeRange visitedRange = DateTimeRange(
+  start: DateTime.now().subtract(const Duration(days: 100)),
+  end: DateTime.now().subtract(const Duration(days: 90)),
+);
 
 class TournamentPlan extends ConsumerWidget {
   final TextEditingController textFieldController = TextEditingController();
@@ -132,10 +152,17 @@ class TournamentPlan extends ConsumerWidget {
                   ),
                 ),
                 selectedDayPredicate: (day) => isSameDay(selectedDay, day),
-                onDaySelected: (selectedDay, focusedDay) =>
-                    ref.read(selectedDayProvider.notifier).state = selectedDay,
+                onDaySelected: (selectedDay, focusedDay) {
+                  ref.read(selectedDayProvider.notifier).state = selectedDay;
+                  ref.read(seasonPlanSeachFilterProvider.notifier).state = ref
+                      .read(seasonPlanSeachFilterProvider)
+                      .copyWith(startDate: selectedDay);
+                },
                 onPageChanged: (focusedDay) {
                   ref.read(selectedDayProvider.notifier).state = focusedDay;
+                  ref.read(seasonPlanSeachFilterProvider.notifier).state = ref
+                      .read(seasonPlanSeachFilterProvider)
+                      .copyWith(startDate: focusedDay);
                 },
               ),
 
@@ -162,9 +189,7 @@ class TournamentPlan extends ConsumerWidget {
                                             ),
                                           ) &&
                                           tournament.dateFrom.isBefore(
-                                            selectedDay.add(
-                                              const Duration(days: 1),
-                                            ),
+                                            selectedDay,
                                           ),
                                     )
                                     .length,
@@ -181,9 +206,7 @@ class TournamentPlan extends ConsumerWidget {
                                               ),
                                             ) &&
                                             tournament.dateFrom.isBefore(
-                                              selectedDay.add(
-                                                const Duration(days: 1),
-                                              ),
+                                              selectedDay,
                                             ),
                                       )
                                       .toList();
@@ -202,7 +225,7 @@ class TournamentPlan extends ConsumerWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Der er ingen turneringer der matchede din søgning",
+                                      "Ingen turneringer der matchede din søgning",
                                       style: TextStyle(
                                         color: colorThemeState.fontColor,
                                         fontSize: 18,

@@ -8,6 +8,7 @@ class TabBarLabel extends ConsumerWidget {
   final int index;
   final int currentIndex;
   final TabController tabController;
+  final Function()? onTap;
 
   const TabBarLabel({
     super.key,
@@ -15,6 +16,7 @@ class TabBarLabel extends ConsumerWidget {
     required this.index,
     required this.currentIndex,
     required this.tabController,
+    this.onTap,
   });
 
   @override
@@ -28,6 +30,9 @@ class TabBarLabel extends ConsumerWidget {
           borderRadius: BorderRadius.circular(4),
           onTap: () {
             tabController.animateTo(index);
+            if (onTap != null) {
+              onTap!();
+            }
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
@@ -47,8 +52,9 @@ class TabBarLabel extends ConsumerWidget {
                 color: currentIndex == index
                     ? colorThemeState.primaryColor
                     : colorThemeState.fontColor.withValues(alpha: 0.8),
-                fontWeight:
-                    currentIndex == index ? FontWeight.bold : FontWeight.normal,
+                fontWeight: currentIndex == index
+                    ? FontWeight.bold
+                    : FontWeight.normal,
                 fontSize: 12,
               ),
             ),

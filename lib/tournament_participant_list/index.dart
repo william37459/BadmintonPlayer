@@ -1,74 +1,106 @@
 import 'package:app/global/classes/color_theme.dart';
-import 'package:app/global/classes/participant.dart';
 import 'package:app/global/classes/tournament.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
-import 'package:app/global/widgets/custom_expander.dart';
+import 'package:app/tournament_participant_list/classes/participant.dart';
+import 'package:app/tournament_participant_list/classes/tournament_class.dart';
+import 'package:app/tournament_participant_list/functions/get_classes.dart';
 import 'package:app/tournament_participant_list/functions/get_participaters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-StateProvider<Map<String, dynamic>> tournamentParticipationFilterProvider =
-    StateProvider<Map<String, dynamic>>(
-      (ref) => {
-        "clientselectfunction": "SelectTournamentClass1",
-        "clubid": 0,
-        "groupnumber": 0,
-        "locationnumber": 0,
-        "playerid": 0,
-        "tabnumber": 0,
-        "tournamentclassid": null,
-        "tournamenteventid": 0,
-      },
-    );
 
 StateProvider<Map<String, String>> rankFilterProvider = StateProvider(
   (ref) => {},
 );
 
+StateProvider<int> selectedClass = StateProvider<int>((ref) => 0);
+
 FutureProvider<List<Participant>> tournamentParticipationProvider =
     FutureProvider<List<Participant>>((ref) async {
-      final filterProvider = ref.watch(tournamentParticipationFilterProvider);
-      final selectedTournamentState = ref.watch(selectedTournament);
+      final int selectedClassState = ref.watch(selectedClass);
 
-      final result = await getParticipaters(
-        filterProvider,
-        contextKey,
-        filterProvider['tournamentclassid'] ?? selectedTournamentState,
-      );
-
-      ref.read(rankFilterProvider.notifier).state = result['filters'];
-
-      return result['data'];
+      return getParticipaters(selectedClassState);
     });
 
-class TournamentParticipationList extends ConsumerWidget {
+FutureProvider<List<TournamentClass>> tournamentClassProvider =
+    FutureProvider<List<TournamentClass>>((ref) async {
+      final int selectedTournamentState = ref.watch(selectedTournament);
+      return await getClasses(selectedTournamentState);
+    });
+
+class TournamentParticipationList extends ConsumerStatefulWidget {
   final Tournament tournament;
 
   const TournamentParticipationList({super.key, required this.tournament});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TournamentParticipationList> createState() =>
+      _TournamentParticipationListState();
+}
+
+class _TournamentParticipationListState
+    extends ConsumerState<TournamentParticipationList>
+    with TickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 1, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  void ensureControllerLength(int newLength) {
+    if (newLength < 1) newLength = 1;
+    if (tabController.length == newLength) return;
+
+    final safeIndex = tabController.index.clamp(0, newLength - 1);
+    tabController.dispose();
+    tabController = TabController(
+      length: newLength,
+      vsync: this,
+      initialIndex: safeIndex,
+    );
+    tabController.addListener(() {
+      setState(() {});
+    });
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-    AsyncValue<List<Participant>> futureAsyncValue = ref.watch(
+    AsyncValue<List<Participant>> participantListAsync = ref.watch(
       tournamentParticipationProvider,
     );
+
+    AsyncValue<List<TournamentClass>> classListAsync = ref.watch(
+      tournamentClassProvider,
+    );
+
+    final tabCount = classListAsync.maybeWhen(
+      data: (classes) => (classes.length + 1),
+      orElse: () => 1,
+    );
+    ensureControllerLength(tabCount);
 
     return Scaffold(
       backgroundColor: colorThemeState.backgroundColor,
       appBar: AppBar(
-        backgroundColor: colorThemeState.primaryColor,
+        backgroundColor: colorThemeState.backgroundColor,
         title: Text(
-          tournament.title != null && tournament.title!.isNotEmpty
-              ? tournament.title!
-              : tournament.clubName,
-          style: TextStyle(color: colorThemeState.secondaryFontColor),
+          widget.tournament.title != null && widget.tournament.title!.isNotEmpty
+              ? widget.tournament.title!
+              : widget.tournament.clubName,
+          style: TextStyle(color: colorThemeState.fontColor, fontSize: 16),
         ),
         leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left,
-            color: colorThemeState.secondaryFontColor,
-          ),
+          icon: Icon(Icons.chevron_left, color: colorThemeState.fontColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -76,140 +108,108 @@ class TournamentParticipationList extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomContainer(
-              margin: EdgeInsets.fromLTRB(16, 24, 16, 12),
-              child: Row(
-                children: [
-                  // Expanded(
-                  //   child: CustomDropDownSelector<String>(
-                  //     itemAsString: (item) => item.values.first,
-                  //     items: (filter, props) => rankFilterProviderState.entries
-                  //         .map((entry) => {entry.key: entry.value})
-                  //         .toList(),
-                  //     onChanged: (value) {
-                  //       ref
-                  //           .read(
-                  //             tournamentParticipationFilterProvider.notifier,
-                  //           )
-                  //           .update(
-                  //             (state) => {...state, "tournamentclassid": value},
-                  //           );
-                  //     },
-                  //     initalValue: "Vælg række",
-                  //     hint: "Vælg række",
-                  //   ),
-                  // ),
-                ],
+            SizedBox(
+              height: 48,
+              child: classListAsync.when(
+                data: (data) => ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (int i = 0; i < data.length; i++)
+                      TabBarLabel(
+                        label: "${data[i].ageGroupName} ${data[i].className}",
+                        index: i,
+                        currentIndex: tabController.index,
+                        tabController: tabController,
+                        onTap: () => ref.read(selectedClass.notifier).state =
+                            data[i].tournamentClassID,
+
+                        colorThemeState: colorThemeState,
+                      ),
+                  ],
+                ),
+                error: (error, stackTrace) => Center(
+                  child: Text(
+                    "Kunne ikke hente klasser",
+                    style: TextStyle(color: colorThemeState.fontColor),
+                  ),
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ),
-            futureAsyncValue.when(
+            participantListAsync.when(
               data: (data) {
-                List<String> categoryList = [];
-                for (var element in data) {
-                  if (!categoryList.contains(element.category)) {
-                    categoryList.add(element.category);
-                  }
-                }
-
                 return Expanded(
-                  child: ListView(
-                    children: [
-                      for (String category in categoryList)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: CustomExpander(
-                            isExpanded: true,
-                            body: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                for (Participant participant in data)
-                                  if (participant.category == category)
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        vertical: 4,
-                                        horizontal: 16,
-                                      ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withValues(
-                                              alpha: 0.2,
-                                            ),
-                                            blurRadius: 4,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            participant.players
-                                                .where(
-                                                  (customClass) => customClass
-                                                      .name
-                                                      .isNotEmpty,
-                                                )
-                                                .map(
-                                                  (customClass) =>
-                                                      customClass.name,
-                                                )
-                                                .join(' & '),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: colorThemeState.fontColor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            "Fra: ${participant.players.where((customClass) => customClass.club.isNotEmpty).map((customClass) => customClass.club).join(' & ')}",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: colorThemeState.fontColor
-                                                  .withValues(alpha: 0.5),
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          Text(
-                                            "Tilmeldt af: ${participant.registrator}",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: colorThemeState.fontColor
-                                                  .withValues(alpha: 0.5),
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (index == 0 ||
+                            data[index].type != data[index - 1].type) ...[
+                          const SizedBox(height: 16),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            child: Text(
+                              data[index].type,
+                              style: TextStyle(
+                                color: colorThemeState.fontColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                        CustomContainer(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical:
+                                (index == 0 ||
+                                    data[index].type != data[index - 1].type)
+                                ? 4
+                                : 8,
+                          ),
+                          onTap: () => print("Tapped"),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                            vertical: 16,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      data[index].players
+                                          .map((e) => e.name)
+                                          .join(", "),
+                                      style: TextStyle(
+                                        color: colorThemeState.fontColor,
                                       ),
                                     ),
-                              ],
-                            ),
-                            header: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                              ),
-                              child: Text(
-                                category,
-                                style: TextStyle(
-                                  color: colorThemeState.fontColor,
-                                  fontSize: 14,
+                                    Text(
+                                      data[index].players
+                                          .map((e) => e.club)
+                                          .join(", "),
+                                      style: TextStyle(
+                                        color: colorThemeState.fontColor
+                                            .withAlpha(128),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            isExpandedKey: category,
+                              Icon(
+                                Icons.info_outline,
+                                color: colorThemeState.primaryColor,
+                              ),
+                            ],
                           ),
                         ),
-                    ],
+                      ],
+                    ),
+                    itemCount: data.length,
                   ),
                 );
               },
@@ -220,6 +220,73 @@ class TournamentParticipationList extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class TabBarLabel extends StatelessWidget {
+  final String label;
+  final int index;
+  final int currentIndex;
+  final TabController tabController;
+  final CustomColorTheme colorThemeState;
+  final Function()? onTap;
+
+  const TabBarLabel({
+    super.key,
+    required this.label,
+    required this.index,
+    required this.currentIndex,
+    required this.tabController,
+    required this.colorThemeState,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    bool isSelected = currentIndex == index;
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 300),
+      opacity: 1,
+      child: Center(
+        child: Material(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(4),
+            onTap: () {
+              tabController.animateTo(index);
+              onTap?.call();
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              height: 48,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: isSelected
+                    ? Border(
+                        bottom: BorderSide(
+                          color: colorThemeState.primaryColor,
+                          width: 1,
+                        ),
+                      )
+                    : null,
+              ),
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: isSelected
+                      ? colorThemeState.primaryColor
+                      : colorThemeState.fontColor,
+                  fontWeight: isSelected ? FontWeight.w600 : null,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

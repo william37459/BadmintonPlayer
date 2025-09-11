@@ -24,8 +24,8 @@ FutureProvider<TeamTournamentResult> teamTournaments =
       return result;
     });
 
-class TeamTournamentClubResultsWidget extends ConsumerWidget {
-  const TeamTournamentClubResultsWidget({super.key});
+class TeamTournamentMatchResultWidget extends ConsumerWidget {
+  const TeamTournamentMatchResultWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

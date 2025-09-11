@@ -68,6 +68,8 @@ Future<Map<String, dynamic>> getResults(
       "damedouble",
       "herresingle",
       "damesingle",
+      "single (m/k)",
+      "double (m/k)",
     ];
 
     filters['matchType']?.removeWhere(

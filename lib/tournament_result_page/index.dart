@@ -120,7 +120,15 @@ class TournamentResultPage extends ConsumerWidget {
                   builder: (context, constraints) {
                     final filters = resultFilterProviderState['matchType']!.keys
                         .toList()
-                        .sublist(0, 5);
+                        .sublist(
+                          0,
+                          resultFilterProviderState['matchType']!.keys.length <
+                                  5
+                              ? resultFilterProviderState['matchType']!
+                                    .keys
+                                    .length
+                              : 5,
+                        );
                     double totalWidth = filters.length * 100;
                     if (totalWidth < constraints.maxWidth) {
                       return Row(

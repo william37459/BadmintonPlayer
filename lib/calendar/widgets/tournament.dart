@@ -1,6 +1,7 @@
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/tournament.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/tournament_participant_list/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -122,6 +123,8 @@ class TournamentWidget extends ConsumerWidget {
                       onTap: () {
                         ref.read(selectedTournament.notifier).state =
                             tournament.tournamentClassID;
+                        ref.read(selectedClass.notifier).state =
+                            tournament.tournamentClassID;
                         Navigator.of(context).pushNamed(
                           "/TournamentParticipationPage",
                           arguments: {"tournament": tournament},
@@ -157,14 +160,12 @@ class TournamentWidget extends ConsumerWidget {
                       onTap: () {
                         ref.read(selectedTournament.notifier).state =
                             tournament.tournamentClassID;
+
                         Navigator.of(context).pushNamed(
                           "/TournamentResultPage",
                           arguments: {
                             "tournament":
-                                tournament.title != null &&
-                                    tournament.title!.isNotEmpty
-                                ? tournament.title
-                                : tournament.clubName,
+                                tournament.title ?? tournament.clubName,
                           },
                         );
                       },

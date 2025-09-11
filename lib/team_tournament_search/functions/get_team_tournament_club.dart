@@ -5,7 +5,7 @@ import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
 
-Future<Map<String, List<TeamTournamentFilter>>> getTeamTournamentRegion(
+Future<Map<String, List<TeamTournamentFilterClub>>> getTeamTournamentClub(
   String contextKey,
   Map<String, String> filter,
 ) async {
@@ -17,18 +17,18 @@ Future<Map<String, List<TeamTournamentFilter>>> getTeamTournamentRegion(
     body: json.encode({"callbackcontextkey": contextKey, ...filter}),
   );
 
-  Map<String, List<TeamTournamentFilter>> result = {};
+  Map<String, List<TeamTournamentFilterClub>> result = {};
 
   if (response.statusCode == 200) {
     final document = html_parser.parse(json.decode(response.body)['d']['html']);
 
     List<Element> rows = document.querySelectorAll('tr');
-    List<TeamTournamentFilter> allTeamTournamentFilters = [];
+    List<TeamTournamentFilterClub> allTeamTournamentFilters = [];
 
     String header = "";
 
     for (Element row in rows) {
-      if (row.className == "divisionrow") {
+      if (row.className == "agegrouprow") {
         if (header.isNotEmpty) {
           result.putIfAbsent(header, () => allTeamTournamentFilters);
           allTeamTournamentFilters = [];
@@ -44,22 +44,26 @@ Future<Map<String, List<TeamTournamentFilter>>> getTeamTournamentRegion(
 
         params.map((param) => "'$param'").toList();
 
-        allTeamTournamentFilters.add(
-          TeamTournamentFilter(
-            text: row.text,
-            clubID: params[8],
-            leagueGroupID: params[2],
-            leagueGroupTeamID: params[5],
-            leagueMatchID: params[6],
-            ageGroupID: params[3],
-            playerID: params[7],
-            regionID: params[4],
-            seasonID: params[1],
-            subPage: params[0],
-          ),
-        );
+        if (row.children.length > 1) {
+          allTeamTournamentFilters.add(
+            TeamTournamentFilterClub(
+              club: row.children[0].text,
+              text: row.children[1].text,
+              clubID: params[8],
+              leagueGroupID: params[5],
+              leagueGroupTeamID: params[2],
+              leagueMatchID: params[6],
+              ageGroupID: params[3],
+              playerID: params[7],
+              regionID: params[4],
+              seasonID: params[1],
+              subPage: params[0],
+            ),
+          );
+        }
       }
     }
+    result.putIfAbsent(header, () => allTeamTournamentFilters);
   }
 
   return result;

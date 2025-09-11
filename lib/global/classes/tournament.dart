@@ -88,12 +88,12 @@ class Tournament {
   });
 
   factory Tournament.fromJson(
-      Map<String, dynamic> json, List<TournamentDetails> tournamentDetails) {
+    Map<String, dynamic> json,
+    List<TournamentDetails> tournamentDetails,
+  ) {
     List<TournamentLink> tournamentLinks = [];
     for (int i = 0; i < (json['tournamentLink']?.length ?? 0); i++) {
-      tournamentLinks.add(
-        TournamentLink.fromJson(json['tournamentLink'][i]),
-      );
+      tournamentLinks.add(TournamentLink.fromJson(json['tournamentLink'][i]));
     }
 
     return Tournament(
@@ -144,6 +144,9 @@ class Tournament {
   }
 
   bool participatersReady() {
+    if (tournamentType == 104) {
+      return false;
+    }
     for (var link in tournamentLink) {
       if (link.tournamentLinkType == 0) {
         return true;
@@ -153,6 +156,9 @@ class Tournament {
   }
 
   bool resultsReady() {
+    if (tournamentType == 104) {
+      return false;
+    }
     for (var link in tournamentLink) {
       if (link.tournamentLinkType == 4) {
         return true;
@@ -180,9 +186,7 @@ class Tournament {
     List<String> formattedClassAndAgeGroupCodes = [];
 
     classAndAgeGroupCodes.forEach((key, value) {
-      formattedClassAndAgeGroupCodes.add(
-        "$key ${value.join(', ')}",
-      );
+      formattedClassAndAgeGroupCodes.add("$key ${value.join(', ')}");
     });
 
     return formattedClassAndAgeGroupCodes;
@@ -267,8 +271,9 @@ class TournamentDetails {
       ageGroupCode: json['ageGroupCode'],
       ageGroupID: json['ageGroupID'],
       ageGroupName: json['ageGroupName'],
-      bornFrom:
-          json['bornFrom'] != null ? DateTime.parse(json['bornFrom']) : null,
+      bornFrom: json['bornFrom'] != null
+          ? DateTime.parse(json['bornFrom'])
+          : null,
       bornTo: json['bornTo'] != null ? DateTime.parse(json['bornTo']) : null,
       classCode: json['classCode'],
       classDateFrom: DateTime.parse(json['classDateFrom']),

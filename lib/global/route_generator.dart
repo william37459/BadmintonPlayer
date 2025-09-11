@@ -4,10 +4,6 @@ import 'package:app/player_profile/index.dart';
 import 'package:app/player_profile_search/index.dart';
 import 'package:app/setup/index.dart';
 import 'package:app/team_tournament/index.dart';
-import 'package:app/team_tournament_results/all_matches/index.dart';
-import 'package:app/team_tournament_results/club/index.dart';
-import 'package:app/team_tournament_results/position/index.dart';
-import 'package:app/team_tournament_results/region/index.dart';
 import 'package:app/team_tournament_results/match_result/index.dart';
 import 'package:app/team_tournament_search/index.dart';
 import 'package:app/tournament_participant_list/index.dart';
@@ -38,16 +34,6 @@ class RouteGenerator {
           );
         }
         return CupertinoPageRoute(builder: (_) => const PlayerSearch());
-      case '/TeamTournamentRegionPage':
-        if (args is Map) {
-          return CupertinoPageRoute(
-            builder: (_) => TeamTournamentRegionPage(
-              region: args['region'],
-              rank: args['rank'],
-            ),
-          );
-        }
-        return _errorRoute();
       case '/PlayerProfilePage':
         if (args is Map) {
           return CupertinoPageRoute(
@@ -71,32 +57,12 @@ class RouteGenerator {
           );
         }
         return _errorRoute();
-      case '/TeamTournamentClubPage':
-        if (args is Map) {
-          return CupertinoPageRoute(
-            builder: (_) => TeamTournamentClubPage(club: args['club']),
-          );
-        }
-        return _errorRoute();
-      case '/TeamTournamentPositionPage':
-        if (args is Map) {
-          return CupertinoPageRoute(
-            builder: (_) => TeamTournamentPositionWidget(title: args['title']),
-          );
-        }
-        return _errorRoute();
       case '/TournamentOverviewPage':
         return CupertinoPageRoute(builder: (_) => TournamentPlan());
       case '/TeamTournamentResultPage':
         return CupertinoPageRoute(
-          builder: (_) => const TeamTournamentClubResultsWidget(),
+          builder: (_) => const TeamTournamentMatchResultWidget(),
         );
-
-      case '/AllTeamTournamentMatchesPage':
-        return CupertinoPageRoute(
-          builder: (_) => const AllTeamTournamentMatchesWidget(),
-        );
-
       default:
         return _errorRoute();
     }

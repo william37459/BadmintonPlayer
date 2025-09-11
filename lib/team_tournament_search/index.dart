@@ -3,11 +3,18 @@ import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/drop_down_selector.dart';
-import 'package:app/team_tournament_results/club/index.dart';
+import 'package:app/team_tournament_search/functions/get_team_tournament_club.dart';
 import 'package:app/team_tournament_search/widgets/team_tournament_team_widget.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+FutureProvider<Map<String, List<TeamTournamentFilterClub>>> teamTournaments =
+    FutureProvider<Map<String, List<TeamTournamentFilterClub>>>((ref) async {
+      final filters = ref.watch(teamTournamentSearchFilterProvider);
+      final result = await getTeamTournamentClub(contextKey, filters.toJson());
+      return result;
+    });
 
 class TeamTournamentSearch extends ConsumerWidget {
   final TextEditingController textFieldController = TextEditingController();
