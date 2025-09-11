@@ -101,7 +101,7 @@ class TeamTournamentSearch extends ConsumerWidget {
             ),
             Expanded(
               child: futureAsyncValue.when(
-                data: (data) => (data[data.keys.first]?.length ?? 0) < 2
+                data: (data) => (data[data.keys.first] ?? []).isEmpty
                     ? const Center(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),

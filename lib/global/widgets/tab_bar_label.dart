@@ -36,7 +36,7 @@ class TabBarLabel extends ConsumerWidget {
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
