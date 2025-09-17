@@ -9,6 +9,8 @@ class TeamTournamentClubResult {
   Sets sets;
   int points;
   int sPoints;
+  int leagueGroupId;
+  int leagueTeamId;
 
   TeamTournamentClubResult({
     required this.placement,
@@ -19,6 +21,8 @@ class TeamTournamentClubResult {
     required this.sets,
     required this.points,
     required this.sPoints,
+    required this.leagueGroupId,
+    required this.leagueTeamId,
   });
 
   factory TeamTournamentClubResult.fromElement(Element element) {
@@ -35,6 +39,17 @@ class TeamTournamentClubResult {
     int points = int.tryParse(allScores.elementAtOrNull(4) ?? "") ?? -1;
     int sPoints = int.tryParse(allScores.elementAtOrNull(5) ?? "") ?? -1;
 
+    List<String> hrefParts =
+        element
+            .querySelector(".team1 > a")
+            ?.attributes['onclick']
+            ?.split(", ")
+            .map((e) => e.replaceAll("'", ""))
+            .toList() ??
+        [];
+    int leagueGroupId = int.tryParse(hrefParts.elementAtOrNull(2) ?? "") ?? -1;
+    int leagueTeamId = int.tryParse(hrefParts.elementAtOrNull(5) ?? "") ?? -1;
+
     return TeamTournamentClubResult(
       placement: placement,
       clubName: clubName,
@@ -44,6 +59,8 @@ class TeamTournamentClubResult {
       sets: Sets.fromString(allScores.elementAtOrNull(3) ?? ""),
       points: points,
       sPoints: sPoints,
+      leagueGroupId: leagueGroupId,
+      leagueTeamId: leagueTeamId,
     );
   }
 }

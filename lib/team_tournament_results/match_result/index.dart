@@ -35,51 +35,66 @@ class TeamTournamentMatchResultWidget extends ConsumerWidget {
 
     return futureAsyncValue.when(
       data: (data) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: colorThemeState.primaryColor,
-          title: Text(
-            "Resultat for #$leagueMatchID",
-            style: TextStyle(
-              fontSize: 18,
-              color: colorThemeState.secondaryFontColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: const Icon(Icons.chevron_left, color: Colors.white),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(100),
-                onTap: () => showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: colorThemeState.backgroundColor,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                  ),
-                  builder: (BuildContext context) =>
-                      TournamentInfoBottomSheet(entries: data.info.entries),
-                ),
-                child: Icon(
-                  Icons.info_outline,
-                  color: colorThemeState.backgroundColor,
-                ),
-              ),
-            ),
-          ],
-        ),
+        backgroundColor: colorThemeState.backgroundColor,
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 12,
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 16,
+                ),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Icon(
+                        Icons.chevron_left,
+                        size: 32,
+                        color: colorThemeState.fontColor.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        "Resultat for #$leagueMatchID",
+                        style: TextStyle(
+                          color: colorThemeState.fontColor.withValues(
+                            alpha: 0.8,
+                          ),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(100),
+                        onTap: () => showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: colorThemeState.backgroundColor,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16),
+                            ),
+                          ),
+                          builder: (BuildContext context) =>
+                              TournamentInfoBottomSheet(
+                                entries: data.info.entries,
+                              ),
+                        ),
+                        child: Icon(
+                          Icons.info_outline,
+                          color: colorThemeState.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 16.0,
@@ -107,7 +122,7 @@ class TeamTournamentMatchResultWidget extends ConsumerWidget {
                       "VS",
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey,
+                        color: Colors.black54,
                         fontWeight: FontWeight.w900,
                       ),
                     ),

@@ -1,6 +1,7 @@
-import 'package:app/calendar/index.dart';
+import 'package:app/calendar/classes/season_plan_search_filter.dart';
 
 import 'package:app/dashboard/functions/get_tournament_results_preview.dart';
+import 'package:app/dashboard/functions/get_upcoming_tournaments.dart';
 import 'package:app/dashboard/widgets/add_info_preview.dart';
 import 'package:app/dashboard/widgets/consumer_preview_widget.dart';
 import 'package:app/dashboard/classes/team_tournament_result_preview.dart';
@@ -13,6 +14,7 @@ import 'package:app/dashboard/widgets/tournament_result_preview_widget.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/player_profile.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
+import 'package:app/global/classes/tournament.dart';
 import 'package:app/global/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,6 +78,41 @@ FutureProvider<List<TeamTournamentResultPreview>> teamTournamentResultProvider =
       return result;
     });
 
+StateProvider<SeasonPlanSearchFilter> upcomingTournamentsFilterProvider =
+    StateProvider<SeasonPlanSearchFilter>(
+      (ref) => SeasonPlanSearchFilter.empty(),
+    );
+
+FutureProvider<List<Tournament>> upcomingTournamentsProvider =
+    FutureProvider<List<Tournament>>((ref) async {
+      List<String>? favouriteIds = ref.watch(favouriteTournaments);
+
+      final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+
+      if (favouriteIds == null) {
+        ref.read(favouriteTournaments.notifier).state =
+            await asyncPrefs.getStringList("favouriteTournaments") ?? [];
+      }
+
+      SeasonPlanSearchFilter filterValues = ref.watch(
+        upcomingTournamentsFilterProvider,
+      );
+      List<String>? ids = ref.watch(favouritePlayers);
+
+      if (ids == null) {
+        ref.read(favouritePlayers.notifier).state =
+            await asyncPrefs.getStringList("favouritePlayers") ?? [];
+      }
+
+      final result = await getUpcomingTournaments(
+        ids,
+        favouriteIds,
+        filterValues,
+        contextKey,
+      );
+      return result;
+    });
+
 class Dashboard extends ConsumerWidget {
   final ScrollController scrollController = ScrollController();
 
@@ -127,7 +164,7 @@ class Dashboard extends ConsumerWidget {
                 ConsumerPreviewWidget(
                   child: (dynamic result) =>
                       TournamentPreviewWidget(tournament: result, width: 200),
-                  provider: seasonPlanFutureProvider,
+                  provider: upcomingTournamentsProvider,
                   errorText: 'Ingen kommende turneringer',
                 ),
                 Padding(

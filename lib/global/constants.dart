@@ -39,6 +39,9 @@ StateProvider<List<String>?> favouritePlayers = StateProvider<List<String>?>(
   (ref) => null,
 );
 
+StateProvider<List<String>?> favouriteTournaments =
+    StateProvider<List<String>?>((ref) => null);
+
 StateProvider<List<String>?> favouriteTeams = StateProvider<List<String>?>(
   (ref) => null,
 );

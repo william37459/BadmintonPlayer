@@ -20,7 +20,6 @@ Map<String, String> monthToNumber = {
 
 Future<List<Tournament>> getSeasonPlan(
   SeasonPlanSearchFilter filterValues,
-  String contextKey,
 ) async {
   http.Response response = await http.patch(
     Uri.parse("https://badmintonplayer.dk/api/Tournament"),
@@ -52,7 +51,6 @@ Future<List<Tournament>> getSeasonPlan(
       );
     }
   }
-
   return tournamentList;
 
   // print(json.decode(response.body)['d']['html']);

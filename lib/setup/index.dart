@@ -1,14 +1,15 @@
 import 'package:app/setup/functions/get_setup_values.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SetupWidget extends StatefulWidget {
+class SetupWidget extends ConsumerStatefulWidget {
   const SetupWidget({super.key});
 
   @override
-  State<SetupWidget> createState() => _SetupWidgetState();
+  SetupWidgetState createState() => SetupWidgetState();
 }
 
-class _SetupWidgetState extends State<SetupWidget>
+class SetupWidgetState extends ConsumerState<SetupWidget>
     with TickerProviderStateMixin {
   late AnimationController controller;
   late AnimationController progressController;
@@ -45,7 +46,7 @@ class _SetupWidgetState extends State<SetupWidget>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getSetupValues(),
+      future: getSetupValues(ref),
       builder: (context, snapshot) {
         return Material(
           color: const Color(0xffDF2026),
@@ -61,9 +62,7 @@ class _SetupWidgetState extends State<SetupWidget>
                     children: [
                       FractionallySizedBox(
                         widthFactor: 0.25,
-                        child: Image.asset(
-                          "assets/Foreground.png",
-                        ),
+                        child: Image.asset("assets/Foreground.png"),
                       ),
                     ],
                   ),
@@ -72,7 +71,8 @@ class _SetupWidgetState extends State<SetupWidget>
               AnimatedBuilder(
                 animation: progressController,
                 builder: (context, widget) => Container(
-                  width: progressController.value *
+                  width:
+                      progressController.value *
                       MediaQuery.of(context).size.width *
                       0.3,
                   height: 3,

@@ -9,15 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PlayerRanking extends ConsumerWidget {
   final PlayerScore playerScore;
-  const PlayerRanking({
-    super.key,
-    required this.playerScore,
-  });
+  const PlayerRanking({super.key, required this.playerScore});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
-    // final List<String> likedIdsState = ref.watch(likedIds);
 
     return InkWell(
       onTap: () async {
@@ -28,16 +24,17 @@ class PlayerRanking extends ConsumerWidget {
           builder: (context) => const CustomCircularProgressIndicator(),
         );
 
-        PlayerProfile? selectedPlayer =
-            await getPlayerProfilePreview(playerScore.id, contextKey, ref);
+        PlayerProfile? selectedPlayer = await getPlayerProfilePreview(
+          playerScore.id,
+          contextKey,
+          ref,
+        );
 
         navigatorState.pop();
 
         navigatorState.pushNamed(
           '/PlayerProfilePage',
-          arguments: {
-            'player': selectedPlayer,
-          },
+          arguments: {'player': selectedPlayer},
         );
       },
       child: Column(
@@ -69,17 +66,16 @@ class PlayerRanking extends ConsumerWidget {
                       Text(
                         "${playerScore.rankClass}${playerScore.rankClass.isNotEmpty && playerScore.points != null ? ', ' : ''}${playerScore.points == null ? '' : '${playerScore.points} point'}",
                         style: TextStyle(
-                          color:
-                              colorThemeState.fontColor.withValues(alpha: 0.5),
+                          color: colorThemeState.fontColor.withValues(
+                            alpha: 0.5,
+                          ),
                           fontSize: 12,
                         ),
                       ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                Expanded(child: Container()),
                 Column(
                   children: [
                     Icon(
@@ -93,15 +89,13 @@ class PlayerRanking extends ConsumerWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 12,
-            ),
+            margin: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: colorThemeState.fontColor.withValues(alpha: 0.5),
               borderRadius: BorderRadiusDirectional.circular(2),
             ),
             height: 0.25,
-          )
+          ),
         ],
       ),
     );
@@ -109,9 +103,8 @@ class PlayerRanking extends ConsumerWidget {
 }
 
 class CustomCircularProgressIndicator extends StatefulWidget {
-  const CustomCircularProgressIndicator({
-    super.key,
-  });
+  final Color? color;
+  const CustomCircularProgressIndicator({super.key, this.color});
 
   @override
   State<CustomCircularProgressIndicator> createState() =>
@@ -153,6 +146,7 @@ class _CustomCircularProgressIndicatorState
                 widthFactor: 0.25,
                 child: Image.asset(
                   "assets/Foreground.png",
+                  color: widget.color,
                 ),
               ),
             ],

@@ -76,7 +76,6 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
             document.querySelector("h3")?.text ??
                 document.querySelector("h2")?.text ??
                 "Kamp",
-            dateTime,
           ),
         );
       }

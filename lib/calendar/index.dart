@@ -25,7 +25,7 @@ FutureProvider<List<Tournament>> seasonPlanFutureProvider =
         seasonPlanSeachFilterProvider,
       );
 
-      final result = await getSeasonPlan(filterValues, contextKey);
+      final result = await getSeasonPlan(filterValues);
       for (Tournament tournament in result) {
         if (tournament.dateTo.isAfter(visitedRange.end)) {
           visitedRange = DateTimeRange(

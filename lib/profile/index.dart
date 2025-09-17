@@ -7,11 +7,15 @@ import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/global/widgets/custom_input.dart';
 import 'package:app/profile/functions/get_user_info.dart';
 import 'package:app/profile/functions/login.dart';
+import 'package:app/profile/pages/change_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 StateProvider<bool?> isLoggedInProvider = StateProvider<bool?>((ref) => null);
+
+StateProvider<bool> keepLoggedIn = StateProvider<bool>((ref) => false);
 
 StateProvider<User> userProvider = StateProvider<User>(
   (ref) => User(
@@ -25,18 +29,13 @@ StateProvider<User> userProvider = StateProvider<User>(
 );
 
 List<String> menus = [
+  "Brugerkonto",
   "Mine spillere",
   "Mine betalinger",
-  "Tilmeld turnering",
-  "Betal tilmeldinger",
   "Mine tilmeldinger",
-  "Køb spillerlicens",
   "Opret klubskifte",
   "Klubskifter",
   "Opret nyt BadmintonID",
-  "Vis kursustilmeldinger",
-  "Mine kurser",
-  "Min Kalender (Beta)",
 ];
 
 StateProvider<Map<String, dynamic>> loginProvider =
@@ -50,6 +49,7 @@ class ProfilePage extends ConsumerWidget {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
     bool? isLoggedInState = ref.watch(isLoggedInProvider);
     User userProviderState = ref.watch(userProvider);
+    bool? keepLoggedInState = ref.watch(keepLoggedIn);
 
     return Stack(
       children: [
@@ -119,7 +119,12 @@ class ProfilePage extends ConsumerWidget {
                           ),
                           for (String menu in menus)
                             CustomContainer(
-                              onTap: () {},
+                              onTap: () {
+                                ref.invalidate(updateUserInfoProvider);
+                                Navigator.of(context).pushNamed(
+                                  "/Profile/${menu.replaceAll(" ", "")}",
+                                );
+                              },
                               margin: const EdgeInsets.all(0),
                               padding: const EdgeInsets.symmetric(
                                 vertical: 8,
@@ -167,7 +172,11 @@ class ProfilePage extends ConsumerWidget {
                             ),
                           ),
                           CustomContainer(
-                            onTap: () {
+                            onTap: () async {
+                              SharedPreferencesAsync prefs =
+                                  SharedPreferencesAsync();
+                              await prefs.remove('email');
+                              await prefs.remove('password');
                               ref.read(isLoggedInProvider.notifier).state =
                                   null;
                               ref.read(loginProvider.notifier).state = {
@@ -268,6 +277,28 @@ class ProfilePage extends ConsumerWidget {
                             hint: "Adgangskode",
                           ),
                         ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: keepLoggedInState,
+                              onChanged: (value) {
+                                ref.read(keepLoggedIn.notifier).state =
+                                    value ?? false;
+                              },
+                              visualDensity: VisualDensity.compact,
+                              activeColor: colorThemeState.primaryColor,
+                            ),
+                            Text(
+                              "Hold mig logget ind",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: colorThemeState.fontColor.withValues(
+                                  alpha: 0.8,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         if (isLoggedInState == false)
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -302,6 +333,7 @@ class ProfilePage extends ConsumerWidget {
                                           .read(loginProvider)['email']
                                           .toLowerCase(),
                                       ref.read(loginProvider)['password'],
+                                      ref.read(keepLoggedIn),
                                     ).then((value) {
                                       ref
                                               .read(isLoggedInProvider.notifier)

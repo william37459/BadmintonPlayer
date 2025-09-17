@@ -15,6 +15,24 @@ class Profile {
     required this.clubId,
   });
 
+  factory Profile.empty({
+    String? id,
+    String? badmintonId,
+    String? name,
+    String? club,
+    String? gender,
+    String? clubId,
+  }) {
+    return Profile(
+      id: id ?? "",
+      badmintonId: badmintonId ?? "",
+      name: name ?? "",
+      club: club ?? "",
+      gender: gender ?? "",
+      clubId: clubId ?? "",
+    );
+  }
+
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       id: json['id'],

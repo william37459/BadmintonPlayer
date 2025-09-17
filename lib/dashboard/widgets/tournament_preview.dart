@@ -55,7 +55,7 @@ class TournamentPreviewWidget extends ConsumerWidget {
                       ),
                       Text(
                         tournament.getFormattedClassAndAgeGroupCodes().join(
-                          '\n',
+                          ',\t',
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -67,7 +67,7 @@ class TournamentPreviewWidget extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        '${DateFormat('MM/dd').format(tournament.dateFrom)} - ${DateFormat('MM/dd').format(tournament.dateTo)}',
+                        '${DateFormat('dd/MM').format(tournament.dateFrom)} - ${DateFormat('dd/MM').format(tournament.dateTo)}',
                         style: TextStyle(
                           color: colorThemeState.fontColor.withValues(
                             alpha: 0.8,

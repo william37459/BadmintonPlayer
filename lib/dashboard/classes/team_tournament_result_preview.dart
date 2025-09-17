@@ -23,7 +23,6 @@ class TeamTournamentResultPreview {
   factory TeamTournamentResultPreview.fromElement(
     Element element,
     String league,
-    DateTime dateTime,
   ) {
     String matchNumber = element.querySelector(".matchno")?.text ?? "";
     String homeTeam = element.querySelectorAll("td.team")[0].text;
@@ -32,6 +31,23 @@ class TeamTournamentResultPreview {
     String location = element.querySelector(".venue")?.text ?? "";
     String result = element.querySelector(".score")?.text ?? "";
     String point = element.querySelector(".points")?.text ?? "";
+
+    late DateTime dateTime;
+    String date = element.querySelector(".time")?.text ?? "";
+    if (date.split(" ").length < 3) {
+      dateTime = DateTime.parse(
+        date
+            .replaceAll("(", "")
+            .replaceAll(")", "")
+            .split("‑")
+            .reversed
+            .join("-"),
+      );
+    } else {
+      dateTime = DateTime.parse(
+        "${date.split(" ")[1].split("‑").reversed.join("-")} ${date.split(" ")[2]}:00",
+      );
+    }
 
     return TeamTournamentResultPreview(
       date: dateTime,

@@ -191,6 +191,25 @@ class Tournament {
 
     return formattedClassAndAgeGroupCodes;
   }
+
+  @override
+  String toString() {
+    String startDate = dateFrom.toIso8601String();
+    String endDate = dateTo.toIso8601String();
+    String id = tournamentID.toString();
+
+    return "${startDate}_${endDate}_$id";
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Tournament &&
+          runtimeType == other.runtimeType &&
+          tournamentID == other.tournamentID;
+
+  @override
+  int get hashCode => tournamentID.hashCode;
 }
 
 class TournamentLink {

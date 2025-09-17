@@ -2,6 +2,7 @@ import 'package:app/global/widgets/drop_down_selector.dart';
 import 'package:app/global/classes/team_tournament_region.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/team_tournament/functions/get_by_region.dart';
+import 'package:app/team_tournament_results/club_result/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -134,7 +135,19 @@ class SearchByRegion extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(8),
-                                  onTap: () {},
+                                  onTap: () {
+                                    ref.read(selectedLeague.notifier).state =
+                                        int.tryParse(
+                                          region.filter.leagueGroupID,
+                                        ) ??
+                                        -1;
+                                    Navigator.pushNamed(
+                                      context,
+                                      "/TeamTournamentClubPage",
+                                      arguments: {"header": region.pool},
+                                      // arguments: club,
+                                    );
+                                  },
                                   child: Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: Row(

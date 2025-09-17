@@ -41,7 +41,6 @@ StateProvider<Map<String, dynamic>> rankFilterProvider =
       },
     );
 
-StateProvider<List<String>> likedIds = StateProvider((ref) => []);
 StateProvider<int> currentIndex = StateProvider((ref) => 0);
 StateProvider<bool> showingSearch = StateProvider((ref) => false);
 

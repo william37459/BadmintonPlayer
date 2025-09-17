@@ -1,4 +1,5 @@
 import 'package:app/global/constants.dart';
+import 'package:app/team_tournament_results/all_league_matches/index.dart';
 import 'package:app/team_tournament_results/club_result/classes/team_tournament_club_result.dart';
 import 'package:app/team_tournament_results/club_result/functions/get_club_results.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,9 @@ class TeamTournamentClubResultWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final futureAsyncValue = ref.watch(seasonPlanFutureProvider);
     final colorThemeState = ref.watch(colorThemeProvider);
-    return Material(
-      color: colorThemeState.backgroundColor,
-      child: SafeArea(
+    return Scaffold(
+      backgroundColor: colorThemeState.backgroundColor,
+      body: SafeArea(
         child: Column(
           children: [
             Padding(
@@ -37,19 +38,19 @@ class TeamTournamentClubResultWidget extends ConsumerWidget {
                 children: [
                   InkWell(
                     onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(Icons.chevron_left),
+                    child: Icon(
+                      Icons.chevron_left,
+                      size: 32,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.5),
+                    ),
                   ),
                   Expanded(
-                    child: Center(
-                      child: Text(
-                        header,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: colorThemeState.fontColor.withValues(
-                            alpha: 0.8,
-                          ),
-                          fontSize: 16,
-                        ),
+                    child: Text(
+                      header,
+                      style: TextStyle(
+                        color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -61,76 +62,30 @@ class TeamTournamentClubResultWidget extends ConsumerWidget {
               data: (data) => Expanded(
                 child: ListView.separated(
                   itemCount: data.length,
-                  separatorBuilder: (context, index) =>
-                      index + 1 == (data.length / 2).ceil()
-                      ? Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: 1,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: colorThemeState.fontColor,
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_downward,
-                              size: 12,
-                              color: colorThemeState.fontColor,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 4.0,
-                              ),
-                              child: Text(
-                                "Nedrykning",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: colorThemeState.fontColor,
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_downward,
-                              size: 12,
-                              color: colorThemeState.fontColor,
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 1,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: colorThemeState.fontColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(
-                          height: 1,
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: colorThemeState.fontColor.withValues(
-                              alpha: 0.3,
-                            ),
-                          ),
-                        ),
+                  separatorBuilder: (context, index) => Container(
+                    height: 1,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: colorThemeState.fontColor.withValues(alpha: 0.1),
+                    ),
+                  ),
                   itemBuilder: (context, index) => InkWell(
-                    onTap: () => Navigator.of(
-                      context,
-                    ).pushNamed("/TeamTournamentLeagueMatches"),
+                    onTap: () {
+                      ref.read(selectedLeagueGroup.notifier).state =
+                          data[index].leagueGroupId;
+                      ref.read(selectedLeagueTeam.notifier).state =
+                          data[index].leagueTeamId;
+
+                      Navigator.of(context).pushNamed(
+                        "/TeamTournamentLeagueMatches",
+                        arguments: {"header": data[index].clubName},
+                      );
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
-                        vertical: 8,
+                        vertical: 16,
                       ),
                       child: Row(
                         spacing: 16,
@@ -139,7 +94,7 @@ class TeamTournamentClubResultWidget extends ConsumerWidget {
                             "${data[index].placement}",
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                               color: colorThemeState.primaryColor,
                             ),
                           ),
@@ -149,40 +104,86 @@ class TeamTournamentClubResultWidget extends ConsumerWidget {
                               children: [
                                 Text(
                                   data[index].clubName,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  "Vundet ${data[index].won} af ${data[index].matches} kampe",
-                                  style: const TextStyle(fontSize: 12),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                                 const SizedBox(height: 4),
-                                Opacity(
-                                  opacity: 0.8,
-                                  child: Wrap(
-                                    spacing: 16,
-                                    children: [
-                                      Text(
-                                        "Score: ${data[index].score}",
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                      Text(
-                                        "Sæt: ${data[index].sets}",
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                      if (data[index].points != -1)
-                                        Text(
-                                          "Point: ${data[index].points}",
-                                          style: const TextStyle(fontSize: 12),
+                                DefaultTextStyle(
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: colorThemeState.fontColor.withValues(
+                                      alpha: 0.7,
+                                    ),
+                                  ),
+                                  child: Opacity(
+                                    opacity: 0.8,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          spacing: 16,
+                                          children: [
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                "Vundet ${data[index].won} af ${data[index].matches} kampe",
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                data[index].points != -1
+                                                    ? "Point: ${data[index].points}"
+                                                    : "",
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                data[index].sPoints != -1
+                                                    ? "S.Point: ${data[index].sPoints}"
+                                                    : "",
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      if (data[index].sPoints != -1)
-                                        Text(
-                                          "S.Point: ${data[index].sPoints}",
-                                          style: const TextStyle(fontSize: 12),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                "Score: ${data[index].score}",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: colorThemeState
+                                                      .fontColor
+                                                      .withValues(alpha: 0.7),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                "Sæt: ${data[index].sets}",
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                            const Expanded(
+                                              child: Text(
+                                                "",
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],

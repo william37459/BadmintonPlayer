@@ -8,10 +8,7 @@ import 'package:app/tournament_participant_list/functions/get_classes.dart';
 import 'package:app/tournament_participant_list/functions/get_participaters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-StateProvider<Map<String, String>> rankFilterProvider = StateProvider(
-  (ref) => {},
-);
+import 'package:shared_preferences/shared_preferences.dart';
 
 StateProvider<int> selectedClass = StateProvider<int>((ref) => 0);
 
@@ -25,7 +22,11 @@ FutureProvider<List<Participant>> tournamentParticipationProvider =
 FutureProvider<List<TournamentClass>> tournamentClassProvider =
     FutureProvider<List<TournamentClass>>((ref) async {
       final int selectedTournamentState = ref.watch(selectedTournament);
-      return await getClasses(selectedTournamentState);
+      List<TournamentClass> data = await getClasses(selectedTournamentState);
+      ref.read(selectedClass.notifier).state = data.isNotEmpty
+          ? data[0].tournamentClassID
+          : 0;
+      return data;
     });
 
 class TournamentParticipationList extends ConsumerStatefulWidget {
@@ -87,27 +88,92 @@ class _TournamentParticipationListState
       data: (classes) => (classes.length + 1),
       orElse: () => 1,
     );
+
     ensureControllerLength(tabCount);
 
     return Scaffold(
       backgroundColor: colorThemeState.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: colorThemeState.backgroundColor,
-        title: Text(
-          widget.tournament.title != null && widget.tournament.title!.isNotEmpty
-              ? widget.tournament.title!
-              : widget.tournament.clubName,
-          style: TextStyle(color: colorThemeState.fontColor, fontSize: 16),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left, color: colorThemeState.fontColor),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16,
+              ),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Icon(
+                      Icons.chevron_left,
+                      size: 32,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      widget.tournament.title != null &&
+                              widget.tournament.title!.isNotEmpty
+                          ? widget.tournament.title!
+                          : widget.tournament.clubName,
+                      style: TextStyle(
+                        color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      final SharedPreferencesAsync asyncPrefs =
+                          SharedPreferencesAsync();
+
+                      String combined = widget.tournament.toString();
+
+                      List<String>? currentState = ref.read(
+                        favouriteTournaments,
+                      );
+
+                      List<String>? favoriteTournamentsState = List.from(
+                        currentState ?? [],
+                      );
+
+                      if (favoriteTournamentsState.contains(combined)) {
+                        favoriteTournamentsState.remove(combined);
+                      } else {
+                        favoriteTournamentsState.add(combined);
+                      }
+
+                      ref.read(favouriteTournaments.notifier).state =
+                          favoriteTournamentsState;
+
+                      await asyncPrefs.setStringList(
+                        "favouriteTournaments",
+                        favoriteTournamentsState,
+                      );
+                    },
+                    child: Icon(
+                      (ref
+                                  .watch(favouriteTournaments)
+                                  ?.contains(widget.tournament.toString()) ??
+                              false
+                          ? Icons.star
+                          : Icons.star_outline_outlined),
+                      color:
+                          ref
+                                  .watch(favouriteTournaments)
+                                  ?.contains(widget.tournament.toString()) ??
+                              false
+                          ? colorThemeState.primaryColor
+                          : colorThemeState.fontColor.withValues(alpha: 0.7),
+                      size: 32,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(
               height: 48,
               child: classListAsync.when(
@@ -138,6 +204,16 @@ class _TournamentParticipationListState
             ),
             participantListAsync.when(
               data: (data) {
+                if (data.isEmpty) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        "Der er ingen deltagere i denne klasse",
+                        style: TextStyle(color: colorThemeState.fontColor),
+                      ),
+                    ),
+                  );
+                }
                 return Expanded(
                   child: ListView.builder(
                     itemBuilder: (context, index) => Column(
@@ -169,7 +245,9 @@ class _TournamentParticipationListState
                                 ? 4
                                 : 8,
                           ),
-                          onTap: () => print("Tapped"),
+                          onTap: () => print(
+                            "Tapped on ${data[index].players.first.playerId}",
+                          ),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12.0,
                             vertical: 16,

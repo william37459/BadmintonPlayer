@@ -2,6 +2,7 @@ import 'package:app/calendar/index.dart';
 import 'package:app/main_builder/index.dart';
 import 'package:app/player_profile/index.dart';
 import 'package:app/player_profile_search/index.dart';
+import 'package:app/profile/pages/change_info.dart';
 import 'package:app/setup/index.dart';
 import 'package:app/team_tournament/index.dart';
 import 'package:app/team_tournament_results/all_league_matches/index.dart';
@@ -61,6 +62,8 @@ class RouteGenerator {
         return _errorRoute();
       case '/TournamentOverviewPage':
         return CupertinoPageRoute(builder: (_) => TournamentPlan());
+      case '/Profile/Brugerkonto':
+        return CupertinoPageRoute(builder: (_) => const ChangeInfoWidget());
       case '/TeamTournamentResultPage':
         return CupertinoPageRoute(
           builder: (_) => const TeamTournamentMatchResultWidget(),
@@ -74,9 +77,9 @@ class RouteGenerator {
         }
         return _errorRoute();
       case '/TeamTournamentLeagueMatches':
-        if (args is Map || true) {
+        if (args is Map) {
           return CupertinoPageRoute(
-            builder: (_) => const TeamTournamentLeagueMatches(),
+            builder: (_) => TeamTournamentLeagueMatches(header: args['header']),
           );
         }
         return _errorRoute();

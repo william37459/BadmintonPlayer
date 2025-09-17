@@ -4,6 +4,7 @@ import 'package:app/dashboard/widgets/team_tournament_result_preview.dart';
 import 'package:app/dashboard/widgets/tournament_result_preview_widget.dart';
 import 'package:app/global/classes/player_profile.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/global/widgets/placeholder_image.dart';
 import 'package:app/player_profile/widgets/ranks_widget.dart';
 import 'package:app/player_profile/widgets/toggle_switch_button.dart';
 import 'package:flutter/material.dart';
@@ -49,56 +50,38 @@ class PlayerProfilePageState extends ConsumerState<PlayerProfilePage>
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16,
+              ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => Navigator.of(context).pop(),
                     child: Icon(
                       Icons.chevron_left,
-                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                      size: 32,
+                      color: colorThemeState.fontColor.withValues(alpha: 0.5),
                     ),
                   ),
-                  Text(
-                    "Profil",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: colorThemeState.fontColor.withValues(alpha: 0.8),
-                      fontSize: 16,
+                  Expanded(
+                    child: Text(
+                      "Profil",
+                      style: TextStyle(
+                        color: colorThemeState.fontColor.withValues(alpha: 0.8),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                  const Icon(Icons.chevron_left, color: Colors.transparent),
+                  const Opacity(opacity: 0, child: Icon(Icons.chevron_left)),
                 ],
               ),
             ),
             Expanded(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 16.0,
-                      left: 16.0,
-                      right: 16.0,
-                    ),
-                    child: FractionallySizedBox(
-                      widthFactor: 0.25,
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg",
-                              ),
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  const PlaceholderImage(),
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),

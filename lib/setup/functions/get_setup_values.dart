@@ -1,16 +1,36 @@
 import 'dart:convert';
 
 import 'package:app/global/classes/club.dart';
+import 'package:app/global/classes/user.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/profile/functions/get_user_info.dart';
+import 'package:app/profile/functions/login.dart';
+import 'package:app/profile/index.dart';
 import 'package:app/setup/functions/get_profile_search_filters.dart';
 import 'package:app/setup/functions/get_ranking_search_filters.dart';
 import 'package:app/setup/functions/get_tournament_search_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> getSetupValues() async {
+Future<void> getSetupValues(WidgetRef ref) async {
   NavigatorState? navigatorState = navKey.currentState;
+
+  SharedPreferencesAsync prefs = SharedPreferencesAsync();
+  String? email = await prefs.getString('email');
+  String? password = await prefs.getString('password');
+  if (email != null && password != null) {
+    await login(email, password, true).then((value) {
+      ref.read(isLoggedInProvider.notifier).state = value;
+      if (value) {
+        getUserInfo().then(
+          (User user) => ref.read(userProvider.notifier).state = user,
+        );
+      }
+    });
+  }
 
   await Future.wait([
     getTournamentSearchFilters(),

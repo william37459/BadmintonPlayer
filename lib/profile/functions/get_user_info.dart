@@ -36,24 +36,29 @@ Future<User> getUserInfo() async {
 
   String email =
       document.querySelector("#ctl00_ContentPlaceHolder1_LabelEmail")?.text ??
-          "";
-  String name = document
+      "";
+  String name =
+      document
           .querySelector("#ctl00_ContentPlaceHolder1_TextBoxName")
           ?.attributes['value'] ??
       "";
-  String telephone = document
+  String telephone =
+      document
           .querySelector("#ctl00_ContentPlaceHolder1_TextBoxPhone")
           ?.attributes['value'] ??
       "";
-  String street = document
+  String street =
+      document
           .querySelector("#ctl00_ContentPlaceHolder1_TextBoxStreet")
           ?.attributes['value'] ??
       "";
-  String postalCode = document
+  String postalCode =
+      document
           .querySelector("#ctl00_ContentPlaceHolder1_TextBoxPostalCode")
           ?.attributes['value'] ??
       "";
-  String town = document
+  String town =
+      document
           .querySelector("#ctl00_ContentPlaceHolder1_TextBoxCity")
           ?.attributes['value'] ??
       "";
