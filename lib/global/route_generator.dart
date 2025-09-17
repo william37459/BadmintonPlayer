@@ -93,8 +93,21 @@ class RouteGenerator {
     return CupertinoPageRoute(
       builder: (_) {
         return Scaffold(
-          appBar: AppBar(title: const Text("Fejl!")),
-          body: const Center(child: Text("FEJL")),
+          appBar: AppBar(title: const Text("Under konstruktion")),
+          body: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.construction, size: 64, color: Colors.orange),
+                SizedBox(height: 24),
+                Text(
+                  "Denne side er under opbygning.",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

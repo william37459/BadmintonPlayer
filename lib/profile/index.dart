@@ -159,7 +159,10 @@ class ProfilePage extends ConsumerWidget {
                               }
                             },
                             margin: const EdgeInsets.only(top: 8),
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -171,6 +174,7 @@ class ProfilePage extends ConsumerWidget {
                               ],
                             ),
                           ),
+                          const SizedBox(height: 64),
                           CustomContainer(
                             onTap: () async {
                               SharedPreferencesAsync prefs =
@@ -193,7 +197,10 @@ class ProfilePage extends ConsumerWidget {
                               );
                             },
                             margin: const EdgeInsets.only(top: 8),
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
