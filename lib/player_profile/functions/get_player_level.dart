@@ -14,6 +14,7 @@ Future<List<int>> getPlayerLevel(String id, String name) async {
 
   late List<Result> results;
   late int resultIndex;
+  int rank = -1;
 
   while (stepLength > 1) {
     List<int> intervals = [
@@ -32,24 +33,16 @@ Future<List<int>> getPlayerLevel(String id, String name) async {
       return [-1, -1];
     }
 
+    if (results[resultIndex].rank != -1) {
+      rank = results[resultIndex].rank;
+    }
+
     minimum += resultIndex * stepLength;
     maximum = minimum + stepLength;
     stepLength = ((maximum - minimum) ~/ steps);
   }
 
-  // late Result containsPlayer;
-  // while (maximum - minimum > 2) {
-  //   int mid = minimum + ((maximum - minimum) ~/ 2);
-  //   containsPlayer = await containsName(id, name, mid, maximum);
-
-  //   if (containsPlayer.hasName) {
-  //     minimum = mid;
-  //   } else {
-  //     maximum = mid;
-  //   }
-  // }
-
-  return [maximum - 1, results[resultIndex].rank];
+  return [maximum - 1, rank];
 }
 
 Future<Result> containsName(String id, String name, int start, int end) async {
@@ -88,7 +81,7 @@ Future<Result> containsName(String id, String name, int start, int end) async {
   );
 
   String rawHTML = json.decode(response.body)['d']['Html'];
-  if (rawHTML.toLowerCase().contains(name.toLowerCase())) {
+  if (rawHTML.toLowerCase().contains(name.split(" ")[0].toLowerCase())) {
     if (end - start < 100 && end - start > 10) {
       Document row = html_parser.parse(rawHTML);
       for (Element element in row.querySelectorAll('tr')) {

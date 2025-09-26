@@ -6,6 +6,13 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - package_info_plus (0.4.5):
+    - Flutter
+  - Sentry/HybridSDK (8.52.1)
+  - sentry_flutter (9.6.0):
+    - Flutter
+    - FlutterMacOS
+    - Sentry/HybridSDK (= 8.52.1)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -15,7 +22,13 @@ DEPENDENCIES:
   - flutter_background_service_ios (from `.symlinks/plugins/flutter_background_service_ios/ios`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+
+SPEC REPOS:
+  trunk:
+    - Sentry
 
 EXTERNAL SOURCES:
   Flutter:
@@ -26,6 +39,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_email_sender/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
+  sentry_flutter:
+    :path: ".symlinks/plugins/sentry_flutter/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
@@ -34,6 +51,9 @@ SPEC CHECKSUMS:
   flutter_background_service_ios: 00d31bdff7b4bfe06d32375df358abe0329cf87e
   flutter_email_sender: 2397f5e84aaacfb61af569637a963e7c687858d8
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
+  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
+  Sentry: 2cbbe3592f30050c60e916c63c7f5a2fa584005e
+  sentry_flutter: 9b1e3e6934cb7040ffb71383c95a35f73523180c
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
 
 PODFILE CHECKSUM: 57c8aed26fba39d3ec9424816221f294a07c58eb

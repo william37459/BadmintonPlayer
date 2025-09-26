@@ -8,16 +8,21 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterBackgroundService service = FlutterBackgroundService();
 
   onStart(service);
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://223aae453a25d79145a9bcf5ef421dfd@o4506016534102016.ingest.us.sentry.io/4506283562500096';
+    },
+    // Init your App.
+    appRunner: () => runApp(const ProviderScope(child: MyApp())),
   );
 }
 
@@ -26,8 +31,10 @@ void onStart(FlutterBackgroundService service) async {
 
   const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
   const iosSettings = DarwinInitializationSettings();
-  const settings =
-      InitializationSettings(android: androidSettings, iOS: iosSettings);
+  const settings = InitializationSettings(
+    android: androidSettings,
+    iOS: iosSettings,
+  );
 
   // bool newPlayerResult = await newPlayerResults();
   await notification.initialize(settings);
@@ -68,9 +75,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color(0xffF1F0F5),
         ),
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        supportedLocales: const [
-          Locale('da', 'DK'),
-        ],
+        supportedLocales: const [Locale('da', 'DK')],
         // navigatorObservers: [
         //   SentryNavigatorObserver(),
         // ],

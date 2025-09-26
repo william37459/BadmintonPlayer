@@ -18,9 +18,7 @@ Future<PlayerProfile?> getPlayerProfilePreview(
     Uri.parse(
       "https://badmintonplayer.dk/SportsResults/Components/WebService1.asmx/GetPlayerProfile",
     ),
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
+    headers: {"Content-Type": "application/json; charset=UTF-8"},
     body: json.encode({
       "callbackcontextkey": contextKey,
       "getplayerdata": true,
@@ -41,14 +39,16 @@ Future<PlayerProfile?> getPlayerProfilePreview(
 
   Document document = html_parser.parse(htmlContent);
 
-  Element? profiles =
-      document.querySelector('.playerprofileuserlist')?.querySelector("tbody");
+  Element? profiles = document
+      .querySelector('.playerprofileuserlist')
+      ?.querySelector("tbody");
 
   List<AttachedProfile> attachedProfiles = [];
 
   for (Element profile in profiles?.children ?? []) {
     String name = profile.querySelectorAll("td")[0].text.trim();
-    String id = profile
+    String id =
+        profile
             .querySelectorAll("td")[1]
             .querySelector('a')!
             .attributes['href']
@@ -59,9 +59,11 @@ Future<PlayerProfile?> getPlayerProfilePreview(
 
   String club = "";
 
-  for (int index = 0;
-      index < document.children[0].text.split("\n").length;
-      index++) {
+  for (
+    int index = 0;
+    index < document.children[0].text.split("\n").length;
+    index++
+  ) {
     if (document.children[0].text.split("\n")[index] == "Klub") {
       club = document.children[0].text.split("\n")[index + 1];
       break;
@@ -89,19 +91,23 @@ Future<PlayerProfile?> getPlayerProfilePreview(
           if (row.text.contains("Tilmeldingsniveau") &&
               row.querySelectorAll("a").length < 3) {
             List<int> startValues = (await getPlayerLevel(
-                id, formattedResponse['d']['playername'].trim()));
+              id,
+              formattedResponse['d']['playername'].trim(),
+            ));
 
-            startLevel = startValues[0] == -1 ? "" : startValues[0].toString();
+            startLevel = startValues[1] == -1 ? "" : startValues[1].toString();
 
             scoreData.add(
               ScoreData(
                 type: row.children[0].text.trim(),
                 rank: row.children[2].text.trim(),
                 points: startValues[0] == -1 ? "" : startValues[0].toString(),
-                matches:
-                    row.children.length > 4 ? row.children[4].text.trim() : "",
-                placement:
-                    startValues[1] == -1 ? "" : startValues[0].toString(),
+                matches: row.children.length > 4
+                    ? row.children[4].text.trim()
+                    : "",
+                placement: startValues[1] == -1
+                    ? ""
+                    : startValues[1].toString(),
               ),
             );
           } else {
@@ -109,12 +115,15 @@ Future<PlayerProfile?> getPlayerProfilePreview(
               ScoreData(
                 type: row.children[0].text.trim(),
                 rank: row.children[2].text.trim(),
-                points:
-                    row.children.length > 3 ? row.children[3].text.trim() : "",
-                matches:
-                    row.children.length > 4 ? row.children[4].text.trim() : "",
-                placement:
-                    row.children.length > 5 ? row.children[5].text.trim() : "",
+                points: row.children.length > 3
+                    ? row.children[3].text.trim()
+                    : "",
+                matches: row.children.length > 4
+                    ? row.children[4].text.trim()
+                    : "",
+                placement: row.children.length > 5
+                    ? row.children[5].text.trim()
+                    : "",
               ),
             );
           }
@@ -125,21 +134,16 @@ Future<PlayerProfile?> getPlayerProfilePreview(
     if (rows[0].text.contains("Dato")) {
       for (Element row in rows) {
         if (!row.text.contains("Dato")) {
-          tournaments.add(
-            TournamentResultPreview.fromElement(
-              row,
-            ),
-          );
+          tournaments.add(TournamentResultPreview.fromElement(row));
         }
       }
     }
   }
 
-  List<Element> allTeamTournaments = document
+  List<Element> allTeamTournaments =
+      document
           .querySelectorAll('.GridView')
-          .where(
-            (element) => element.text.contains("Kampdato"),
-          )
+          .where((element) => element.text.contains("Kampdato"))
           .firstOrNull
           ?.children
           .firstOrNull
@@ -151,7 +155,8 @@ Future<PlayerProfile?> getPlayerProfilePreview(
   List<String> teamTournamentMatchIds = [];
 
   for (Element teamTournament in allTeamTournaments) {
-    List<String> allAttributes = teamTournament
+    List<String> allAttributes =
+        teamTournament
             .querySelectorAll("a")
             .firstOrNull
             ?.attributes['href']
@@ -165,7 +170,10 @@ Future<PlayerProfile?> getPlayerProfilePreview(
 
   List<TeamTournamentResultPreview> teamTournaments =
       await getTeamTournamentResults(
-          teamTournamentAttributes, contextKey, teamTournamentMatchIds);
+        teamTournamentAttributes,
+        contextKey,
+        teamTournamentMatchIds,
+      );
   return PlayerProfile(
     name: formattedResponse['d']['playername'].trim(),
     attachedProfiles: [],

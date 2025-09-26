@@ -14,18 +14,13 @@ class PlayerPreviewWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomContainer(
       width: 200,
-      margin: const EdgeInsets.symmetric(
-        vertical: 4,
-      ),
+      margin: const EdgeInsets.symmetric(vertical: 4),
       onTap: () {
         ref.read(selectedPlayer.notifier).state = profile.id;
         ref.read(choiceIndex.notifier).state = 0;
-        Navigator.of(context).pushNamed(
-          "/PlayerProfilePage",
-          arguments: {
-            "player": profile,
-          },
-        );
+        Navigator.of(
+          context,
+        ).pushNamed("/PlayerProfilePage", arguments: {"player": profile});
       },
       child: Row(
         children: [
@@ -43,16 +38,11 @@ class PlayerPreviewWidget extends ConsumerWidget {
                 Text(
                   profile.name,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Opacity(
                   opacity: 0.5,
-                  child: Text(
-                    profile.club,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  child: Text(profile.club, overflow: TextOverflow.ellipsis),
                 ),
                 Opacity(
                   opacity: 0.5,
