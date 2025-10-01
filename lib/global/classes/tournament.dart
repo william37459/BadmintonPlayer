@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:math';
+
 class Tournament {
   final int tournamentID;
   final int tournamentClassID;
@@ -192,6 +194,34 @@ class Tournament {
     return formattedClassAndAgeGroupCodes;
   }
 
+  factory Tournament.empty() {
+    return Tournament(
+      tournamentID: -1,
+      tournamentClassID: -1,
+      tournamentNumber: '',
+      seasonID: -1,
+      dateTo: DateTime.now().add(const Duration(days: 2)),
+      dateFrom: DateTime.now(),
+      tournamentState: -1,
+      tournamentType: -1,
+      clubName: 'Arrangør',
+      clubNumber: '',
+      recurring: 0,
+      contactName: '',
+      contactEmail: '',
+      weekChanged: false,
+      contactAddress: '',
+      contactCity: '',
+      contactPostalCode: '',
+      contactCountryCode: '',
+      contactPhoneMobile: '',
+      contactPhoneWork: '',
+      contactPhone: '',
+      tournamentLink: [],
+      details: [for (int i = 0; i < 5; i++) TournamentDetails.empty(i)],
+    );
+  }
+
   @override
   String toString() {
     String startDate = dateFrom.toIso8601String();
@@ -313,6 +343,24 @@ class TournamentDetails {
       tournamentNumber: json['tournamentNumber'],
       tournamentState: json['tournamentState'],
       validationRule: json['validationRule'],
+    );
+  }
+
+  factory TournamentDetails.empty(int i) {
+    List<String> ageGroupCodes = ["U11", "U13", "U15", "U17", "U19", "Sen"];
+    List<String> classCodes = ["D", "C", "B", "A", "M", "E"];
+    return TournamentDetails(
+      ageGroupCode: ageGroupCodes[i % ageGroupCodes.length],
+      ageGroupID: 1,
+      classCode: classCodes[i % classCodes.length],
+      classDateFrom: DateTime.now(),
+      classDateTo: DateTime.now().add(const Duration(days: 1)),
+      classID: 1,
+      noValidateAgeGroup: false,
+      noValidateClass: false,
+      tournamentClassID: 1,
+      tournamentID: 1,
+      tournamentState: 1,
     );
   }
 }

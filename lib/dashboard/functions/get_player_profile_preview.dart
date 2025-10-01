@@ -5,6 +5,7 @@ import 'package:app/dashboard/classes/tournament_result_preview.dart';
 import 'package:app/dashboard/functions/get_team_tournament_results.dart';
 import 'package:app/global/classes/player_profile.dart';
 import 'package:app/player_profile/functions/get_player_level.dart';
+import 'package:app/settings/index.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
@@ -173,6 +174,7 @@ Future<PlayerProfile?> getPlayerProfilePreview(
         teamTournamentAttributes,
         contextKey,
         teamTournamentMatchIds,
+        ref.read(settingsProvider).elementsOnDashboard,
       );
   return PlayerProfile(
     name: formattedResponse['d']['playername'].trim(),

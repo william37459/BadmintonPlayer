@@ -9,6 +9,7 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
   List<String> leagues,
   String contextKey,
   List<String>? matchIds,
+  int numberOfResults,
 ) async {
   List<Future<List<TeamTournamentResultPreview>>> futures = leagues.map((
     league,
@@ -51,7 +52,7 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
     for (Element row in allRows) {
       if (!row.attributes.values.contains("headerrow") &&
           !row.attributes.values.contains("roundheader") &&
-          results.length < 10) {
+          results.length < numberOfResults) {
         String date = row.querySelector(".time")?.text ?? "";
         late DateTime dateTime;
         if (date.split(" ").length < 3) {
@@ -109,6 +110,6 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
   } else {
     results.sort((a, b) => a.date.compareTo(b.date));
 
-    return results.take(10).toList();
+    return results.take(numberOfResults).toList();
   }
 }

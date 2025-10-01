@@ -36,16 +36,15 @@ Future<void> getTournamentSearchFilters() async {
   );
 
   if (response.statusCode == 200) {
-    List<AgeGroup> allAgeGroups = [];
     List formattedJson = jsonDecode(response.body);
     for (dynamic element in formattedJson) {
-      allAgeGroups.add(AgeGroup.fromJson(element));
+      ageGroups.add(AgeGroup.fromJson(element));
     }
 
     seasonPlanSearchFiltersRaw.update(
       "ageGroups",
-      (value) => allAgeGroups,
-      ifAbsent: () => allAgeGroups,
+      (value) => ageGroups,
+      ifAbsent: () => ageGroups,
     );
   } else {
     throw Exception('Failed to load age groups');

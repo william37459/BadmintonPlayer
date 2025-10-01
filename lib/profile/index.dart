@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:app/global/classes/color_theme.dart';
+import 'package:app/global/classes/settings.dart';
 import 'package:app/global/classes/user.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
@@ -28,7 +29,6 @@ StateProvider<User> userProvider = StateProvider<User>(
     town: "",
   ),
 );
-
 List<SettingsLink> menus = [
   SettingsLink(
     title: "Brugerkonto",
@@ -157,6 +157,7 @@ class ProfilePage extends ConsumerWidget {
                               vertical: 8,
                               horizontal: 16,
                             ),
+                            borderRadius: 0,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -240,6 +241,7 @@ class ProfilePage extends ConsumerWidget {
                               vertical: 8,
                               horizontal: 16,
                             ),
+                            borderRadius: 0,
                             margin: const EdgeInsets.all(0),
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -276,6 +278,7 @@ class ProfilePage extends ConsumerWidget {
                                 town: "",
                               );
                             },
+                            borderRadius: 0,
                             margin: const EdgeInsets.only(top: 8),
                             padding: const EdgeInsets.symmetric(
                               vertical: 8,

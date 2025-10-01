@@ -3,6 +3,8 @@ import 'package:app/global/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+const double standardBorderRadius = 12;
+
 class CustomContainer extends ConsumerWidget {
   final Function()? onTap;
   final Widget child;
@@ -30,10 +32,12 @@ class CustomContainer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     CustomColorTheme colorThemeState = ref.watch(colorThemeProvider);
     return Padding(
-      padding: margin ?? const EdgeInsets.all(8),
+      padding: margin ?? const EdgeInsets.all(16),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius ?? 4),
+          borderRadius: BorderRadius.circular(
+            borderRadius ?? standardBorderRadius,
+          ),
           border:
               border ??
               Border.all(
@@ -41,18 +45,24 @@ class CustomContainer extends ConsumerWidget {
                 width: 1,
               ),
         ),
-        child: SizedBox(
-          width: width,
-          height: height,
-          child: Material(
-            borderRadius: BorderRadius.circular(4),
-            color: backgroundColor ?? colorThemeState.backgroundColor,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(4),
-              onTap: onTap,
-              child: Padding(
-                padding: padding ?? const EdgeInsets.all(6.0),
-                child: child,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(
+            borderRadius ?? standardBorderRadius,
+          ),
+          child: SizedBox(
+            width: width,
+            height: height,
+            child: Material(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                color: backgroundColor ?? colorThemeState.backgroundColor,
+                child: InkWell(
+                  onTap: onTap,
+                  child: Padding(
+                    padding: padding ?? const EdgeInsets.all(6.0),
+                    child: child,
+                  ),
+                ),
               ),
             ),
           ),

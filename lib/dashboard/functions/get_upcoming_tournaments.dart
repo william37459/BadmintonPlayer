@@ -1,15 +1,33 @@
 import 'package:app/calendar/classes/season_plan_search_filter.dart';
 import 'package:app/calendar/functions/get_season_plan.dart';
 import 'package:app/global/classes/profile.dart';
+import 'package:app/global/classes/settings.dart';
 import 'package:app/global/classes/tournament.dart';
+import 'package:app/global/constants.dart';
 
 Future<List<Tournament>> getUpcomingTournaments(
   List<String>? ids,
   List<String>? tournamentIds,
   SeasonPlanSearchFilter filterValues,
   String contextKey,
+  Settings settings,
 ) async {
   List<Tournament> results = [];
+
+  if (settings.showTournamentAgeGroups.isNotEmpty) {
+    for (int ageGroup in settings.showTournamentAgeGroups) {
+      filterValues = filterValues.copyWith(
+        ageGroupList: [
+          ageGroups.firstWhere((element) => element.ageGroupId == ageGroup),
+        ],
+      );
+      List<Tournament> ageGroupResults = await getSeasonPlan(filterValues);
+      results.addAll(ageGroupResults);
+    }
+    filterValues = filterValues.copyWith(ageGroupList: [
+        ],
+      );
+  }
 
   if (tournamentIds != null && tournamentIds.isNotEmpty) {
     late DateTime startDate;
@@ -34,7 +52,9 @@ Future<List<Tournament>> getUpcomingTournaments(
   }
 
   if (ids == null || ids.isEmpty) {
-    results = await getSeasonPlan(filterValues);
+    if (settings.showComingTournaments) {
+      results = await getSeasonPlan(filterValues);
+    }
   } else {
     for (String id in ids) {
       filterValues = filterValues.copyWith(player: Profile.empty(id: id));
@@ -45,5 +65,5 @@ Future<List<Tournament>> getUpcomingTournaments(
 
   results = results.toSet().toList();
 
-  return results.take(20).toList();
+  return results.take(settings.elementsOnDashboard).toList();
 }

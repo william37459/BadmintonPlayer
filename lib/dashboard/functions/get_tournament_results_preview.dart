@@ -9,6 +9,7 @@ import 'package:html/parser.dart' as html_parser;
 Future<List<TournamentResultPreview>> getTournamentResultsPreview(
   List<String> ids,
   String contextKey,
+  int numberOfResults,
 ) async {
   List<TournamentResultPreview> results = [];
 
@@ -56,5 +57,5 @@ Future<List<TournamentResultPreview>> getTournamentResultsPreview(
       }
     }
   }
-  return results.take(10).toList();
+  return results.take(numberOfResults).toList();
 }

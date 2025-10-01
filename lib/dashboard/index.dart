@@ -13,9 +13,11 @@ import 'package:app/dashboard/widgets/tournament_preview.dart';
 import 'package:app/dashboard/widgets/tournament_result_preview_widget.dart';
 import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/classes/player_profile.dart';
+import 'package:app/global/classes/settings.dart';
 import 'package:app/global/classes/team_tournament_filter.dart';
 import 'package:app/global/classes/tournament.dart';
 import 'package:app/global/constants.dart';
+import 'package:app/settings/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +58,11 @@ FutureProvider<List<dynamic>> tournamentResultPreviewProvider =
         ref.read(favouritePlayers.notifier).state =
             await asyncPrefs.getStringList("favouritePlayers") ?? [];
       }
-      final result = await getTournamentResultsPreview(ids ?? [], contextKey);
+      final result = await getTournamentResultsPreview(
+        ids ?? [],
+        contextKey,
+        ref.read(settingsProvider).elementsOnDashboard,
+      );
       return result;
     });
 
@@ -73,6 +79,7 @@ FutureProvider<List<TeamTournamentResultPreview>> teamTournamentResultProvider =
         teamIds ?? [],
         contextKey,
         null,
+        ref.read(settingsProvider).elementsOnDashboard,
       );
       // return result;
       return result;
@@ -85,23 +92,34 @@ StateProvider<SeasonPlanSearchFilter> upcomingTournamentsFilterProvider =
 
 FutureProvider<List<Tournament>> upcomingTournamentsProvider =
     FutureProvider<List<Tournament>>((ref) async {
-      List<String>? favouriteIds = ref.watch(favouriteTournaments);
-
+      Settings settingsState = ref.watch(settingsProvider);
       final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
-      if (favouriteIds == null) {
-        ref.read(favouriteTournaments.notifier).state =
-            await asyncPrefs.getStringList("favouriteTournaments") ?? [];
-      }
+      late List<String>? favouriteIds;
+      if (settingsState.showFollowedTournaments) {
+        favouriteIds = ref.watch(favouriteTournaments);
 
+        if (favouriteIds == null) {
+          ref.read(favouriteTournaments.notifier).state =
+              await asyncPrefs.getStringList("favouriteTournaments") ?? [];
+        }
+      } else {
+        favouriteIds = null;
+      }
       SeasonPlanSearchFilter filterValues = ref.watch(
         upcomingTournamentsFilterProvider,
       );
-      List<String>? ids = ref.watch(favouritePlayers);
+      List<String>? ids;
 
-      if (ids == null) {
-        ref.read(favouritePlayers.notifier).state =
-            await asyncPrefs.getStringList("favouritePlayers") ?? [];
+      if (settingsState.showTournamentsForFollowedPlayers) {
+        ids = ref.watch(favouritePlayers);
+
+        if (ids == null) {
+          ref.read(favouritePlayers.notifier).state =
+              await asyncPrefs.getStringList("favouritePlayers") ?? [];
+        }
+      } else {
+        ids = null;
       }
 
       final result = await getUpcomingTournaments(
@@ -109,7 +127,9 @@ FutureProvider<List<Tournament>> upcomingTournamentsProvider =
         favouriteIds,
         filterValues,
         contextKey,
+        settingsState,
       );
+
       return result;
     });
 

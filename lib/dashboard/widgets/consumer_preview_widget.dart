@@ -39,8 +39,15 @@ class ConsumerPreviewWidget extends ConsumerWidget {
                       const SizedBox(width: 0),
                       for (int i = 0; i < 10; i++)
                         Shimmer.fromColors(
-                          highlightColor: Colors.grey[200] ?? Colors.grey,
-                          baseColor: Colors.grey[100] ?? Colors.grey,
+                          highlightColor:
+                              colorThemeState.backgroundColor == Colors.white
+                              ? Colors.grey[200] ?? Colors.grey
+                              : Colors.grey[850] ?? Colors.black,
+                          baseColor:
+                              colorThemeState.backgroundColor == Colors.white
+                              ? Colors.grey[100] ?? Colors.grey
+                              : Colors.grey[900] ?? Colors.black,
+
                           child: IgnorePointer(
                             child: PlayerPreviewWidget(
                               profile: PlayerProfile(
@@ -64,8 +71,14 @@ class ConsumerPreviewWidget extends ConsumerWidget {
                       const SizedBox(width: 0),
                       for (int i = 0; i < 10; i++)
                         Shimmer.fromColors(
-                          highlightColor: Colors.grey[200] ?? Colors.grey,
-                          baseColor: Colors.grey[100] ?? Colors.grey,
+                          highlightColor:
+                              colorThemeState.backgroundColor == Colors.white
+                              ? Colors.grey[200] ?? Colors.grey
+                              : Colors.grey[850] ?? Colors.black,
+                          baseColor:
+                              colorThemeState.backgroundColor == Colors.white
+                              ? Colors.grey[100] ?? Colors.grey
+                              : Colors.grey[900] ?? Colors.black,
                           child: IgnorePointer(
                             child: TournamentResultPreviewWidget(
                               result: TournamentResultPreview(
