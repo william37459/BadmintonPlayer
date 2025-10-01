@@ -5,6 +5,7 @@ import 'package:app/global/classes/user.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/global/widgets/custom_input.dart';
+import 'package:app/profile/classes/settings_link.dart';
 import 'package:app/profile/functions/get_user_info.dart';
 import 'package:app/profile/functions/login.dart';
 import 'package:app/profile/pages/change_info.dart';
@@ -28,14 +29,42 @@ StateProvider<User> userProvider = StateProvider<User>(
   ),
 );
 
-List<String> menus = [
-  "Brugerkonto",
-  "Mine spillere",
-  "Mine betalinger",
-  "Mine tilmeldinger",
-  "Opret klubskifte",
-  "Klubskifter",
-  "Opret nyt BadmintonID",
+List<SettingsLink> menus = [
+  SettingsLink(
+    title: "Brugerkonto",
+    link: "/Profile/Brugerkonto",
+    icon: Icons.person,
+  ),
+  SettingsLink(
+    title: "Mine spillere",
+    link: "/Profile/MineSpillere",
+    icon: Icons.sports_basketball,
+  ),
+  SettingsLink(
+    title: "Mine betalinger",
+    link: "/Profile/MineBetalinger",
+    icon: Icons.payment,
+  ),
+  SettingsLink(
+    title: "Mine tilmeldinger",
+    link: "/Profile/MineTilmeldinger",
+    icon: Icons.list_alt,
+  ),
+  SettingsLink(
+    title: "Opret klubskifte",
+    link: "/Profile/OpretKlubskifte",
+    icon: Icons.swap_horiz,
+  ),
+  SettingsLink(
+    title: "Klubskifter",
+    link: "/Profile/Klubskifter",
+    icon: Icons.group,
+  ),
+  SettingsLink(
+    title: "Opret nyt BadmintonID",
+    link: "/Profile/OpretNytBadmintonID",
+    icon: Icons.badge,
+  ),
 ];
 
 StateProvider<Map<String, dynamic>> loginProvider =
@@ -117,32 +146,77 @@ class ProfilePage extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          for (String menu in menus)
-                            CustomContainer(
-                              onTap: () {
-                                ref.invalidate(updateUserInfoProvider);
-                                Navigator.of(context).pushNamed(
-                                  "/Profile/${menu.replaceAll(" ", "")}",
-                                );
-                              },
-                              margin: const EdgeInsets.all(0),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 16,
-                              ),
-                              borderRadius: 0,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(menu),
-                                  Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.grey[400] ?? Colors.grey,
-                                  ),
-                                ],
-                              ),
+                          CustomContainer(
+                            onTap: () async {},
+                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
                             ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Indstillinger",
+                                  style: TextStyle(
+                                    color: colorThemeState.fontColor,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.chevron_right,
+                                  color: colorThemeState.fontColor.withValues(
+                                    alpha: 0.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          CustomContainer(
+                            margin: const EdgeInsets.all(0),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
+                            borderRadius: 0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                for (SettingsLink menu in menus)
+                                  InkWell(
+                                    onTap: () {
+                                      ref.invalidate(updateUserInfoProvider);
+                                      Navigator.of(
+                                        context,
+                                      ).pushNamed(menu.link);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(menu.title),
+                                            Icon(
+                                              Icons.chevron_right,
+                                              color: colorThemeState.fontColor
+                                                  .withValues(alpha: 0.2),
+                                            ),
+                                          ],
+                                        ),
+                                        if (menus.indexOf(menu) !=
+                                            menus.length - 1)
+                                          Divider(
+                                            color: colorThemeState.fontColor
+                                                .withValues(alpha: 0.1),
+                                            height: 16,
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 64),
                           CustomContainer(
                             onTap: () async {
                               final Email email = Email(
@@ -158,23 +232,25 @@ class ProfilePage extends ConsumerWidget {
                                 debugPrint(e.toString());
                               }
                             },
-                            margin: const EdgeInsets.only(top: 8),
                             padding: const EdgeInsets.symmetric(
                               vertical: 8,
                               horizontal: 16,
                             ),
-                            child: Row(
+                            margin: const EdgeInsets.all(0),
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text("Foreslå en feature!"),
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.grey[400] ?? Colors.grey,
+                                Text(
+                                  "Foreslå en feature!",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
+                                Icon(Icons.chevron_right, color: Colors.green),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 64),
                           CustomContainer(
                             onTap: () async {
                               SharedPreferencesAsync prefs =
