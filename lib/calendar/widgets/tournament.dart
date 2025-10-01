@@ -18,7 +18,7 @@ class TournamentWidget extends ConsumerWidget {
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorThemeState.backgroundColor,
         borderRadius: BorderRadius.circular(4),
         boxShadow: [
           BoxShadow(color: Colors.grey.withValues(alpha: 0.5), blurRadius: 2),
@@ -31,11 +31,7 @@ class TournamentWidget extends ConsumerWidget {
             tournament.title != null && tournament.title!.isNotEmpty
                 ? tournament.title!
                 : tournament.clubName,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -46,7 +42,7 @@ class TournamentWidget extends ConsumerWidget {
                 tournament.lastRegistration != null
                     ? "Tilmeldingsfrist: ${DateFormat('EEE, M/d/y').format(tournament.lastRegistration!)}"
                     : "Ingen tilmeldingsfrist",
-                style: const TextStyle(fontSize: 14, color: Colors.black),
+                style: const TextStyle(fontSize: 14),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -65,7 +61,7 @@ class TournamentWidget extends ConsumerWidget {
                       (index == tournament.getClassAndAgeGroupCodes().length - 1
                           ? ""
                           : ", "),
-                  style: const TextStyle(fontSize: 12, color: Colors.black),
+                  style: const TextStyle(fontSize: 12),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -77,14 +73,14 @@ class TournamentWidget extends ConsumerWidget {
               Icon(
                 Icons.calendar_month,
                 size: 12,
-                color: Colors.black.withValues(alpha: 0.5),
+                color: colorThemeState.fontColor.withValues(alpha: 0.5),
               ),
               const SizedBox(width: 4),
               Text(
                 DateFormat('d. MMMM').format(tournament.dateFrom),
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.black.withValues(alpha: 0.5),
+                  color: colorThemeState.fontColor.withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -92,21 +88,21 @@ class TournamentWidget extends ConsumerWidget {
           Icon(
             Icons.more_vert,
             size: 12,
-            color: Colors.black.withValues(alpha: 0.5),
+            color: colorThemeState.fontColor.withValues(alpha: 0.5),
           ),
           Row(
             children: [
               Icon(
                 Icons.calendar_month,
                 size: 12,
-                color: Colors.black.withValues(alpha: 0.5),
+                color: colorThemeState.fontColor.withValues(alpha: 0.5),
               ),
               const SizedBox(width: 4),
               Text(
                 DateFormat('d. MMMM').format(tournament.dateTo),
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.black.withValues(alpha: 0.5),
+                  color: colorThemeState.fontColor.withValues(alpha: 0.5),
                 ),
               ),
             ],

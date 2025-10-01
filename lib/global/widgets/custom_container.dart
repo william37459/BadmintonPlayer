@@ -32,16 +32,12 @@ class CustomContainer extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 4),
-          border: border,
-          boxShadow: [
-            if (border == null)
-              BoxShadow(
-                color: colorThemeState.shadowColor,
-                spreadRadius: 1,
-                blurRadius: 2,
-                offset: const Offset(0, 1),
+          border:
+              border ??
+              Border.all(
+                color: colorThemeState.shadowColor.withValues(alpha: 0.1),
+                width: 1,
               ),
-          ],
         ),
         child: SizedBox(
           width: width,

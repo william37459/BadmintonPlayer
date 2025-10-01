@@ -50,7 +50,8 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
 
     for (Element row in allRows) {
       if (!row.attributes.values.contains("headerrow") &&
-          !row.attributes.values.contains("roundheader")) {
+          !row.attributes.values.contains("roundheader") &&
+          results.length < 10) {
         String date = row.querySelector(".time")?.text ?? "";
         late DateTime dateTime;
         if (date.split(" ").length < 3) {
@@ -108,6 +109,6 @@ Future<List<TeamTournamentResultPreview>> getTeamTournamentResults(
   } else {
     results.sort((a, b) => a.date.compareTo(b.date));
 
-    return results.length > 10 ? results.sublist(0, 10) : results;
+    return results.take(10).toList();
   }
 }

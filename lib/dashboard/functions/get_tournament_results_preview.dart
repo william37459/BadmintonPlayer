@@ -56,5 +56,5 @@ Future<List<TournamentResultPreview>> getTournamentResultsPreview(
       }
     }
   }
-  return results.sublist(0, 10 > results.length ? results.length : 10);
+  return results.take(10).toList();
 }

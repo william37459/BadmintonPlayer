@@ -45,5 +45,5 @@ Future<List<Tournament>> getUpcomingTournaments(
 
   results = results.toSet().toList();
 
-  return results.sublist(0, results.length > 20 ? 20 : results.length);
+  return results.take(20).toList();
 }
