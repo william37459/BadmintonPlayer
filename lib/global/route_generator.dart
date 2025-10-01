@@ -3,6 +3,7 @@ import 'package:app/main_builder/index.dart';
 import 'package:app/player_profile/index.dart';
 import 'package:app/player_profile_search/index.dart';
 import 'package:app/profile/pages/change_info.dart';
+import 'package:app/settings/index.dart';
 import 'package:app/setup/index.dart';
 import 'package:app/team_tournament/index.dart';
 import 'package:app/team_tournament_results/all_league_matches/index.dart';
@@ -84,6 +85,8 @@ class RouteGenerator {
         }
         return _errorRoute();
 
+      case '/Profile/Settings':
+        return CupertinoPageRoute(builder: (_) => const SettingsPage());
       default:
         return _errorRoute();
     }

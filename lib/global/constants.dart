@@ -17,15 +17,7 @@ List<TeamTournamentFilter> teamTournamentSearchFilterStack = [];
 
 StateProvider<CustomColorTheme> colorThemeProvider =
     StateProvider<CustomColorTheme>((ref) {
-      return CustomColorTheme(
-        primaryColor: const Color(0xffDF2026),
-        secondaryColor: const Color(0xff960E13),
-        fontColor: Colors.black,
-        secondaryFontColor: Colors.white,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.black.withValues(alpha: 0.3),
-        inputFieldColor: const Color(0xffEBEBEB),
-      );
+      return CustomColorTheme.light();
     });
 
 StateProvider<Map<String, bool>> isExpandedProvider =

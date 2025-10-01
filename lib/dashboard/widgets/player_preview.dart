@@ -1,3 +1,4 @@
+import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/widgets/custom_container.dart';
 import 'package:app/global/classes/player_profile.dart';
@@ -12,6 +13,7 @@ class PlayerPreviewWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    CustomColorTheme colortheme = ref.watch(colorThemeProvider);
     return CustomContainer(
       width: 200,
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -38,11 +40,18 @@ class PlayerPreviewWidget extends ConsumerWidget {
                 Text(
                   profile.name,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: colortheme.fontColor,
+                  ),
                 ),
                 Opacity(
                   opacity: 0.5,
-                  child: Text(profile.club, overflow: TextOverflow.ellipsis),
+                  child: Text(
+                    profile.club,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: colortheme.fontColor),
+                  ),
                 ),
                 Opacity(
                   opacity: 0.5,
@@ -51,6 +60,7 @@ class PlayerPreviewWidget extends ConsumerWidget {
                         ? "Ingen rangering"
                         : "#${profile.startLevel}",
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: colortheme.fontColor),
                   ),
                 ),
               ],

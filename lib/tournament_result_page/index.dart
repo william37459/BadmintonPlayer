@@ -112,10 +112,9 @@ class TournamentResultPage extends ConsumerWidget {
             ),
             if (resultFilterProviderState.isNotEmpty &&
                 resultFilterProviderState['matchType'] != null)
-              Container(
+              SizedBox(
                 height: 48,
                 width: double.infinity,
-                color: Colors.white,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final filters = resultFilterProviderState['matchType']!.keys

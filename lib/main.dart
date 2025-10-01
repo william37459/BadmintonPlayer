@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/global/background_functions/new_player_results.dart';
+import 'package:app/global/classes/color_theme.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/global/route_generator.dart';
 import 'package:flutter/material.dart';
@@ -62,17 +63,32 @@ void onStart(FlutterBackgroundService service) async {
 
 final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    CustomColorTheme colorTheme = ref.watch(colorThemeProvider);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp(
         scaffoldMessengerKey: scaffoldKey,
         theme: ThemeData().copyWith(
-          scaffoldBackgroundColor: const Color(0xffF1F0F5),
+          scaffoldBackgroundColor: colorTheme.backgroundColor,
+          textTheme: TextTheme(
+            bodyLarge: TextStyle(color: colorTheme.fontColor),
+            bodyMedium: TextStyle(color: colorTheme.fontColor),
+            bodySmall: TextStyle(color: colorTheme.fontColor),
+            headlineLarge: TextStyle(color: colorTheme.fontColor),
+            headlineMedium: TextStyle(color: colorTheme.fontColor),
+            headlineSmall: TextStyle(color: colorTheme.fontColor),
+            titleLarge: TextStyle(color: colorTheme.fontColor),
+            titleMedium: TextStyle(color: colorTheme.fontColor),
+            titleSmall: TextStyle(color: colorTheme.fontColor),
+            labelLarge: TextStyle(color: colorTheme.fontColor),
+            labelMedium: TextStyle(color: colorTheme.fontColor),
+            labelSmall: TextStyle(color: colorTheme.fontColor),
+          ),
         ),
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         supportedLocales: const [Locale('da', 'DK')],
