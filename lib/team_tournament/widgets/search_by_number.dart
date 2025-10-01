@@ -35,8 +35,12 @@ class SearchByNumber extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 height: 41,
                 decoration: BoxDecoration(
-                  color: const Color(0xffEBEBEB),
+                  color: colorThemeState.backgroundColor,
                   borderRadius: BorderRadius.circular(48),
+                  border: Border.all(
+                    color: colorThemeState.shadowColor.withValues(alpha: 0.1),
+                    width: 1,
+                  ),
                 ),
                 child: Center(
                   child: CustomInput(

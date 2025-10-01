@@ -9,6 +9,7 @@ class CustomContainer extends ConsumerWidget {
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final double? width;
+  final double? height;
   final double? borderRadius;
   final Color? backgroundColor;
   final BoxBorder? border;
@@ -18,6 +19,7 @@ class CustomContainer extends ConsumerWidget {
     this.margin,
     this.padding,
     this.width,
+    this.height,
     this.borderRadius,
     this.backgroundColor,
     this.border,
@@ -41,6 +43,7 @@ class CustomContainer extends ConsumerWidget {
         ),
         child: SizedBox(
           width: width,
+          height: height,
           child: Material(
             borderRadius: BorderRadius.circular(4),
             color: backgroundColor ?? colorThemeState.backgroundColor,

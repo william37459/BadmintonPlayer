@@ -125,8 +125,12 @@ class _PlayerSearchState extends ConsumerState<PlayerSearch> {
               margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xffEBEBEB),
+                color: colorThemeState.backgroundColor,
                 borderRadius: BorderRadius.circular(42),
+                border: Border.all(
+                  color: colorThemeState.shadowColor.withValues(alpha: 0.1),
+                  width: 1,
+                ),
               ),
               child: Row(
                 children: [
