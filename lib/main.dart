@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/global/background_functions/new_player_results.dart';
 import 'package:app/global/classes/color_theme.dart';
@@ -11,9 +12,27 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    final client = super.createHttpClient(context);
+    client.badCertificateCallback =
+        (X509Certificate cert, String host, int port) {
+          // Allow only the problematic host
+          if (host.contains('badmintonplayer.dk')) return true;
+          return false;
+        };
+    return client;
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterBackgroundService service = FlutterBackgroundService();
+
+  if (Platform.isAndroid) {
+    HttpOverrides.global = MyHttpOverrides();
+  }
 
   onStart(service);
 

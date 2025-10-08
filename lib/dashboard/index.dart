@@ -185,7 +185,8 @@ class Dashboard extends ConsumerWidget {
                   child: (dynamic result) =>
                       TournamentPreviewWidget(tournament: result, width: 200),
                   provider: upcomingTournamentsProvider,
-                  errorText: 'Ingen kommende turneringer',
+                  errorText:
+                      'Der er ingen turneringer der matcher dine valg, gå til indstillinger for at ændre dine valg',
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),

@@ -9,14 +9,8 @@ Future<void> getRankSearchFilters() async {
 
   if (response.statusCode == 200) {
     List<Map<String, String>> mapParameters = [
-      {
-        "id": "DropDownListSearchAgeGroup",
-        "key": "ageGroup",
-      },
-      {
-        "id": "DropDownListSearchClass",
-        "key": "class",
-      },
+      {"id": "DropDownListSearchAgeGroup", "key": "ageGroup"},
+      {"id": "DropDownListSearchClass", "key": "class"},
     ];
 
     String htmlContent = response.body;
@@ -35,10 +29,7 @@ Future<void> getRankSearchFilters() async {
         );
       }
 
-      rankSearchFilters.putIfAbsent(
-        parameter['key'] ?? "",
-        () => data,
-      );
+      rankSearchFilters.putIfAbsent(parameter['key'] ?? "", () => data);
     }
   } else {
     throw Exception('Failed to load search filters');

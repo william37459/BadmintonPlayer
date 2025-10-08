@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/global/classes/club.dart';
+import 'package:app/global/classes/color_theme.dart';
+import 'package:app/global/classes/settings.dart';
 import 'package:app/global/classes/user.dart';
 import 'package:app/global/constants.dart';
 import 'package:app/profile/functions/get_user_info.dart';
 import 'package:app/profile/functions/login.dart';
 import 'package:app/profile/index.dart';
+import 'package:app/settings/index.dart';
 import 'package:app/setup/functions/get_profile_search_filters.dart';
 import 'package:app/setup/functions/get_ranking_search_filters.dart';
 import 'package:app/setup/functions/get_tournament_search_filters.dart';
@@ -23,13 +27,25 @@ Future<void> getSetupValues(WidgetRef ref) async {
   String? password = await prefs.getString('password');
   if (email != null && password != null) {
     await login(email, password, true).then((value) {
-      ref.read(isLoggedInProvider.notifier).state = value;
+      ref.read(isLoggedInProvider.notifier).state = LoginState.isLoggedIn;
       if (value) {
         getUserInfo().then(
           (User user) => ref.read(userProvider.notifier).state = user,
         );
       }
     });
+  }
+
+  final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+  List<String> settingsStringList =
+      await asyncPrefs.getStringList('settings') ?? [];
+  Settings settings = Settings.fromStringList(settingsStringList);
+  ref.read(settingsProvider.notifier).state = settings;
+
+  if (settings.darkMode) {
+    ref.read(colorThemeProvider.notifier).state = CustomColorTheme.dark();
+  } else {
+    ref.read(colorThemeProvider.notifier).state = CustomColorTheme.light();
   }
 
   await Future.wait([
